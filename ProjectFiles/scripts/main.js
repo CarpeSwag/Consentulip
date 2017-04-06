@@ -9,9 +9,6 @@ window.addEventListener('DOMContentLoaded', function() {
 		// This creates and positions a free camera (non-mesh)
 		var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 4,
 			Math.PI / 3, 10, new BABYLON.Vector3(0,1,0), scene);
-
-		// This targets the camera to scene origin
-		camera.setTarget(BABYLON.Vector3.Zero());
 		
 		// Set camera view limits
 			camera.upperBetaLimit = Math.PI / 2;
