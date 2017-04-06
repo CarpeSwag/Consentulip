@@ -13,6 +13,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		// Set camera view limits
 			camera.upperBetaLimit = Math.PI / 2;
 			camera.lowerRadiusLimit = 7.5;
+			camera.upperRadiusLimit = 500;
 
 		// This attaches the camera to the canvas
 		camera.attachControl(canvas, true);
