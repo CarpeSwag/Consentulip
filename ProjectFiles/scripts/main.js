@@ -7,7 +7,8 @@ window.addEventListener('DOMContentLoaded', function() {
 		var scene = new BABYLON.Scene(engine);
 
 		// This creates and positions a free camera (non-mesh)
-		var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+		var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI,
+			Math.PI / 8, 150, BABYLON.Vector3.Zero(), scene);
 
 		// This targets the camera to scene origin
 		camera.setTarget(BABYLON.Vector3.Zero());
@@ -16,7 +17,8 @@ window.addEventListener('DOMContentLoaded', function() {
 		camera.attachControl(canvas, true);
 
 		// This creates a light, aiming 0,1,0 - to the sky (non-mesh)
-		var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+		var light = new BABYLON.HemisphericLight("light1",
+			new BABYLON.Vector3(0, 1, 0), scene);
 
 		// Default intensity is 1. Let's dim the light a small amount
 		light.intensity = 0.7;
@@ -27,7 +29,8 @@ window.addEventListener('DOMContentLoaded', function() {
 		// Move the sphere upward 1/2 its height
 		sphere.position.y = 1;
 
-		// Our built-in 'ground' shape. Params: name, width, depth, subdivs, scene
+		// Our built-in 'ground' shape. 
+		// Params: name, width, depth, subdivs, scene
 		var ground = BABYLON.Mesh.CreateGround("ground1", 6, 6, 2, scene);
 
 		return scene;
