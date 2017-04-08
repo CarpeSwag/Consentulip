@@ -15,7 +15,6 @@ window.addEventListener('DOMContentLoaded', function() {
 	});
 	
 	// Populate the scene
-	
 	var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 4,
 		Math.PI / 3, 10, new BABYLON.Vector3(0,1,0), scene);
 	camera.upperBetaLimit = Math.PI / 2;
@@ -26,9 +25,14 @@ window.addEventListener('DOMContentLoaded', function() {
 	var light = new BABYLON.HemisphericLight("light1",
 		new BABYLON.Vector3(0, 1, 0), scene);
 	light.intensity = 0.7;
-
-	var sphere = BABYLON.Mesh.CreateSphere("sphere1", 16, 2, scene);
-	sphere.position.y = 1;
+	
+	BABYLON.SceneLoader.ImportMesh('', 'art/models/',
+		'flower_base.babylon', scene, function (newMeshes) {
+		
+    });
+	
+	//var sphere = BABYLON.Mesh.CreateSphere("sphere1", 16, 2, scene);
+	//sphere.position.y = 1;
 
 	var ground = BABYLON.Mesh.CreateGround("ground1", 6, 6, 2, scene);
 });
