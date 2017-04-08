@@ -32,12 +32,26 @@ window.addEventListener('DOMContentLoaded', function() {
 		var SCALE = 0.33;
 		flowerBase = newMeshes[0];
 		for (var i = 0; i < newMeshes.length; ++i) {
-			var mesh = newMeshes[i];
-			mesh.scaling.x = SCALE;
-			mesh.scaling.y = SCALE;
-			mesh.scaling.z = SCALE;
+			newMeshes[i].scaling.x = SCALE;
+			newMeshes[i].scaling.y = SCALE;
+			newMeshes[i].scaling.z = SCALE;
 		}
     });
+	
+	var petal;
+	BABYLON.SceneLoader.ImportMesh('', 'art/models/',
+		'petal.babylon', scene, function (newMeshes) {
+		var SCALE = 0.33;
+		petal = newMeshes[0];
+		for (var i = 0; i < newMeshes.length; ++i) {
+			newMeshes[i].scaling.x = SCALE;
+			newMeshes[i].scaling.y = SCALE;
+			newMeshes[i].scaling.z = SCALE;
+			newMeshes[i].position.x = 0 * SCALE;
+			newMeshes[i].position.y = 12.25 * SCALE;
+			newMeshes[i].position.z = -0.75 * SCALE;
+		}
+	});
 	
 	//var sphere = BABYLON.Mesh.CreateSphere("sphere1", 16, 2, scene);
 	//sphere.position.y = 1;
