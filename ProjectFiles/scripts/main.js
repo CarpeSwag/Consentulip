@@ -26,9 +26,17 @@ window.addEventListener('DOMContentLoaded', function() {
 		new BABYLON.Vector3(0, 1, 0), scene);
 	light.intensity = 0.7;
 	
+	var flowerBase;
 	BABYLON.SceneLoader.ImportMesh('', 'art/models/',
 		'flower_base.babylon', scene, function (newMeshes) {
-		
+		var SCALE = 0.33;
+		flowerBase = newMeshes[0];
+		for (var i = 0; i < newMeshes.length; ++i) {
+			var mesh = newMeshes[i];
+			mesh.scaling.x = SCALE;
+			mesh.scaling.y = SCALE;
+			mesh.scaling.z = SCALE;
+		}
     });
 	
 	//var sphere = BABYLON.Mesh.CreateSphere("sphere1", 16, 2, scene);
