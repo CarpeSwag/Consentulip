@@ -21,7 +21,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	camera.upperBetaLimit = Math.PI / 2;
 	camera.lowerRadiusLimit = 7.5;
 	camera.upperRadiusLimit = 500;
-	camera.attachControl(canvas, true, false);
+	camera.attachControl(canvas, true, true);
 
 	var light = new BABYLON.HemisphericLight("light1",
 		new BABYLON.Vector3(0, 1, 0), scene);
