@@ -14,7 +14,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	
 	// Populate the scene
 	var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 4,
-		Math.PI / 3, 100, new BABYLON.Vector3(0,1,0), scene);
+		Math.PI / 3, 10, new BABYLON.Vector3(0,1,0), scene);
 	camera.upperBetaLimit = Math.PI / 2;
 	camera.lowerRadiusLimit = 7.5;
 	camera.upperRadiusLimit = 500;
@@ -54,7 +54,8 @@ window.addEventListener('DOMContentLoaded', function() {
 	//var sphere = BABYLON.Mesh.CreateSphere("sphere1", 16, 2, scene);
 	//sphere.position.y = 1;
 
-	var ground = BABYLON.Mesh.CreateGround("ground1", 6, 6, 2, scene);
+	var ground = BABYLON.Mesh.CreateGround("ground1", 3, 3, 2, scene);	
+	scene.clearColor = new BABYLON.Color3(1, 1, 1);
 	
 	// Ensure screen is sized correctly.
 	engine.resize();
