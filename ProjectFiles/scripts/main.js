@@ -16,7 +16,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	
 	// Populate the scene
 	var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 4,
-		Math.PI / 3, 10, new BABYLON.Vector3(0,1,0), scene);
+		Math.PI / 3, 100, new BABYLON.Vector3(0,1,0), scene);
 	camera.upperBetaLimit = Math.PI / 2;
 	camera.lowerRadiusLimit = 7.5;
 	camera.upperRadiusLimit = 500;
