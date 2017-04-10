@@ -9,7 +9,7 @@ html, body {
 #renderCanvas {
 	width   : 100%;
 	height  : 100%;
-}}
+}
 
 #overlay {
 	position: absolute;
@@ -18,5 +18,20 @@ html, body {
 	width: 100%;
 	height: 100%;
 	pointer-events: none;
+}
+
+#trust-container {
+	position: absolute;
+	bottom: 20px;
+	left: 5%;
+	width: 90%;
+	height: 65px;
+}
+
+#trust-container h1 {
+	font-size: 40px;
+	margin: 0;
+	font-family: sans-serif;
+	font-weight: normal;
 }
 
