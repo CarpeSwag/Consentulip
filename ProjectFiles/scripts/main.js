@@ -2,10 +2,8 @@ window.addEventListener('DOMContentLoaded', function() {
 	var canvas = document.getElementById('renderCanvas');
 	var engine = new BABYLON.Engine(canvas, true);
 	var scene = new BABYLON.Scene(engine);
-
-	// Engine functions
-	engine.resize();
 	
+	// Engine functions
 	window.addEventListener('resize', function() {
 		engine.resize();
 	});
@@ -57,5 +55,8 @@ window.addEventListener('DOMContentLoaded', function() {
 	//sphere.position.y = 1;
 
 	var ground = BABYLON.Mesh.CreateGround("ground1", 6, 6, 2, scene);
+	
+	// Ensure screen is sized correctly.
+	engine.resize();
 });
 	
