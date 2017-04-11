@@ -21,23 +21,13 @@ html, body {
 	pointer-events: none;
 }
 
-/* Top Bar */
-
-#top-bar {
-	position: absolute;
-	width: 100%;
-	height: 50px;
-}
-
-#menu-btn {
-	
-}
+/* Sandwich Button */
 
 .sandwich-button {
 	position: relative;
 	height: 0;
-	width: 50px;
-	padding-bottom: 50px;
+	width: 100%;
+	padding-bottom: 100%;
 	z-index: 0;
 }
 
@@ -60,6 +50,34 @@ html, body {
 .sandwich-button div::after {
 	margin-top: 50%;
 	height: 100%;
+}
+
+/* Top Bar */
+
+#top-bar {
+	position: absolute;
+	top: 20px;
+	left: 5%;
+	width: 90%;
+	height: 50px;
+}
+
+#menu-btn {
+	margin-left: 15px;
+	width: 40px;
+	padding-bottom: 40px;
+}
+
+#menu-btn::before {
+	position: absolute;
+	content: '';
+	margin-left: -15px;
+	margin-top: 12px;
+	width: 0;
+	height: 0;
+	border-top: 7.5px solid transparent;
+	border-bottom: 7.5px solid transparent;
+	border-right: 7.5px solid #8293A7;
 }
 
 /* Trust Container */
