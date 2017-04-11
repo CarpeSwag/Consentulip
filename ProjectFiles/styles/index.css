@@ -20,6 +20,17 @@ html, body {
 	pointer-events: none;
 }
 
+/* Top Bar */
+
+#top-bar {
+	position: absolute;
+	width: 100%;
+	height: 50px;
+}
+
+
+/* Trust Container */
+
 #trust-container {
 	position: absolute;
 	bottom: 20px;
