@@ -40,6 +40,26 @@ html, body {
 	z-index: 0;
 }
 
+.sandwich-button div, .sandwich-button div::before, .sandwich-button div::after {
+	content: '';
+	position: absolute;
+	display: block;
+	width: 100%;
+	height: 12.5%;
+	margin-top: 17.5%;
+	background-color: #8293A7;
+	border-radius: 999999px;
+}
+
+.sandwich-button div::before {
+	margin-top: 25%;
+	height: 100%;
+}
+
+.sandwich-button div::after {
+	margin-top: 50%;
+	height: 100%;
+}
 
 /* Trust Container */
 
