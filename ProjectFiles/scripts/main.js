@@ -2,10 +2,8 @@ window.addEventListener('DOMContentLoaded', function() {
 	var canvas = document.getElementById('renderCanvas');
 	var engine = new BABYLON.Engine(canvas, true);
 	var scene = new BABYLON.Scene(engine);
-
-	// Engine functions
-	engine.resize();
 	
+	// Engine functions
 	window.addEventListener('resize', function() {
 		engine.resize();
 	});
@@ -56,6 +54,10 @@ window.addEventListener('DOMContentLoaded', function() {
 	//var sphere = BABYLON.Mesh.CreateSphere("sphere1", 16, 2, scene);
 	//sphere.position.y = 1;
 
-	var ground = BABYLON.Mesh.CreateGround("ground1", 6, 6, 2, scene);
+	var ground = BABYLON.Mesh.CreateGround("ground1", 3, 3, 2, scene);	
+	scene.clearColor = new BABYLON.Color3(1, 1, 1);
+	
+	// Ensure screen is sized correctly.
+	engine.resize();
 });
 	
