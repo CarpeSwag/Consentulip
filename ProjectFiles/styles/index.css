@@ -153,7 +153,16 @@ html, body {
 
 #settings-btn {
 	position: absolute;
-	right: 5px;
+	right: 0;
+	width: 30px;
+	height: 30px;
+	padding: 10px;
+	margin-top: -10px;
+	border-radius: 10px;
+}
+
+#settings-btn div.gear-button  {
+	position: relative;
 	width: 14px;
 	height: 14px;
 	border: 8px solid #8293A7;
