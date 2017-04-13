@@ -148,6 +148,10 @@ html, body {
 	border-right: 7.5px solid #8293A7;
 }
 
+#menu-btn:hover {
+	background-color: rgba(217,222,228, 0.75);
+}
+
 #flower-name {
 	position: absolute;
 	left: 55px;
@@ -174,6 +178,10 @@ html, body {
 	width: 14px;
 	height: 14px;
 	border: 8px solid #8293A7;
+}
+
+#settings-btn:hover {
+	background-color: rgba(217,222,228, 0.75);
 }
 
 /* Trust Container */
