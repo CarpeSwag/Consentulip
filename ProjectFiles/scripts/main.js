@@ -1,3 +1,83 @@
+/**
+* Gesture control
+**/
+//
+// Startup
+//
+var isDown, points, strokeID, recog; // global variables
+
+function onLoadEvent()
+{
+	points = new Array(); // point array for current stroke
+	strokeID = 0;
+	recog = new PDollarRecognizer();
+
+	isDown = false;
+}
+
+//
+// Mouse Events
+//
+function mouseDownEvent(x, y, button) {
+	document.onselectstart = function() { return false; } // disable drag-select
+	document.onmousedown = function() { return false; } // disable drag-select
+	if (button <= 1)
+	{
+		isDown = true;
+		if (strokeID == 0)	{
+			points.length = 0;
+		}
+		points[points.length] = new Point(x, y, ++strokeID);
+		console.log("Recording stroke #" + strokeID + "...");
+	}
+	else if (button == 2) {
+		console.log("Recognizing gesture...");
+	}
+}
+
+function mouseMoveEvent(x, y, button) {
+	if (isDown) {
+		points[points.length] = new Point(x, y, strokeID); // append
+		drawLine(points.length - 2, points.length - 1);
+	}
+}
+
+function mouseUpEvent(x, y, button) {
+	document.onselectstart = function() { return true; } // enable drag-select
+	document.onmousedown = function() { return true; } // enable drag-select
+	if (button <= 1) {
+		if (isDown) {
+			isDown = false;
+			console.log("Stroke #" + strokeID + " recorded.");
+		}
+	} else if (button == 2) {
+		if (points.length >= 10){
+			var result = recog.Recognize(points);
+			console.log("Result: " + result.Name + " (" + (Math.round(result.Score * 100) / 100) + ").");
+		} else {
+			console.log("Too little input made. Please try again.");
+		}
+		clearStrokes();
+	}
+}
+
+function drawLine(a, b) {
+	
+}
+
+function clearStrokes()
+{
+	points.length = 0;
+	strokeID = 0;
+	//g.clearRect(0, 0, window.innerWidth, window.innerHeight);
+	console.log("Canvas cleared.");
+}
+
+
+/**
+* Babylon Things
+**/
+
 window.addEventListener('DOMContentLoaded', function() {
 	var canvas = document.getElementById('renderCanvas');
 	var engine = new BABYLON.Engine(canvas, true);
@@ -59,5 +139,6 @@ window.addEventListener('DOMContentLoaded', function() {
 	
 	// Ensure screen is sized correctly.
 	engine.resize();
-});
 	
+	onLoadEvent();
+});

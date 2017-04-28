@@ -7,6 +7,12 @@
 	<body>
 		<canvas id="renderCanvas"></canvas>
 		<div id='overlay'>
+			<canvas id='gestures' class='active'
+				onmousedown="mouseDownEvent(event.clientX, event.clientY, event.button)"
+				onmousemove="mouseMoveEvent(event.clientX, event.clientY, event.button)"
+				onmouseup="mouseUpEvent(event.clientX, event.clientY, event.button)"
+				oncontextmenu="return false;">
+			</canvas>
 			<div id='top-bar'>
 				<div id='menu-btn' class='button'>
 					<div class='sandwich-button'>
