@@ -4,7 +4,7 @@
 //
 // Startup
 //
-var isDown, points, strokeID, recog; // global variables
+var isDown, points, strokeID, recog, iter; // global variables
 
 function onLoadEvent()
 {
@@ -18,6 +18,7 @@ function onLoadEvent()
 	var ctx = gestures.getContext('2d');
 	ctx.canvas.width = window.innerWidth;
 	ctx.canvas.height = window.innerHeight;
+	iter = 0;
 }
 
 //
@@ -34,9 +35,11 @@ function mouseDownEvent(x, y, button) {
 		}
 		points[points.length] = new Point(x, y, ++strokeID);
 		var context = document.getElementById('gestures').getContext('2d');
-		context.beginPath();
+		context.lineWidth = 5;
 		context.moveTo(x, y);
+		context.strokeStyle = '#ffffff';
 		console.log("Recording stroke #" + strokeID + "...");
+		context.beginPath();
 	}
 	else if (button == 2) {
 		console.log("Recognizing gesture...");
@@ -47,7 +50,7 @@ function mouseMoveEvent(x, y, button) {
 	if (isDown) {
 		var point = new Point(x, y, strokeID);
 		points[points.length] = point; // append
-		drawLine(point);
+		drawLine(points[points.length-2], point);
 	}
 }
 
@@ -58,6 +61,8 @@ function mouseUpEvent(x, y, button) {
 		if (isDown) {
 			isDown = false;
 			console.log("Stroke #" + strokeID + " recorded.");
+			var context = document.getElementById('gestures').getContext('2d');
+			context.closePath();
 		}
 	} else if (button == 2) {
 		if (points.length >= 10){
@@ -70,10 +75,12 @@ function mouseUpEvent(x, y, button) {
 	}
 }
 
-function drawLine(a) {
+function drawLine(a, b) {
 	var canvas = document.getElementById('gestures');
 	var context = canvas.getContext('2d');
-	context.lineTo(a.X, a.Y)
+	context.lineTo(b.X, b.Y);
+	var width = Math.sqrt(Math.pow(a.X - b.X, 2) + Math.pow(a.Y - b.Y, 2));
+	context.lineWidth = 5 - (5 * (width/100));//width;
 	context.stroke();
 }
 
@@ -81,8 +88,9 @@ function clearStrokes()
 {
 	points.length = 0;
 	strokeID = 0;
-	var canvas = document.getElementById('gestures').getContext('2d');
-	canvas.clearRect(0, 0, window.innerWidth, window.innerHeight);
+	var context = document.getElementById('gestures').getContext('2d');
+	context.closePath();
+	context.clearRect(0, 0, window.innerWidth, window.innerHeight);
 	console.log("Canvas cleared.");
 }
 
@@ -152,7 +160,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	//sphere.position.y = 1;
 
 	var ground = BABYLON.Mesh.CreateGround("ground1", 3, 3, 2, scene);	
-	scene.clearColor = new BABYLON.Color3(1, 1, 1);
+	scene.clearColor = new BABYLON.Color3(.1, .1, .1);
 	
 	// Ensure screen is sized correctly.
 	engine.resize();
