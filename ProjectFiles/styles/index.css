@@ -117,8 +117,9 @@ html, body {
 
 #gestures {
 	position: absolute;
-	width: 100%;
+	width: calc(100% + 6.0rem);
 	height: 100%;
+	left: -3.0rem;
 }
 
 #gestures.active {
