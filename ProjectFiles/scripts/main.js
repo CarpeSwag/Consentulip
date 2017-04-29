@@ -13,6 +13,11 @@ function onLoadEvent()
 	recog = new PDollarRecognizer();
 
 	isDown = false;
+	
+	var gestures = document.getElementById('gestures');
+	var ctx = gestures.getContext('2d');
+	ctx.canvas.width = window.innerWidth;
+	ctx.canvas.height = window.innerHeight;
 }
 
 //
@@ -28,6 +33,9 @@ function mouseDownEvent(x, y, button) {
 			points.length = 0;
 		}
 		points[points.length] = new Point(x, y, ++strokeID);
+		var context = document.getElementById('gestures').getContext('2d');
+		context.beginPath();
+		context.moveTo(x, y);
 		console.log("Recording stroke #" + strokeID + "...");
 	}
 	else if (button == 2) {
@@ -37,8 +45,9 @@ function mouseDownEvent(x, y, button) {
 
 function mouseMoveEvent(x, y, button) {
 	if (isDown) {
-		points[points.length] = new Point(x, y, strokeID); // append
-		drawLine(points.length - 2, points.length - 1);
+		var point = new Point(x, y, strokeID);
+		points[points.length] = point; // append
+		drawLine(point);
 	}
 }
 
@@ -61,15 +70,19 @@ function mouseUpEvent(x, y, button) {
 	}
 }
 
-function drawLine(a, b) {
-	
+function drawLine(a) {
+	var canvas = document.getElementById('gestures');
+	var context = canvas.getContext('2d');
+	context.lineTo(a.X, a.Y)
+	context.stroke();
 }
 
 function clearStrokes()
 {
 	points.length = 0;
 	strokeID = 0;
-	//g.clearRect(0, 0, window.innerWidth, window.innerHeight);
+	var canvas = document.getElementById('gestures').getContext('2d');
+	canvas.clearRect(0, 0, window.innerWidth, window.innerHeight);
 	console.log("Canvas cleared.");
 }
 
@@ -86,6 +99,10 @@ window.addEventListener('DOMContentLoaded', function() {
 	// Engine functions
 	window.addEventListener('resize', function() {
 		engine.resize();
+		var gestures = document.getElementById('gestures');
+		var ctx = gestures.getContext('2d');
+		ctx.canvas.width = window.innerWidth;
+		ctx.canvas.height = window.innerHeight;
 	});
 	
 	engine.runRenderLoop(function() {
