@@ -83,6 +83,8 @@ function drawLine(a, b) {
 	var width = Math.sqrt(Math.pow(a.X - b.X, 2) + Math.pow(a.Y - b.Y, 2));
 	context.lineWidth = 5 - (5 * (width/100));
 	context.shadowBlur = 7 - (7 * (width / 200));
+	var bright = Math.round(Math.random() * 200);
+	context.shadowColor = "rgba("+bright+","+bright+",255,0.25)";
 	context.stroke();
 }
 
