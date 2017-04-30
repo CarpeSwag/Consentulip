@@ -85,6 +85,11 @@ function drawLine(a, b) {
 	context.shadowBlur = 7 - (7 * (width / 200));
 	var bright = Math.round(Math.random() * 200);
 	context.shadowColor = "rgba("+bright+","+bright+",255,0.25)";
+	var red   = 255;
+	var green = Math.round(Math.random() * 120 + 135);
+	var blue  = Math.round(Math.random() * 200);
+	var rgb = red + ',' + green + ',' + blue;
+	context.shadowColor = 'rgba(' + rgb + ',0.25)';
 	context.stroke();
 }
 
