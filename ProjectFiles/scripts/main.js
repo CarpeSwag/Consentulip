@@ -35,12 +35,12 @@ function mouseDownEvent(x, y, button) {
 		}
 		points[points.length] = new Point(x, y, ++strokeID);
 		var context = document.getElementById('gestures').getContext('2d');
-		context.lineWidth = 5;
+		context.lineWidth = 3;
 		context.moveTo(x, y);
 		context.strokeStyle = '#ffffff';
 		console.log("Recording stroke #" + strokeID + "...");
 		context.beginPath();
-		context.shadowColor = "rgba(100,100,255,0.25)";
+		context.shadowColor = "rgba(255,255,0,0.25)";
 	}
 	else if (button == 2) {
 		console.log("Recognizing gesture...");
@@ -81,10 +81,8 @@ function drawLine(a, b) {
 	var context = canvas.getContext('2d');
 	context.lineTo(b.X, b.Y);
 	var width = Math.sqrt(Math.pow(a.X - b.X, 2) + Math.pow(a.Y - b.Y, 2));
-	context.lineWidth = 5 - (5 * (width/100));
-	context.shadowBlur = 7 - (7 * (width / 200));
-	var bright = Math.round(Math.random() * 200);
-	context.shadowColor = "rgba("+bright+","+bright+",255,0.25)";
+	context.lineWidth = 3 - (3 * (width/100));
+	context.shadowBlur = 5 - (5 * (width / 200));
 	var red   = 255;
 	var green = Math.round(Math.random() * 120 + 135);
 	var blue  = Math.round(Math.random() * 200);
