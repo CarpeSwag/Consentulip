@@ -106,6 +106,22 @@ function clearStrokes()
 * Babylon Things
 **/
 
+var createOverlay = function(scene) {
+	var canvas = new BABYLON.ScreenSpaceCanvas2D(scene, { 
+		id: "OverlayCanvas",  backgroundFill: "#00000000"});
+
+    var cp = [new BABYLON.Vector2(0, 0), new BABYLON.Vector2(200, 0), new BABYLON.Vector2(200, 200)];
+    var line = new BABYLON.Lines2D(cp, {
+        parent: canvas, id: "Square", x: 50, y: 50, fillThickness: 30, startCap: 0, endCap: 0,
+        fill: "#8040C0FF, A080FFFF",
+		startCap: BABYLON.Lines2D.RoundCap, endCap: BABYLON.Lines2D.RoundCap,
+        border: "#C0C080FF",
+        borderThickness: 10, origin: BABYLON.Vector2.Zero()
+    });
+	
+    return {canvas, line};
+}
+
 window.addEventListener('DOMContentLoaded', function() {
 	var canvas = document.getElementById('renderCanvas');
 	var engine = new BABYLON.Engine(canvas, true);
