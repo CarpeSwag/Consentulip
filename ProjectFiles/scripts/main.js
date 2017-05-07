@@ -109,10 +109,9 @@ function clearStrokes()
 function createOverlay(scene) {
 	var canvas = new BABYLON.ScreenSpaceCanvas2D(scene, { 
 		id: "OverlayCanvas",  backgroundFill: "#00000000"});
-
-    var cp = [];
-    var line = new BABYLON.Lines2D(cp, {
-        parent: canvas, id: "Square", x: 50, y: 50, fillThickness: 3, startCap: 0, endCap: 0,
+		
+    var line = new BABYLON.Lines2D([new BABYLON.Vector2(0, 0), new BABYLON.Vector2(0, 0)], {
+        parent: canvas, id: "Square", x: -50, y: -50, fillThickness: 3, startCap: 0, endCap: 0,
         fill: "#FFFFFFFF",
 		startCap: BABYLON.Lines2D.RoundCap, endCap: BABYLON.Lines2D.RoundCap,
         border: "#FFC332EE",
