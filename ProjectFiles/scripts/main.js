@@ -106,7 +106,7 @@ function clearStrokes()
 * Babylon Things
 **/
 
-var createOverlay = function(scene) {
+function createOverlay(scene) {
 	var canvas = new BABYLON.ScreenSpaceCanvas2D(scene, { 
 		id: "OverlayCanvas",  backgroundFill: "#00000000"});
 
@@ -187,6 +187,10 @@ window.addEventListener('DOMContentLoaded', function() {
 	
 	// Ensure screen is sized correctly.
 	engine.resize();
+	
+	// Create Overlay
+	var overlay = createOverlay(scene);
+	
 	
 	onLoadEvent();
 });
