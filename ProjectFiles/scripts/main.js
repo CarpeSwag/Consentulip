@@ -106,21 +106,6 @@ function clearStrokes()
 * Babylon Things
 **/
 
-function createOverlay(scene) {
-	var canvas = new BABYLON.ScreenSpaceCanvas2D(scene, { 
-		id: "OverlayCanvas",  backgroundFill: "#00000000"});
-		
-    var line = new BABYLON.Lines2D([new BABYLON.Vector2(0, 0), new BABYLON.Vector2(0, 0)], {
-        parent: canvas, id: "Square", x: -50, y: -50, fillThickness: 3, startCap: 0, endCap: 0,
-        fill: "#FFFFFFFF",
-		startCap: BABYLON.Lines2D.RoundCap, endCap: BABYLON.Lines2D.RoundCap,
-        border: "#FFC332EE",
-        borderThickness: 3, origin: BABYLON.Vector2.Zero()
-    });
-	
-    return {canvas, line};
-}
-
 window.addEventListener('DOMContentLoaded', function() {
 	var canvas = document.getElementById('renderCanvas');
 	var engine = new BABYLON.Engine(canvas, true);
@@ -147,7 +132,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	camera.upperRadiusLimit = 500;
 	camera.attachControl(canvas, true, true);
 
-	var light = new BABYLON.HemisphericLight("light1",
+	var light = new BABYLON.HemisphericLight("light",
 		new BABYLON.Vector3(0, 1, 0), scene);
 	light.intensity = 0.7;
 	
@@ -177,19 +162,12 @@ window.addEventListener('DOMContentLoaded', function() {
 			newMeshes[i].position.z = -0.75 * SCALE;
 		}
 	});
-	
-	//var sphere = BABYLON.Mesh.CreateSphere("sphere1", 16, 2, scene);
-	//sphere.position.y = 1;
 
-	var ground = BABYLON.Mesh.CreateGround("ground1", 3, 3, 2, scene);	
+	var ground = BABYLON.Mesh.CreateGround("ground", 3, 3, 2, scene);	
 	scene.clearColor = new BABYLON.Color3(.1, .1, .1);
 	
 	// Ensure screen is sized correctly.
 	engine.resize();
-	
-	// Create Overlay
-	var overlay = createOverlay(scene);
-	
 	
 	onLoadEvent();
 });
