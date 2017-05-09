@@ -4,21 +4,26 @@
 //
 // Startup
 //
-var isDown, points, strokeID, recog, iter; // global variables
+var isDown, points, strokeID, recog, iter, circles, scratch; // global variables
 
-function onLoadEvent()
-{
+function onLoadEvent() {
 	points = new Array(); // point array for current stroke
 	strokeID = 0;
 	recog = new PDollarRecognizer();
-
 	isDown = false;
 	
 	var gestures = document.getElementById('gestures');
 	var ctx = gestures.getContext('2d');
 	ctx.canvas.width = window.innerWidth;
 	ctx.canvas.height = window.innerHeight;
+	scratch = document.createElement('canvas');
+	var sctx = scratch.getContext('2d');
+	sctx.canvas.width = window.innerWidth;
+	sctx.canvas.height = window.innerHeight;
+	
 	iter = 0;
+	circles = [];
+	window.webkitRequestAnimationFrame(draw);
 }
 
 //
@@ -41,6 +46,13 @@ function mouseDownEvent(x, y, button) {
 		console.log("Recording stroke #" + strokeID + "...");
 		context.beginPath();
 		context.shadowColor = "rgba(255,255,0,0.25)";
+		
+		circles.unshift({
+			x: x,
+			y: y,
+			radius: 10,
+			color: 'rgba(255,255,0,0.25)'
+		});
 	}
 	else if (button == 2) {
 		console.log("Recognizing gesture...");
@@ -91,14 +103,39 @@ function drawLine(a, b) {
 	context.stroke();
 }
 
-function clearStrokes()
-{
+function clearStrokes() {
 	points.length = 0;
 	strokeID = 0;
 	var context = document.getElementById('gestures').getContext('2d');
 	context.closePath();
 	context.clearRect(0, 0, window.innerWidth, window.innerHeight);
 	console.log("Canvas cleared.");
+}
+
+function createCircle(context, x, y, rad, col) {
+    context.fillStyle = col;
+    context.beginPath();
+    context.arc(x, y, rad, 0, 2 * Math.PI, false);
+    context.closePath();
+    context.fill();
+}
+
+function draw() {
+	var canvas = document.getElementById('gestures');
+	var context = canvas.getContext('2d');
+	var scontext = scratch.getContext('2d');
+	scontext.clearRect(0, 0, window.innerWidth, window.innerHeight);	
+	context.clearRect(0, 0, window.innerWidth, window.innerHeight);	
+	for (var i = circles.length - 1; i >= 0; --i) {
+		createCircle(scontext, circles[i].x, circles[i].y, circles[i].radius, circles[i].color);
+		circles[i].radius += 5;
+		if (circles[i].radius > 25) {
+			circles.splice(i,1);
+		}
+	}
+	
+	context.drawImage(scratch, 0, 0);
+	window.webkitRequestAnimationFrame(draw);
 }
 
 
@@ -118,6 +155,9 @@ window.addEventListener('DOMContentLoaded', function() {
 		var ctx = gestures.getContext('2d');
 		ctx.canvas.width = window.innerWidth;
 		ctx.canvas.height = window.innerHeight;
+		var sctx = scratch.getContext('2d');
+		sctx.canvas.width = window.innerWidth;
+		sctx.canvas.height = window.innerHeight;
 	});
 	
 	engine.runRenderLoop(function() {
