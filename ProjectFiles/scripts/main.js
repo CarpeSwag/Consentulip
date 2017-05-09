@@ -88,53 +88,64 @@ function mouseUpEvent(x, y, button) {
 	}
 }
 
-function drawLine(a, b) {
-	var canvas = document.getElementById('gestures');
-	var context = canvas.getContext('2d');
-	context.lineTo(b.X, b.Y);
+function drawLine(ctx, a, b) {
+	ctx.lineTo(b.X, b.Y);
 	var width = Math.sqrt(Math.pow(a.X - b.X, 2) + Math.pow(a.Y - b.Y, 2));
-	context.lineWidth = 3 - (3 * (width/100));
-	context.shadowBlur = 5 - (5 * (width / 200));
-	var red   = 255;
-	var green = Math.round(Math.random() * 120 + 135);
-	var blue  = Math.round(Math.random() * 200);
-	var rgb = red + ',' + green + ',' + blue;
-	context.shadowColor = 'rgba(' + rgb + ',0.25)';
-	context.stroke();
+	ctx.lineWidth = 3 - (3 * (width/100));
+	ctx.stroke();
 }
 
 function clearStrokes() {
 	points.length = 0;
 	strokeID = 0;
-	var context = document.getElementById('gestures').getContext('2d');
-	context.closePath();
-	context.clearRect(0, 0, window.innerWidth, window.innerHeight);
-	console.log("Canvas cleared.");
+	var ctx = document.getElementById('gestures').getContext('2d');
+	ctx.closePath();
+	ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+	ctx.log("Canvas cleared.");
 }
 
-function createCircle(context, x, y, rad, col) {
-    context.fillStyle = col;
-    context.beginPath();
-    context.arc(x, y, rad, 0, 2 * Math.PI, false);
-    context.closePath();
-    context.fill();
+function createCircle(ctx, x, y, rad, col) {
+    ctx.fillStyle = col;
+    ctx.beginPath();
+    ctx.arc(x, y, rad, 0, 2 * Math.PI, false);
+    ctx.closePath();
+    ctx.fill();
 }
 
 function draw() {
 	var canvas = document.getElementById('gestures');
-	var context = canvas.getContext('2d');
-	var scontext = scratch.getContext('2d');
-	scontext.clearRect(0, 0, window.innerWidth, window.innerHeight);	
-	context.clearRect(0, 0, window.innerWidth, window.innerHeight);	
+	var ctx = canvas.getContext('2d');
+	var sctx = scratch.getContext('2d');
+	
+	// Clear the canvas
+	ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+	sctx.clearRect(0, 0, window.innerWidth, window.innerHeight);	
+	
+	// Create the circles
 	for (var i = circles.length - 1; i >= 0; --i) {
-		createCircle(scontext, circles[i].x, circles[i].y, circles[i].radius, circles[i].color);
+		createCircle(sctx, circles[i].x, circles[i].y, circles[i].radius, circles[i].color);
 		circles[i].radius += 5;
 		if (circles[i].radius > 25) {
 			circles.splice(i,1);
 		}
 	}
 	
-	context.drawImage(scratch, 0, 0);
+	ctx.shadowBlur = 6 - Math.random() * 3;
+	var red   = 255;
+	var green = Math.round(Math.random() * 120 + 135);
+	var blue  = Math.round(Math.random() * 200);
+	var rgb = red + ',' + green + ',' + blue;
+	ctx.shadowColor = 'rgba(' + rgb + ',0.25)';
+	
+	if (points.length > 1) {
+		ctx.moveTo(points[0].X, points[0].Y);
+		// Draw the lines
+		for (i = 0; i < points.length - 1; ++i) {
+			drawLine(ctx, points[i], points[i+1]);
+		}
+	}
+	
+	ctx.drawImage(scratch, 0, 0);
 	window.webkitRequestAnimationFrame(draw);
 }
 
