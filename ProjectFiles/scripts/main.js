@@ -96,7 +96,6 @@ function drawLine(ctx, a, b) {
 	ctx.lineTo(b.X, b.Y);
 	var width = Math.sqrt(Math.pow(a.X - b.X, 2) + Math.pow(a.Y - b.Y, 2));
 	ctx.lineWidth = 3 - (3 * (width/100));
-	
 	ctx.stroke();
 }
 
@@ -133,6 +132,7 @@ function draw() {
 	// Clear the canvas
 	ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 	sctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+	gctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 	
 	// Create the circles
 	for (var i = circles.length - 1; i >= 0; --i) {
@@ -147,13 +147,11 @@ function draw() {
 	}
 	
 	if (points.length > 0) {
-		gctx.shadowBlur = 7 - Math.random() * 3;
-		var red   = 255;
-		var green = Math.round(Math.random() * 120 + 135);
-		var blue  = Math.round(Math.random() * 200);
-		var rgb = red + ',' + green + ',' + blue;
-		gctx.shadowColor = 'rgba(' + rgb + ',1)';
-		gctx.stroke();
+		gctx.shadowBlur = 10 - Math.random() * 2;
+		gctx.shadowColor = 'rgb(255,200,50)';
+		for (i = 0; i < 5; ++i) {
+			gctx.stroke();
+		}
 	}
 	
 	ctx.drawImage(gestureCanv, 0, 0);
