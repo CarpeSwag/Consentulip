@@ -4,10 +4,11 @@
 //
 // Startup
 //
-var isDown, points, strokeID, recog, iter, circles; // global variables
-var circleCanv, gestureCanv;
 
 // Global Variables
+var isDown, points, strokeID, recog, iter, circles, glow, gdx;
+var circleCanv, gestureCanv, bufferCanv;
+
 
 function onLoadEvent() {
 	points = new Array(); // point array for current stroke
@@ -22,6 +23,8 @@ function onLoadEvent() {
 	
 	iter = 0;
 	circles = [];
+	glow = 100;
+	gdx = 1;
 	window.requestAnimationFrame(draw);
 }
 
@@ -145,7 +148,14 @@ function draw() {
 	}
 	
 	if (points.length > 0) {
+		// Change the glow amount
+		glow += gdx;
+		if(glow == 60 || glow == 120)
+			gdx *= -1;
+		
 		bctx.stroke();
+		var glowLoop = Math.floor(glow / 10)
+		for (i = 0; i < glowLoop; ++i) {
 			ctx.drawImage(gestureCanv, 0, 0);
 			ctx.drawImage(bufferCanv, 0, 0);
 		}
