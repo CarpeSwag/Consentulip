@@ -13,18 +13,10 @@ function onLoadEvent() {
 	recog = new PDollarRecognizer();
 	isDown = false;
 	
-	var gestures = document.getElementById('gestures');
-	var ctx = gestures.getContext('2d');
-	ctx.canvas.width = window.innerWidth;
-	ctx.canvas.height = window.innerHeight;
 	circleCanv = document.createElement('canvas');
-	var sctx = circleCanv.getContext('2d');
-	sctx.canvas.width = window.innerWidth;
-	sctx.canvas.height = window.innerHeight;
 	gestureCanv = document.createElement('canvas');
-	var gctx = gestureCanv.getContext('2d');
-	gctx.canvas.width = window.innerWidth;
-	gctx.canvas.height = window.innerHeight;
+	bufferCanv = document.createElement('canvas');
+	resizeCanvas();
 	
 	iter = 0;
 	circles = [];
@@ -159,6 +151,17 @@ function draw() {
 	window.requestAnimationFrame(draw);
 }
 
+function resizeCanvas() {
+	var width = window.innerWidth;
+	var height = window.innerHeight;
+	var canvases = [document.getElementById('gestures'), circleCanv, gestureCanv, bufferCanv];
+	
+	for (var i = 0; i < canvases.length; ++i) {
+		var ctx = canvases[i].getContext('2d');
+		ctx.canvas.width = width;
+		ctx.canvas.height = height;
+	}
+}
 
 /**
 * Babylon Things
@@ -172,15 +175,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	// Engine functions
 	window.addEventListener('resize', function() {
 		engine.resize();
-		var width = window.innerWidth;
-		var height = window.innerHeight;
-		var canvases = [document.getElementById('gestures'), circleCanv, gestureCanv];
-		
-		for (var i = 0; i < canvases.length; ++i) {
-			var ctx = canvases[i].getContext('2d');
-			ctx.canvas.width = width;
-			ctx.canvas.height = height;
-		}
+		resizeCanvas();
 	});
 	
 	engine.runRenderLoop(function() {
