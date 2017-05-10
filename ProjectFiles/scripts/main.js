@@ -112,8 +112,14 @@ function clearStrokes() {
 	strokeID = 0;
 	var ctx = document.getElementById('gestures').getContext('2d');
 	ctx.closePath();
+	var sctx = circleCanv.getContext('2d');
+	var gctx = gestureCanv.getContext('2d');
+	
+	// Clear the canvas
 	ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-	ctx.log("Canvas cleared.");
+	sctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+	gctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+	console.log("Canvas cleared.");
 }
 
 function createCircle(ctx, x, y, rad, col) {
