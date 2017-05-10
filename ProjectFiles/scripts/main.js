@@ -7,6 +7,8 @@
 var isDown, points, strokeID, recog, iter, circles; // global variables
 var circleCanv, gestureCanv;
 
+// Global Variables
+
 function onLoadEvent() {
 	points = new Array(); // point array for current stroke
 	strokeID = 0;
@@ -36,12 +38,14 @@ function mouseDownEvent(x, y, button) {
 			points.length = 0;
 		}
 		points[points.length] = new Point(x, y, ++strokeID);
-		var gctx = gestureCanv.getContext('2d');
-		gctx.lineWidth = 3;
-		gctx.moveTo(x, y);
-		gctx.strokeStyle = '#ffffff';
+		var bctx = bufferCanv.getContext('2d');
+		bctx.lineWidth = 3;
+		bctx.moveTo(x, y);
+		bctx.strokeStyle = '#ffffff';
+		bctx.shadowBlur = 10;
+		bctx.shadowColor = 'rgba(255,200,50,.25)';
 		console.log("Recording stroke #" + strokeID + "...");
-		gctx.beginPath();
+		bctx.beginPath();
 		
 		circles.unshift({
 			x: x,
@@ -59,7 +63,7 @@ function mouseMoveEvent(x, y, button) {
 	if (isDown) {
 		var point = new Point(x, y, strokeID);
 		points[points.length] = point; // append
-		drawLine(gestureCanv.getContext('2d'), points[points.length-2], point);
+		drawLine(bufferCanv.getContext('2d'), points[points.length-2], point);
 	}
 }
 
@@ -70,8 +74,7 @@ function mouseUpEvent(x, y, button) {
 		if (isDown) {
 			isDown = false;
 			console.log("Stroke #" + strokeID + " recorded.");
-			var context = document.getElementById('gestures').getContext('2d');
-			context.closePath();
+			gestureCanv.getContext('2d').drawImage(bufferCanv, 0, 0);
 		}
 	} else if (button == 2) {
 		if (points.length >= 10){
@@ -87,8 +90,8 @@ function mouseUpEvent(x, y, button) {
 function drawLine(ctx, a, b) {
 	ctx.lineTo(b.X, b.Y);
 	var width = Math.sqrt(Math.pow(a.X - b.X, 2) + Math.pow(a.Y - b.Y, 2));
-	ctx.lineWidth = 3 - (3 * (width/100));
-	ctx.stroke();
+	ctx.lineWidth = 4 - (3 * (width/100));
+	ctx.shadowBlur = 10 + (3 * (width/100));
 }
 
 function clearStrokes() {
@@ -98,11 +101,13 @@ function clearStrokes() {
 	ctx.closePath();
 	var sctx = circleCanv.getContext('2d');
 	var gctx = gestureCanv.getContext('2d');
+	var bctx = bufferCanv.getContext('2d');
 	
 	// Clear the canvas
 	ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 	sctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 	gctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+	bctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 	console.log("Canvas cleared.");
 }
 
@@ -120,11 +125,12 @@ function draw() {
 	var ctx = canvas.getContext('2d');
 	var sctx = circleCanv.getContext('2d');
 	var gctx = gestureCanv.getContext('2d');
+	var bctx = bufferCanv.getContext('2d');
 	
 	// Clear the canvas
 	ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 	sctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-	gctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+	bctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 	
 	// Create the circles
 	for (var i = circles.length - 1; i >= 0; --i) {
@@ -139,14 +145,12 @@ function draw() {
 	}
 	
 	if (points.length > 0) {
-		gctx.shadowBlur = 10 - Math.random() * 2;
-		gctx.shadowColor = 'rgb(255,200,50)';
-		for (i = 0; i < 5; ++i) {
-			gctx.stroke();
+		bctx.stroke();
+			ctx.drawImage(gestureCanv, 0, 0);
+			ctx.drawImage(bufferCanv, 0, 0);
 		}
 	}
 	
-	ctx.drawImage(gestureCanv, 0, 0);
 	ctx.drawImage(circleCanv, 0, 0);
 	window.requestAnimationFrame(draw);
 }
