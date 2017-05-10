@@ -50,7 +50,6 @@ function mouseDownEvent(x, y, button) {
 		gctx.strokeStyle = '#ffffff';
 		console.log("Recording stroke #" + strokeID + "...");
 		gctx.beginPath();
-		gctx.shadowColor = "rgba(255,255,0,.25)";
 		
 		circles.unshift({
 			x: x,
@@ -97,12 +96,6 @@ function drawLine(ctx, a, b) {
 	ctx.lineTo(b.X, b.Y);
 	var width = Math.sqrt(Math.pow(a.X - b.X, 2) + Math.pow(a.Y - b.Y, 2));
 	ctx.lineWidth = 3 - (3 * (width/100));
-	ctx.shadowBlur = 6 - Math.random() * 3;
-	var red   = 255;
-	var green = Math.round(Math.random() * 120 + 135);
-	var blue  = Math.round(Math.random() * 200);
-	var rgb = red + ',' + green + ',' + blue;
-	ctx.shadowColor = 'rgba(' + rgb + ',0.25)';
 	
 	ctx.stroke();
 }
@@ -135,6 +128,7 @@ function draw() {
 	var canvas = document.getElementById('gestures');
 	var ctx = canvas.getContext('2d');
 	var sctx = circleCanv.getContext('2d');
+	var gctx = gestureCanv.getContext('2d');
 	
 	// Clear the canvas
 	ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
@@ -150,6 +144,16 @@ function draw() {
 		if (circles[i].radius > THRESHOLD) {
 			circles.splice(i,1);
 		}
+	}
+	
+	if (points.length > 0) {
+		gctx.shadowBlur = 7 - Math.random() * 3;
+		var red   = 255;
+		var green = Math.round(Math.random() * 120 + 135);
+		var blue  = Math.round(Math.random() * 200);
+		var rgb = red + ',' + green + ',' + blue;
+		gctx.shadowColor = 'rgba(' + rgb + ',1)';
+		gctx.stroke();
 	}
 	
 	ctx.drawImage(gestureCanv, 0, 0);
