@@ -4,7 +4,8 @@
 //
 // Startup
 //
-var isDown, points, strokeID, recog, iter, circles, scratch; // global variables
+var isDown, points, strokeID, recog, iter, circles; // global variables
+var circleCanv, gestureCanv;
 
 function onLoadEvent() {
 	points = new Array(); // point array for current stroke
@@ -16,14 +17,18 @@ function onLoadEvent() {
 	var ctx = gestures.getContext('2d');
 	ctx.canvas.width = window.innerWidth;
 	ctx.canvas.height = window.innerHeight;
-	scratch = document.createElement('canvas');
-	var sctx = scratch.getContext('2d');
+	circleCanv = document.createElement('canvas');
+	var sctx = circleCanv.getContext('2d');
 	sctx.canvas.width = window.innerWidth;
 	sctx.canvas.height = window.innerHeight;
+	gestureCanv = document.createElement('canvas');
+	var gctx = gestureCanv.getContext('2d');
+	gctx.canvas.width = window.innerWidth;
+	gctx.canvas.height = window.innerHeight;
 	
 	iter = 0;
 	circles = [];
-	window.webkitRequestAnimationFrame(draw);
+	window.requestAnimationFrame(draw);
 }
 
 //
@@ -39,19 +44,19 @@ function mouseDownEvent(x, y, button) {
 			points.length = 0;
 		}
 		points[points.length] = new Point(x, y, ++strokeID);
-		var context = document.getElementById('gestures').getContext('2d');
-		context.lineWidth = 3;
-		context.moveTo(x, y);
-		context.strokeStyle = '#ffffff';
+		var gctx = gestureCanv.getContext('2d');
+		gctx.lineWidth = 3;
+		gctx.moveTo(x, y);
+		gctx.strokeStyle = '#ffffff';
 		console.log("Recording stroke #" + strokeID + "...");
-		context.beginPath();
-		context.shadowColor = "rgba(255,255,0,0.25)";
+		gctx.beginPath();
+		gctx.shadowColor = "rgba(255,255,0,.25)";
 		
 		circles.unshift({
 			x: x,
 			y: y,
 			radius: 10,
-			color: 'rgba(255,255,0,0.25)'
+			color: '255,255,0'
 		});
 	}
 	else if (button == 2) {
@@ -63,7 +68,7 @@ function mouseMoveEvent(x, y, button) {
 	if (isDown) {
 		var point = new Point(x, y, strokeID);
 		points[points.length] = point; // append
-		drawLine(points[points.length-2], point);
+		drawLine(gestureCanv.getContext('2d'), points[points.length-2], point);
 	}
 }
 
@@ -92,6 +97,13 @@ function drawLine(ctx, a, b) {
 	ctx.lineTo(b.X, b.Y);
 	var width = Math.sqrt(Math.pow(a.X - b.X, 2) + Math.pow(a.Y - b.Y, 2));
 	ctx.lineWidth = 3 - (3 * (width/100));
+	ctx.shadowBlur = 6 - Math.random() * 3;
+	var red   = 255;
+	var green = Math.round(Math.random() * 120 + 135);
+	var blue  = Math.round(Math.random() * 200);
+	var rgb = red + ',' + green + ',' + blue;
+	ctx.shadowColor = 'rgba(' + rgb + ',0.25)';
+	
 	ctx.stroke();
 }
 
@@ -113,40 +125,30 @@ function createCircle(ctx, x, y, rad, col) {
 }
 
 function draw() {
+	var THRESHOLD = 40;
 	var canvas = document.getElementById('gestures');
 	var ctx = canvas.getContext('2d');
-	var sctx = scratch.getContext('2d');
+	var sctx = circleCanv.getContext('2d');
 	
 	// Clear the canvas
 	ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-	sctx.clearRect(0, 0, window.innerWidth, window.innerHeight);	
+	sctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 	
 	// Create the circles
 	for (var i = circles.length - 1; i >= 0; --i) {
-		createCircle(sctx, circles[i].x, circles[i].y, circles[i].radius, circles[i].color);
-		circles[i].radius += 5;
-		if (circles[i].radius > 25) {
+		circles[i].radius += 3;
+		var rgb = circles[i].color;
+		var a = 0.25 * (1 - (circles[i].radius / THRESHOLD));
+		var rgba = 'rgba(' + rgb + ',' + a + ')';
+		createCircle(sctx, circles[i].x, circles[i].y, circles[i].radius, rgba);
+		if (circles[i].radius > THRESHOLD) {
 			circles.splice(i,1);
 		}
 	}
 	
-	ctx.shadowBlur = 6 - Math.random() * 3;
-	var red   = 255;
-	var green = Math.round(Math.random() * 120 + 135);
-	var blue  = Math.round(Math.random() * 200);
-	var rgb = red + ',' + green + ',' + blue;
-	ctx.shadowColor = 'rgba(' + rgb + ',0.25)';
-	
-	if (points.length > 1) {
-		ctx.moveTo(points[0].X, points[0].Y);
-		// Draw the lines
-		for (i = 0; i < points.length - 1; ++i) {
-			drawLine(ctx, points[i], points[i+1]);
-		}
-	}
-	
-	ctx.drawImage(scratch, 0, 0);
-	window.webkitRequestAnimationFrame(draw);
+	ctx.drawImage(gestureCanv, 0, 0);
+	ctx.drawImage(circleCanv, 0, 0);
+	window.requestAnimationFrame(draw);
 }
 
 
@@ -166,9 +168,12 @@ window.addEventListener('DOMContentLoaded', function() {
 		var ctx = gestures.getContext('2d');
 		ctx.canvas.width = window.innerWidth;
 		ctx.canvas.height = window.innerHeight;
-		var sctx = scratch.getContext('2d');
+		var sctx = circleCanv.getContext('2d');
 		sctx.canvas.width = window.innerWidth;
 		sctx.canvas.height = window.innerHeight;
+		var gctx = gestureCanv.getContext('2d');
+		gctx.canvas.width = window.innerWidth;
+		gctx.canvas.height = window.innerHeight;
 	});
 	
 	engine.runRenderLoop(function() {
