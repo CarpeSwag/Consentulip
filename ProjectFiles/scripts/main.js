@@ -9,6 +9,14 @@
 var isDown, points, strokeID, recog, iter, circles, glow, gdx;
 var circleCanv, gestureCanv, bufferCanv;
 
+// Constants
+
+// Testing function
+function testGestures() {
+	var canvas = document.getElementById('gestures').className = 'active';
+	clearStrokes();
+	console.log('Enabling gesture testing...');
+}
 
 function onLoadEvent() {
 	points = new Array(); // point array for current stroke
@@ -93,8 +101,8 @@ function mouseUpEvent(x, y, button) {
 function drawLine(ctx, a, b) {
 	ctx.lineTo(b.X, b.Y);
 	var width = Math.sqrt(Math.pow(a.X - b.X, 2) + Math.pow(a.Y - b.Y, 2));
-	ctx.lineWidth = 4 - (3 * (width/100));
-	ctx.shadowBlur = 10 + (3 * (width/100));
+	ctx.lineWidth = 4 - (3 * (width/200));
+	ctx.shadowBlur = 10 + (3 * (width/200));
 }
 
 function clearStrokes() {
