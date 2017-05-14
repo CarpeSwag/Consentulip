@@ -7,6 +7,12 @@
 	<body>
 		<canvas id="renderCanvas"></canvas>
 		<div id='overlay'>
+			<canvas id='gestures' class=''
+				onmousedown="mouseDownEvent(event.clientX, event.clientY, event.button)"
+				onmousemove="mouseMoveEvent(event.clientX, event.clientY, event.button)"
+				onmouseup="mouseUpEvent(event.clientX, event.clientY, event.button)"
+				oncontextmenu="return false;">
+			</canvas>
 			<div id='top-bar'>
 				<div id='menu-btn' class='button'>
 					<div class='sandwich-button'>
@@ -41,6 +47,7 @@
 		
 		<!-- Scripts and Styles -->
 		<script src="scripts/babylon.js"></script>
+		<script src="scripts/pdollar.js"></script>
 		<script src="scripts/main.js"></script>
 		<link href="styles/index.css" type="text/css" rel="stylesheet">
 	</body>

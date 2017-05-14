@@ -113,6 +113,19 @@ html, body {
   transform: rotate(315deg);
 }
 
+/* Gesture Menu */
+
+#gestures {
+	position: absolute;
+	width: calc(100% + 6.0rem);
+	height: 100%;
+	left: -3.0rem;
+}
+
+#gestures.active {
+	pointer-events: auto;
+}
+
 /* Top Bar */
 
 #top-bar {
