@@ -204,14 +204,16 @@ window.addEventListener('DOMContentLoaded', function() {
 		scene.render();
 	});
 	
-	// Populate the scene
+	// Camera settings
 	var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 4,
 		Math.PI / 3, 10, new BABYLON.Vector3(0,2,0), scene);
 	camera.upperBetaLimit = Math.PI / 2;
 	camera.lowerRadiusLimit = 7.5;
 	camera.upperRadiusLimit = 500;
 	camera.attachControl(canvas, true, true);
-
+	scene.activeCamera.panningSensibility = 0; // disables camera panning
+	
+	// Set up the light
 	var light = new BABYLON.HemisphericLight("light",
 		new BABYLON.Vector3(0, 1, 0), scene);
 	light.intensity = 0.7;
