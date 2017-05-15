@@ -206,7 +206,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	
 	// Populate the scene
 	var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 4,
-		Math.PI / 3, 10, new BABYLON.Vector3(0,1,0), scene);
+		Math.PI / 3, 10, new BABYLON.Vector3(0,2,0), scene);
 	camera.upperBetaLimit = Math.PI / 2;
 	camera.lowerRadiusLimit = 7.5;
 	camera.upperRadiusLimit = 500;
@@ -220,9 +220,16 @@ window.addEventListener('DOMContentLoaded', function() {
 	var stem, leaves, petals;
 	BABYLON.SceneLoader.ImportMesh('', 'art/models/',
 		'tulip.babylon', scene, function (mesh) {
+		var SCALE = 1.5;
 		leaves = [];
 		petals = [];
 		for (var i = 0; i < mesh.length; ++i) {
+			mesh[i].scaling.x *= SCALE;
+			mesh[i].scaling.y *= SCALE;
+			mesh[i].scaling.z *= SCALE;
+			mesh[i].position.x *= SCALE;
+			mesh[i].position.y *= SCALE;
+			mesh[i].position.z *= SCALE;
 			var name = mesh[i].name;
 			var type = 'unknown';
 			if (name === 'stem') {
