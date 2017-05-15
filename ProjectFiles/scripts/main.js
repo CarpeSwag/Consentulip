@@ -266,6 +266,8 @@ window.addEventListener('DOMContentLoaded', function() {
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
 				console.log(mesh.flowerPart);
 				camera.target = mesh.position;
+				camera.alpha = Math.PI / 2;
+				camera.radius = 15;
 			}
         }
     }
