@@ -216,32 +216,22 @@ window.addEventListener('DOMContentLoaded', function() {
 		new BABYLON.Vector3(0, 1, 0), scene);
 	light.intensity = 0.7;
 	
-	var flowerBase;
+	var stem, leaves, petals;
 	BABYLON.SceneLoader.ImportMesh('', 'art/models/',
-		'flower_base.babylon', scene, function (newMeshes) {
-		var SCALE = 0.33;
-		flowerBase = newMeshes[0];
-		for (var i = 0; i < newMeshes.length; ++i) {
-			newMeshes[i].scaling.x = SCALE;
-			newMeshes[i].scaling.y = SCALE;
-			newMeshes[i].scaling.z = SCALE;
+		'tulip.babylon', scene, function (mesh) {
+		leaves = [];
+		petals = [];
+		for (var i = 0; i < mesh.length; ++i) {
+			var name = mesh[i].name;
+			if (name === 'stem') {
+				stem = mesh[i];
+			} else if (name.substring(0,4) === 'leaf') {
+				leaves.push(mesh[i]);
+			} else if (name.substring(0,5) === 'petal') {
+				petals.push(mesh[i]);
+			}
 		}
     });
-	
-	var petal;
-	BABYLON.SceneLoader.ImportMesh('', 'art/models/',
-		'petal.babylon', scene, function (newMeshes) {
-		var SCALE = 0.33;
-		petal = newMeshes[0];
-		for (var i = 0; i < newMeshes.length; ++i) {
-			newMeshes[i].scaling.x = SCALE;
-			newMeshes[i].scaling.y = SCALE;
-			newMeshes[i].scaling.z = SCALE;
-			newMeshes[i].position.x = 0 * SCALE;
-			newMeshes[i].position.y = 12.25 * SCALE;
-			newMeshes[i].position.z = -0.75 * SCALE;
-		}
-	});
 
 	var ground = BABYLON.Mesh.CreateGround("ground", 3, 3, 2, scene);	
 	scene.clearColor = new BABYLON.Color3(.1, .1, .1);
