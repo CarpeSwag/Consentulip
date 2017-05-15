@@ -205,8 +205,9 @@ window.addEventListener('DOMContentLoaded', function() {
 	});
 	
 	// Camera settings
+	var DEFAULT_CAMERA_TARGET = new BABYLON.Vector3(0,7.5,0);
 	var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 4,
-		Math.PI / 3, 10, new BABYLON.Vector3(0,2,0), scene);
+		Math.PI / 3, 30, DEFAULT_CAMERA_TARGET, scene);
 	camera.upperBetaLimit = Math.PI / 2;
 	camera.lowerRadiusLimit = 7.5;
 	camera.upperRadiusLimit = 500;
@@ -222,7 +223,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	var stem, leaves, petals;
 	BABYLON.SceneLoader.ImportMesh('', 'art/models/',
 		'tulip.babylon', scene, function (mesh) {
-		var SCALE = 1.5;
+		var SCALE = 5.0;
 		leaves = [];
 		petals = [];
 		for (var i = 0; i < mesh.length; ++i) {
