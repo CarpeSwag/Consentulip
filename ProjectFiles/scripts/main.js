@@ -233,7 +233,7 @@ window.addEventListener('DOMContentLoaded', function() {
 			mesh[i].position.y *= SCALE;
 			mesh[i].position.z *= SCALE;
 			var name = mesh[i].name;
-			var type = 'unknown';
+			var type = 'ignore';
 			if (name === 'stem') {
 				stem = mesh[i];
 				type = 'stem';
@@ -261,8 +261,11 @@ window.addEventListener('DOMContentLoaded', function() {
         // check if we are under a mesh
         var pickInfo = scene.pick(scene.pointerX, scene.pointerY, function (mesh) { return mesh !== ground; });
         if (pickInfo.hit) {
-            currentMesh = pickInfo.pickedMesh;
-			console.log(pickInfo.pickedMesh.flowerPart);
+			var mesh = pickInfo.pickedMesh;
+			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
+				console.log(mesh.flowerPart);
+				camera.target = mesh.position;
+			}
         }
     }
 
