@@ -216,6 +216,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		new BABYLON.Vector3(0, 1, 0), scene);
 	light.intensity = 0.7;
 	
+	// Load in the model
 	var stem, leaves, petals;
 	BABYLON.SceneLoader.ImportMesh('', 'art/models/',
 		'tulip.babylon', scene, function (mesh) {
@@ -223,18 +224,50 @@ window.addEventListener('DOMContentLoaded', function() {
 		petals = [];
 		for (var i = 0; i < mesh.length; ++i) {
 			var name = mesh[i].name;
+			var type = 'unknown';
 			if (name === 'stem') {
 				stem = mesh[i];
+				type = 'stem';
 			} else if (name.substring(0,4) === 'leaf') {
 				leaves.push(mesh[i]);
+				type = 'leaf';
 			} else if (name.substring(0,5) === 'petal') {
 				petals.push(mesh[i]);
+				type = 'petal';
 			}
+			mesh[i].flowerPart = type;
 		}
     });
-
+	
+	// Load in the ground
 	var ground = BABYLON.Mesh.CreateGround("ground", 3, 3, 2, scene);	
 	scene.clearColor = new BABYLON.Color3(.1, .1, .1);
+	
+	// Mouse events
+	var onPointerDown = function (evt) {
+        if (evt.button !== 0) {
+            return;
+        }
+
+        // check if we are under a mesh
+        var pickInfo = scene.pick(scene.pointerX, scene.pointerY, function (mesh) { return mesh !== ground; });
+        if (pickInfo.hit) {
+            currentMesh = pickInfo.pickedMesh;
+			console.log(pickInfo.pickedMesh.flowerPart);
+        }
+    }
+
+    var onPointerUp = function () {
+        
+    }
+
+    var onPointerMove = function (evt) {
+        
+    }
+
+    canvas.addEventListener("pointerdown", onPointerDown, false);
+    canvas.addEventListener("pointerup", onPointerUp, false);
+    canvas.addEventListener("pointermove", onPointerMove, false);
 	
 	// Ensure screen is sized correctly.
 	engine.resize();
