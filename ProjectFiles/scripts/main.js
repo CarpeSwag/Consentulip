@@ -257,7 +257,7 @@ window.addEventListener('DOMContentLoaded', function() {
 					radius: 12,
 					yOffset: 0
 				}
-				mesh[i].position.y += 2;
+				mesh[i].position.y += 0.4 * SCALE;
 			} else if (name.substring(0,5) === 'petal') {
 				petals.push(mesh[i]);
 				type = 'petal';
