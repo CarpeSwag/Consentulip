@@ -247,6 +247,7 @@ window.addEventListener('DOMContentLoaded', function() {
 				info = {
 					alpha: 0,
 					radius: 10,
+					yOffset: 0
 				}
 			} else if (name.substring(0,4) === 'leaf') {
 				leaves.push(mesh[i]);
@@ -254,6 +255,7 @@ window.addEventListener('DOMContentLoaded', function() {
 				info = {
 					alpha: 0,
 					radius: 12,
+					yOffset: 0
 				}
 			} else if (name.substring(0,5) === 'petal') {
 				petals.push(mesh[i]);
@@ -278,6 +280,7 @@ window.addEventListener('DOMContentLoaded', function() {
 				info = {
 					alpha: alpha,
 					radius: 7.5,
+					yOffset: .5
 				}
 			}
 			mesh[i].flowerPart = type;
@@ -300,8 +303,12 @@ window.addEventListener('DOMContentLoaded', function() {
         if (pickInfo.hit) {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
-				camera.target = mesh.position;
 				var info = mesh.cameraInfo;
+				camera.target = new BABYLON.Vector3(
+					mesh.position.x,
+					mesh.position.y + info.yOffset,
+					mesh.position.z
+				);
 				
 				camera.alpha = info.alpha;
 				if (info.alpha == 0)
