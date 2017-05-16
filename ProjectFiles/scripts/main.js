@@ -9,6 +9,7 @@
 var isDown, points, strokeID, recog, iter, circles, glow, gdx;
 var circleCanv, gestureCanv, bufferCanv;
 
+var zoomOut;
 
 // Constants
 
@@ -340,6 +341,28 @@ window.addEventListener('DOMContentLoaded', function() {
     var onPointerMove = function (evt) {
         
     }
+	
+	zoomOut = function() {
+		// Hide gesture canvas
+		var canvas = document.getElementById('gestures').className = '';
+		clearStrokes();
+		
+		camera.target = DEFAULT_CAMERA_TARGET;
+		
+		// Lock the camera alpha angle
+		camera.lowerAlphaLimit = null;
+		camera.upperAlphaLimit = null;
+		
+		// Lock the camera beta angle
+		camera.beta = Math.PI / 3
+		camera.lowerBetaLimit = 0.1;
+		camera.upperBetaLimit = Math.PI / 2;
+		
+		// Lock the camera radius
+		camera.radius = 30;
+		camera.lowerRadiusLimit = 7.5;
+		camera.upperRadiusLimit = 500;
+	}
 
     canvas.addEventListener("pointerdown", onPointerDown, false);
     canvas.addEventListener("pointerup", onPointerUp, false);
