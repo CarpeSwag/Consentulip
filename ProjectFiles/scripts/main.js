@@ -189,6 +189,11 @@ function resizeCanvas() {
 * Babylon Things
 **/
 
+function isInFront(cameraAlpha) {
+	return (cameraAlpha >= 0)? (cameraAlpha % (Math.PI * 2)) < Math.PI:
+		(Math.abs(cameraAlpha) % (Math.PI * 2)) >= Math.PI;
+}
+
 window.addEventListener('DOMContentLoaded', function() {
 	var canvas = document.getElementById('renderCanvas');
 	var engine = new BABYLON.Engine(canvas, true);
@@ -264,9 +269,9 @@ window.addEventListener('DOMContentLoaded', function() {
         if (pickInfo.hit) {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
-				console.log(mesh.flowerPart);
 				camera.target = mesh.position;
-				camera.alpha = Math.PI / 2;
+				console.log(isInFront(camera.alpha));
+				camera.alpha = (isInFront(camera.alpha))? Math.PI / 2: 3 * Math.PI / 2;
 				camera.radius = 15;
 			}
         }
