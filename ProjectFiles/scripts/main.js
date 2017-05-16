@@ -295,8 +295,24 @@ window.addEventListener('DOMContentLoaded', function() {
 		}
     });
 	
+	// Load in the pot
+	var pot;
+	BABYLON.SceneLoader.ImportMesh('', 'art/models/',
+		'pot.babylon', scene, function (mesh) {
+		var SCALE = 4.5;
+		for (var i = 0; i < mesh.length; ++i) {
+			pot = mesh[i];
+			mesh[i].scaling.x *= SCALE;
+			mesh[i].scaling.y *= SCALE;
+			mesh[i].scaling.z *= SCALE;
+			mesh[i].position.x *= SCALE;
+			mesh[i].position.y *= SCALE;
+			mesh[i].position.z *= SCALE;
+			mesh[i].position.y += -0.80 * SCALE;
+		}
+    });
+	
 	// Load in the ground
-	var ground = BABYLON.Mesh.CreateGround("ground", 3, 3, 2, scene);	
 	scene.clearColor = new BABYLON.Color3(.2, .6, .75);
 	
 	// Mouse events
@@ -306,7 +322,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 
         // check if we are under a mesh
-        var pickInfo = scene.pick(scene.pointerX, scene.pointerY, function (mesh) { return mesh !== ground; });
+        var pickInfo = scene.pick(scene.pointerX, scene.pointerY, function (mesh) { return mesh !== pot; });
         if (pickInfo.hit) {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
