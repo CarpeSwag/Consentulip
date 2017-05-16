@@ -9,14 +9,8 @@
 var isDown, points, strokeID, recog, iter, circles, glow, gdx;
 var circleCanv, gestureCanv, bufferCanv;
 
-// Constants
 
-// Testing function
-function testGestures() {
-	var canvas = document.getElementById('gestures').className = 'active';
-	clearStrokes();
-	console.log('Enabling gesture testing...');
-}
+// Constants
 
 function onLoadEvent() {
 	points = new Array(); // point array for current stroke
@@ -333,7 +327,8 @@ window.addEventListener('DOMContentLoaded', function() {
 				camera.lowerRadiusLimit = radius;
 				camera.upperRadiusLimit = radius;
 				
-					
+				var canvas = document.getElementById('gestures').className = 'active';
+				clearStrokes();
 			}
         }
     }
