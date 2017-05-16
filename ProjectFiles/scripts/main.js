@@ -216,8 +216,12 @@ window.addEventListener('DOMContentLoaded', function() {
 	
 	// Set up the light
 	var light = new BABYLON.HemisphericLight("light",
-		new BABYLON.Vector3(0, 1, 0), scene);
+		new BABYLON.Vector3(0, 1000, 0), scene);
 	light.intensity = 0.7;
+	
+	var light2 = new BABYLON.HemisphericLight("light",
+		new BABYLON.Vector3(0, 0, 0), scene);
+	light2.intensity = 2.0;
 	
 	// Load in the model
 	var stem, leaves, petals;
@@ -286,7 +290,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	
 	// Load in the ground
 	var ground = BABYLON.Mesh.CreateGround("ground", 3, 3, 2, scene);	
-	scene.clearColor = new BABYLON.Color3(.1, .1, .1);
+	scene.clearColor = new BABYLON.Color3(.2, .6, .75);
 	
 	// Mouse events
 	var onPointerDown = function (evt) {
