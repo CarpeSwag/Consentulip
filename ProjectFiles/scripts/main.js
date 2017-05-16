@@ -9,14 +9,9 @@
 var isDown, points, strokeID, recog, iter, circles, glow, gdx;
 var circleCanv, gestureCanv, bufferCanv;
 
-// Constants
+var zoomOut;
 
-// Testing function
-function testGestures() {
-	var canvas = document.getElementById('gestures').className = 'active';
-	clearStrokes();
-	console.log('Enabling gesture testing...');
-}
+// Constants
 
 function onLoadEvent() {
 	points = new Array(); // point array for current stroke
@@ -189,6 +184,11 @@ function resizeCanvas() {
 * Babylon Things
 **/
 
+function isInFront(cameraAlpha) {
+	return (cameraAlpha >= 0)? (cameraAlpha % (Math.PI * 2)) < Math.PI:
+		(Math.abs(cameraAlpha) % (Math.PI * 2)) >= Math.PI;
+}
+
 window.addEventListener('DOMContentLoaded', function() {
 	var canvas = document.getElementById('renderCanvas');
 	var engine = new BABYLON.Engine(canvas, true);
@@ -204,47 +204,173 @@ window.addEventListener('DOMContentLoaded', function() {
 		scene.render();
 	});
 	
-	// Populate the scene
+	// Camera settings
+	var DEFAULT_CAMERA_TARGET = new BABYLON.Vector3(0,7.5,0);
 	var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 4,
-		Math.PI / 3, 10, new BABYLON.Vector3(0,1,0), scene);
+		Math.PI / 3, 30, DEFAULT_CAMERA_TARGET, scene);
 	camera.upperBetaLimit = Math.PI / 2;
 	camera.lowerRadiusLimit = 7.5;
 	camera.upperRadiusLimit = 500;
 	camera.attachControl(canvas, true, true);
-
+	scene.activeCamera.panningSensibility = 0; // disables camera panning
+	
+	// Set up the light
 	var light = new BABYLON.HemisphericLight("light",
-		new BABYLON.Vector3(0, 1, 0), scene);
+		new BABYLON.Vector3(0, 1000, 0), scene);
 	light.intensity = 0.7;
 	
-	var flowerBase;
+	var light2 = new BABYLON.HemisphericLight("light",
+		new BABYLON.Vector3(0, 0, 0), scene);
+	light2.intensity = 2.0;
+	
+	// Load in the model
+	var stem, leaves, petals;
 	BABYLON.SceneLoader.ImportMesh('', 'art/models/',
-		'flower_base.babylon', scene, function (newMeshes) {
-		var SCALE = 0.33;
-		flowerBase = newMeshes[0];
-		for (var i = 0; i < newMeshes.length; ++i) {
-			newMeshes[i].scaling.x = SCALE;
-			newMeshes[i].scaling.y = SCALE;
-			newMeshes[i].scaling.z = SCALE;
+		'tulip.babylon', scene, function (mesh) {
+		var SCALE = 5.0;
+		leaves = [];
+		petals = [];
+		for (var i = 0; i < mesh.length; ++i) {
+			mesh[i].scaling.x *= SCALE;
+			mesh[i].scaling.y *= SCALE;
+			mesh[i].scaling.z *= SCALE;
+			mesh[i].position.x *= SCALE;
+			mesh[i].position.y *= SCALE;
+			mesh[i].position.z *= SCALE;
+			var name = mesh[i].name;
+			var type = 'ignore';
+			var info = {};
+			if (name === 'stem') {
+				stem = mesh[i];
+				type = 'stem';
+				info = {
+					alpha: 0,
+					radius: 10,
+					yOffset: 0
+				}
+			} else if (name.substring(0,4) === 'leaf') {
+				leaves.push(mesh[i]);
+				type = 'leaf';
+				info = {
+					alpha: 0,
+					radius: 12,
+					yOffset: 0
+				}
+				mesh[i].position.y += 0.4 * SCALE;
+			} else if (name.substring(0,5) === 'petal') {
+				petals.push(mesh[i]);
+				type = 'petal';
+				var alpha = 0;
+				switch(+(name.substring(8))) {
+					case 4:
+						alpha = Math.PI / 4;
+						break;
+					case 5:
+						alpha = 5 * Math.PI / 4; 
+						break;
+					case 6:
+						alpha = 7 * Math.PI / 4;
+						break;
+					case 7:
+						alpha = 3 * Math.PI / 4;
+						break;
+					default:
+						break;
+				}
+				info = {
+					alpha: alpha,
+					radius: 7.5,
+					yOffset: .5
+				}
+			}
+			mesh[i].flowerPart = type;
+			mesh[i].cameraInfo = info;
 		}
     });
 	
-	var petal;
-	BABYLON.SceneLoader.ImportMesh('', 'art/models/',
-		'petal.babylon', scene, function (newMeshes) {
-		var SCALE = 0.33;
-		petal = newMeshes[0];
-		for (var i = 0; i < newMeshes.length; ++i) {
-			newMeshes[i].scaling.x = SCALE;
-			newMeshes[i].scaling.y = SCALE;
-			newMeshes[i].scaling.z = SCALE;
-			newMeshes[i].position.x = 0 * SCALE;
-			newMeshes[i].position.y = 12.25 * SCALE;
-			newMeshes[i].position.z = -0.75 * SCALE;
-		}
-	});
-
+	// Load in the ground
 	var ground = BABYLON.Mesh.CreateGround("ground", 3, 3, 2, scene);	
-	scene.clearColor = new BABYLON.Color3(.1, .1, .1);
+	scene.clearColor = new BABYLON.Color3(.2, .6, .75);
+	
+	// Mouse events
+	var onPointerDown = function (evt) {
+        if (evt.button !== 0) {
+            return;
+        }
+
+        // check if we are under a mesh
+        var pickInfo = scene.pick(scene.pointerX, scene.pointerY, function (mesh) { return mesh !== ground; });
+        if (pickInfo.hit) {
+			var mesh = pickInfo.pickedMesh;
+			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
+				var info = mesh.cameraInfo;
+				camera.target = new BABYLON.Vector3(
+					mesh.position.x,
+					mesh.position.y + info.yOffset,
+					mesh.position.z
+				);
+				
+				// Grab camera info for mesh
+				var alpha = info.alpha;
+				if (info.alpha == 0)
+					alpha = (isInFront(camera.alpha))? Math.PI / 2: 3 * Math.PI / 2;
+				var beta = Math.PI / 2;
+				var radius = info.radius;
+				
+				// Lock the camera alpha angle
+				camera.alpha = alpha;
+				camera.lowerAlphaLimit = alpha;
+				camera.upperAlphaLimit = alpha;
+				
+				// Lock the camera beta angle
+				camera.beta = Math.PI / 2;
+				camera.lowerBetaLimit = beta;
+				camera.upperBetaLimit = beta;
+				
+				// Lock the camera radius
+				camera.radius = info.radius;
+				camera.lowerRadiusLimit = radius;
+				camera.upperRadiusLimit = radius;
+				
+				var canvas = document.getElementById('gestures').className = 'active';
+				clearStrokes();
+			}
+        }
+    }
+
+    var onPointerUp = function () {
+        
+    }
+
+    var onPointerMove = function (evt) {
+        
+    }
+	
+	zoomOut = function() {
+		// Hide gesture canvas
+		var canvas = document.getElementById('gestures').className = '';
+		clearStrokes();
+		
+		camera.target = DEFAULT_CAMERA_TARGET;
+		
+		// Lock the camera alpha angle
+		camera.lowerAlphaLimit = null;
+		camera.upperAlphaLimit = null;
+		
+		// Lock the camera beta angle
+		camera.beta = Math.PI / 3
+		camera.lowerBetaLimit = 0.1;
+		camera.upperBetaLimit = Math.PI / 2;
+		
+		// Lock the camera radius
+		camera.radius = 30;
+		camera.lowerRadiusLimit = 7.5;
+		camera.upperRadiusLimit = 500;
+	}
+
+    canvas.addEventListener("pointerdown", onPointerDown, false);
+    canvas.addEventListener("pointerup", onPointerUp, false);
+    canvas.addEventListener("pointermove", onPointerMove, false);
 	
 	// Ensure screen is sized correctly.
 	engine.resize();
