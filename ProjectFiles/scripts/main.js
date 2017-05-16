@@ -281,8 +281,14 @@ window.addEventListener('DOMContentLoaded', function() {
 				info = {
 					alpha: alpha,
 					radius: 7.5,
-					yOffset: .5
+					yOffset: 1.5
 				}
+				var FLOWER_HEAD_SIZE = 1.5;
+				mesh[i].scaling.x *= FLOWER_HEAD_SIZE;
+				mesh[i].scaling.y *= FLOWER_HEAD_SIZE;
+				mesh[i].scaling.z *= FLOWER_HEAD_SIZE;
+				mesh[i].position.x *= FLOWER_HEAD_SIZE;
+				mesh[i].position.z *= FLOWER_HEAD_SIZE;
 			}
 			mesh[i].flowerPart = type;
 			mesh[i].cameraInfo = info;
