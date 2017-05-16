@@ -275,6 +275,7 @@ window.addEventListener('DOMContentLoaded', function() {
 						alpha = 3 * Math.PI / 4;
 						break;
 					default:
+						type = 'ignore';
 						break;
 				}
 				info = {
