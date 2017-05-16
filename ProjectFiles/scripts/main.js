@@ -310,12 +310,29 @@ window.addEventListener('DOMContentLoaded', function() {
 					mesh.position.z
 				);
 				
-				camera.alpha = info.alpha;
+				// Grab camera info for mesh
+				var alpha = info.alpha;
 				if (info.alpha == 0)
-					camera.alpha = (isInFront(camera.alpha))? Math.PI / 2: 3 * Math.PI / 2;
-					
+					alpha = (isInFront(camera.alpha))? Math.PI / 2: 3 * Math.PI / 2;
+				var beta = Math.PI / 2;
+				var radius = info.radius;
+				
+				// Lock the camera alpha angle
+				camera.alpha = alpha;
+				camera.lowerAlphaLimit = alpha;
+				camera.upperAlphaLimit = alpha;
+				
+				// Lock the camera beta angle
 				camera.beta = Math.PI / 2;
+				camera.lowerBetaLimit = beta;
+				camera.upperBetaLimit = beta;
+				
+				// Lock the camera radius
 				camera.radius = info.radius;
+				camera.lowerRadiusLimit = radius;
+				camera.upperRadiusLimit = radius;
+				
+					
 			}
         }
     }
