@@ -240,17 +240,48 @@ window.addEventListener('DOMContentLoaded', function() {
 			mesh[i].position.z *= SCALE;
 			var name = mesh[i].name;
 			var type = 'ignore';
+			var info = {};
 			if (name === 'stem') {
 				stem = mesh[i];
 				type = 'stem';
+				info = {
+					alpha: 0,
+					radius: 10,
+				}
 			} else if (name.substring(0,4) === 'leaf') {
 				leaves.push(mesh[i]);
 				type = 'leaf';
+				info = {
+					alpha: 0,
+					radius: 12,
+				}
 			} else if (name.substring(0,5) === 'petal') {
 				petals.push(mesh[i]);
 				type = 'petal';
+				var alpha = 0;
+				switch(+(name.substring(8))) {
+					case 4:
+						alpha = Math.PI / 4;
+						break;
+					case 5:
+						alpha = 5 * Math.PI / 4; 
+						break;
+					case 6:
+						alpha = 7 * Math.PI / 4;
+						break;
+					case 7:
+						alpha = 3 * Math.PI / 4;
+						break;
+					default:
+						break;
+				}
+				info = {
+					alpha: alpha,
+					radius: 7.5,
+				}
 			}
 			mesh[i].flowerPart = type;
+			mesh[i].cameraInfo = info;
 		}
     });
 	
@@ -270,9 +301,14 @@ window.addEventListener('DOMContentLoaded', function() {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
 				camera.target = mesh.position;
-				console.log(isInFront(camera.alpha));
-				camera.alpha = (isInFront(camera.alpha))? Math.PI / 2: 3 * Math.PI / 2;
-				camera.radius = 15;
+				var info = mesh.cameraInfo;
+				
+				camera.alpha = info.alpha;
+				if (info.alpha == 0)
+					camera.alpha = (isInFront(camera.alpha))? Math.PI / 2: 3 * Math.PI / 2;
+					
+				camera.beta = Math.PI / 2;
+				camera.radius = info.radius;
 			}
         }
     }
