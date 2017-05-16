@@ -38,7 +38,7 @@ html, body {
 	width: 100%;
 	height: 12.5%;
 	margin-top: 17.5%;
-	background-color: #8293A7;
+	background-color: #DDDDDD;
 	border-radius: 999999px;
 }
 
@@ -57,7 +57,7 @@ html, body {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  border: 5px solid #8293A7;
+  border: 5px solid #DDDDDD;
   z-index: 10;
 }
 
@@ -67,7 +67,7 @@ html, body {
   left: 25%;
   width: 50%;
   height: 100%;
-  background:#8293A7;
+  background:#DDDDDD;
   z-index: 0;
 }
 
@@ -158,7 +158,7 @@ html, body {
 	height: 0;
 	border-top: 7.5px solid transparent;
 	border-bottom: 7.5px solid transparent;
-	border-right: 7.5px solid #8293A7;
+	border-right: 7.5px solid #DDDDDD;
 }
 
 #flower-name {
@@ -186,7 +186,7 @@ html, body {
 	position: relative;
 	width: 14px;
 	height: 14px;
-	border: 8px solid #8293A7;
+	border: 8px solid #DDDDDD;
 }
 
 .button:hover {
