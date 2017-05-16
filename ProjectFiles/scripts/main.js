@@ -205,9 +205,9 @@ window.addEventListener('DOMContentLoaded', function() {
 	});
 	
 	// Camera settings
-	var DEFAULT_CAMERA_TARGET = new BABYLON.Vector3(0,7.5,0);
-	var camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 4,
-		Math.PI / 3, 30, DEFAULT_CAMERA_TARGET, scene);
+	var DEFAULT_CAMERA_TARGET = new BABYLON.Vector3(0,5,0);
+	var camera = new BABYLON.ArcRotateCamera("Camera", Math.random() * (Math.PI * 2),
+		Math.PI / 3, 40, DEFAULT_CAMERA_TARGET, scene);
 	camera.upperBetaLimit = Math.PI / 2;
 	camera.lowerRadiusLimit = 7.5;
 	camera.upperRadiusLimit = 500;
