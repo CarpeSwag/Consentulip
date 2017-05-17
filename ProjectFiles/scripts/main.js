@@ -315,6 +315,66 @@ window.addEventListener('DOMContentLoaded', function() {
 	// Load in the ground
 	scene.clearColor = new BABYLON.Color3(.2, .6, .75);
 	
+	// Pan
+	var animationDelta = {
+		alpha: 0,
+		beta: 0,
+		radius: 0,
+		x: 0,
+		y: 0,
+		z: 0,
+		lockCamera: false
+	}
+	var frameCounter = 0;
+	var rotateCameraTo = function(target, alpha, beta, radius, seconds, lockCamera) {
+		// Determine the frames (60 fps)
+		var frameCount = Math.floor(seconds * 60);
+		frameCounter = frameCount;
+		
+		// Clean the alpha value
+		if (camera.alpha < 0)
+			camera.alpha = (2 * Math.PI) - (Math.abs(camera.alpha) % (Math.PI * 2));
+		camera.alpha = camera.alpha % (Math.PI * 2);
+		
+		// Set the info for the camera animation
+		animationDelta.alpha = (alpha - camera.alpha) / frameCount;
+		animationDelta.beta = (beta - camera.beta) / frameCount;
+		animationDelta.radius = (radius - camera.radius) / frameCount;
+		
+		// Start the animation
+		window.requestAnimationFrame(adjustCamera);
+	}
+	
+	var adjustCamera = function() {
+		// Alpha
+		camera.alpha += animationDelta.alpha;
+		camera.lowerAlphaLimit = camera.alpha;
+		camera.upperAlphaLimit = camera.alpha;
+		
+		// Beta
+		camera.beta += animationDelta.beta;
+		camera.lowerBetaLimit = camera.beta;
+		camera.upperBetaLimit = camera.beta;
+		
+		// Radius
+		camera.radius += animationDelta.radius;
+		camera.lowerRadiusLimit = camera.radius;
+		camera.upperRadiusLimit = camera.radius;
+		
+		// Decrement frame counter or end
+		if (frameCounter-- > 0)
+			window.requestAnimationFrame(adjustCamera);
+		else if (!animationDelta.lockCamera) {
+			// Fix camera limits to default
+			camera.lowerAlphaLimit = null;
+			camera.upperAlphaLimit = null;
+			camera.lowerBetaLimit = 0.1;
+			camera.upperBetaLimit = Math.PI / 2;
+			camera.lowerRadiusLimit = 7.5;
+			camera.upperRadiusLimit = 500;
+		}
+	}
+	
 	// Mouse events
 	var onPointerDown = function (evt) {
         if (evt.button !== 0) {
