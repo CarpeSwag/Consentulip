@@ -348,7 +348,16 @@ window.addEventListener('DOMContentLoaded', function() {
         if (evt.button !== 0) {
             return;
         }
-
+		
+		var x = scene.pointerX;
+		var y = scene.pointerY;
+		circles.push({
+			x: x,
+			y: y,
+			radius: 10,
+			color: '255,255,0'
+		});
+		
         // check if we are under a mesh
         var pickInfo = scene.pick(scene.pointerX, scene.pointerY, function (mesh) { return mesh !== pot; });
         if (pickInfo.hit && !enableGestures) {
@@ -377,8 +386,6 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 		
 		if (enableGestures) {
-			var x = scene.pointerX;
-			var y = scene.pointerY;
 			document.onselectstart = function() { return false; } // disable drag-select
 			document.onmousedown = function() { return false; } // disable drag-select
 			if (evt.button <= 1)
@@ -396,13 +403,6 @@ window.addEventListener('DOMContentLoaded', function() {
 				bctx.shadowColor = 'rgba(255,200,50,.25)';
 				console.log("Recording stroke #" + strokeID + "...");
 				bctx.beginPath();
-				
-				circles.unshift({
-					x: x,
-					y: y,
-					radius: 10,
-					color: '255,255,0'
-				});
 			}
 			else if (evt.button == 2) {
 				console.log("Recognizing gesture...");
