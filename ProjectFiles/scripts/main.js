@@ -63,6 +63,43 @@ function createCircle(ctx, x, y, rad, col) {
     ctx.fill();
 }
 
+function createParticle(ctx, x, y, radius, innerRadius, col, radians) {
+	var inner = radius * innerRadius;
+	ctx.fillStyle = col;
+	ctx.beginPath();
+	moveToRotated(ctx, x, y, x - radius, y, radians);
+    lineToRotated(ctx, x, y, x - inner, y - inner, radians);
+	lineToRotated(ctx, x, y, x, y - radius, radians);
+	lineToRotated(ctx, x, y, x + inner, y - inner, radians);
+	lineToRotated(ctx, x, y, x + radius, y, radians);
+	lineToRotated(ctx, x, y, x + inner, y + inner, radians);
+	lineToRotated(ctx, x, y, x, y + radius, radians);
+	lineToRotated(ctx, x, y, x - inner, y + inner, radians);
+	lineToRotated(ctx, x, y, x - radius, y, radians);
+    ctx.closePath();
+	ctx.fill();
+}
+
+function moveToRotated(ctx, x1, y1, x2, y2, rad) {
+	var point = rotateAroundPoint(x1, y1, x2, y2, rad);
+	ctx.moveTo(point[0], point[1]);
+}
+
+function lineToRotated(ctx, x1, y1, x2, y2, rad) {
+	var point = rotateAroundPoint(x1, y1, x2, y2, rad);
+	ctx.lineTo(point[0], point[1]);
+}
+
+function rotateAroundPoint(x1, y1, x2, y2, rad) {
+	var dx = x2 - x1;
+	var dy = y2 - y1;
+	var sin = Math.sin(rad);
+	var cos = Math.cos(rad);
+	var newX = x1 + dx * cos - dy * sin;
+	var newY = y1 + dx * sin + dy * cos;
+	return [newX, newY];
+}
+
 function draw() {
 	var THRESHOLD = 40;
 	var canvas = document.getElementById('gestures');
