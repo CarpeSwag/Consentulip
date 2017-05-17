@@ -357,6 +357,12 @@ window.addEventListener('DOMContentLoaded', function() {
 			radius: 10,
 			color: '255,255,0'
 		});
+		circles.push({
+			x: x,
+			y: y,
+			radius: 20,
+			color: '255,255,0'
+		});
 		
         // check if we are under a mesh
         var pickInfo = scene.pick(scene.pointerX, scene.pointerY, function (mesh) { return mesh !== pot; });
