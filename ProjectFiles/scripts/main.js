@@ -6,7 +6,8 @@
 //
 
 // Global Variables
-var isDown, points, strokeID, recog, iter, circles, glow, gdx;
+var isDown, points, strokeID, recog, iter, glow, gdx;
+var circles, particles;
 var circleCanv, gestureCanv, bufferCanv;
 
 var zoomOut;
@@ -24,8 +25,12 @@ function onLoadEvent() {
 	bufferCanv = document.createElement('canvas');
 	resizeCanvas();
 	
+	var sctx = circleCanv.getContext('2d');
+	sctx.shadowColor = 'rgba(255,200,50,2)';
+	
 	iter = 0;
 	circles = [];
+	particles = [];
 	glow = 100;
 	gdx = 1;
 	window.requestAnimationFrame(draw);
@@ -124,6 +129,30 @@ function draw() {
 			circles.splice(i,1);
 		}
 	}
+	
+	// Create the particles
+	for (var i = particles.length - 1; i >= 0; --i) {
+		sctx.shadowBlur = particles[i].size;
+		var rgb = particles[i].color;
+		var a = particles[i].alpha / 3;
+		var rgba = 'rgba(' + rgb + ',' + a + ')';
+		
+		// Draw the particle
+		for (var j = 0; j < 3; ++j) {
+			createParticle(sctx, particles[i].x, particles[i].y, particles[i].size,
+				.45, rgba, particles[i].rad);
+		}
+		
+		// Adjust it
+		particles[i].rad += particles[i].dr;
+		particles[i].y += particles[i].dy;
+		particles[i].alpha += particles[i].da;
+		
+		if (a <= 0) {
+			particles.splice(i, 1);
+		}
+	}
+	sctx.shadowBlur = 0;
 	
 	if (points.length > 0) {
 		// Change the glow amount
