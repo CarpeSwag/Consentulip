@@ -68,6 +68,20 @@ function createCircle(ctx, x, y, rad, col) {
     ctx.fill();
 }
 
+function addRandomParticle(x, y) {
+	particles.push({
+		x: x,
+		y: y,
+		size: Math.random() * 2.5 + 2.5,
+		rad: Math.random() * Math.PI,
+		color: '255,255,0',
+		alpha: 1,
+		da: -.05,
+		dr: (Math.random() * Math.PI / 12) - Math.PI / 24,
+		dy: Math.random() * 0.25
+	})
+}
+
 function createParticle(ctx, x, y, radius, innerRadius, col, radians) {
 	var inner = radius * innerRadius;
 	ctx.fillStyle = col;
