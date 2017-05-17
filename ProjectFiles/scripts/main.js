@@ -69,12 +69,15 @@ function createCircle(ctx, x, y, rad, col) {
 }
 
 function addRandomParticle(x, y) {
+	var r = 155 + Math.round(Math.random() * 100);
+	var g = 150 + Math.round(Math.random() * 155);
+	var b = Math.round(Math.random() * 255);
 	particles.push({
-		x: x,
-		y: y,
+		x: x + Math.random() * 30 - 15,
+		y: y + Math.random() * 30 - 15,
 		size: Math.random() * 2.5 + 2.5,
 		rad: Math.random() * Math.PI,
-		color: '255,255,0',
+		color: r + ',' + g + ',' + b,
 		alpha: 1,
 		da: -.05,
 		dr: (Math.random() * Math.PI / 12) - Math.PI / 24,
