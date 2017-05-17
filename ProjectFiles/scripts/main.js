@@ -73,8 +73,8 @@ function addRandomParticle(x, y) {
 	var g = 150 + Math.round(Math.random() * 155);
 	var b = Math.round(Math.random() * 255);
 	particles.push({
-		x: x + Math.random() * 30 - 15,
-		y: y + Math.random() * 30 - 15,
+		x: x + Math.random() * 40 - 20,
+		y: y + Math.random() * 40 - 20,
 		size: Math.random() * 2.5 + 2.5,
 		rad: Math.random() * Math.PI,
 		color: r + ',' + g + ',' + b,
@@ -431,6 +431,9 @@ window.addEventListener('DOMContentLoaded', function() {
 			radius: 20,
 			color: '255,255,0'
 		});
+		for (var i = Math.random() * 5 + 3; i >= 0; --i) {
+			addRandomParticle(x, y);
+		}
 		
 		document.onselectstart = function() { return false; } // disable drag-select
 		document.onmousedown = function() { return false; } // disable drag-select
