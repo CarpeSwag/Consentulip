@@ -216,6 +216,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	var scene = new BABYLON.Scene(engine);
 	
 	var enableGestures = false;
+	var gesturesEnabled = false;
 	
 	// Engine functions
 	window.addEventListener('resize', function() {
@@ -438,9 +439,33 @@ window.addEventListener('DOMContentLoaded', function() {
 		document.onselectstart = function() { return false; } // disable drag-select
 		document.onmousedown = function() { return false; } // disable drag-select
 		
-        // check if we are under a mesh
+		if (evt.button <= 1) {
+			isDown = true;
+		}
+		
+		if (enableGestures) {
+			if (evt.button <= 1) {
+				gesturesEnabled = true;
+				if (strokeID == 0)	{
+					points.length = 0;
+				}
+				points[points.length] = new Point(x, y, ++strokeID);
+				var bctx = bufferCanv.getContext('2d');
+				bctx.lineWidth = 3;
+				bctx.moveTo(x, y);
+				bctx.strokeStyle = '#ffffff';
+				bctx.shadowBlur = 10;
+				bctx.shadowColor = 'rgba(255,200,50,.25)';
+				console.log("Recording stroke #" + strokeID + "...");
+				bctx.beginPath();
+			} else if (evt.button == 2) {
+				console.log("Recognizing gesture...");
+			}
+		}
+		
+		// check if we are under a mesh
         var pickInfo = scene.pick(scene.pointerX, scene.pointerY, function (mesh) { return mesh !== pot; });
-        if (pickInfo.hit && !enableGestures) {
+		if (pickInfo.hit && !enableGestures) {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
 				var info = mesh.cameraInfo;
@@ -464,28 +489,6 @@ window.addEventListener('DOMContentLoaded', function() {
 				enableGestures = true;
 			}
         }
-		if (evt.button <= 1) {
-			isDown = true;
-		}
-		
-		if (enableGestures) {
-			if (evt.button <= 1) {
-				if (strokeID == 0)	{
-					points.length = 0;
-				}
-				points[points.length] = new Point(x, y, ++strokeID);
-				var bctx = bufferCanv.getContext('2d');
-				bctx.lineWidth = 3;
-				bctx.moveTo(x, y);
-				bctx.strokeStyle = '#ffffff';
-				bctx.shadowBlur = 10;
-				bctx.shadowColor = 'rgba(255,200,50,.25)';
-				console.log("Recording stroke #" + strokeID + "...");
-				bctx.beginPath();
-			} else if (evt.button == 2) {
-				console.log("Recognizing gesture...");
-			}
-		}
     }
 
     var onPointerMove = function () {
@@ -495,7 +498,7 @@ window.addEventListener('DOMContentLoaded', function() {
 			for (var i = Math.random() * 2 + 1; i >= 0; --i) {
 				addRandomParticle(x, y);
 			}
-			if (enableGestures) {
+			if (gesturesEnabled) {
 				var point = new Point(x, y, strokeID);
 				points[points.length] = point; // append
 				drawLine(bufferCanv.getContext('2d'), points[points.length-2], point);
@@ -511,6 +514,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		if (evt.button <= 1) {
 			if (isDown) {
 				isDown = false;
+				gesturesEnabled = false;
 				console.log("Stroke #" + strokeID + " recorded.");
 				gestureCanv.getContext('2d').drawImage(bufferCanv, 0, 0);
 			}
