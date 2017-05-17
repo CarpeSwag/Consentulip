@@ -31,21 +31,6 @@ function onLoadEvent() {
 	window.requestAnimationFrame(draw);
 }
 
-//
-// Mouse Events
-//
-function mouseDownEvent(x, y, button) {
-	
-}
-
-function mouseMoveEvent(x, y, button) {
-	
-}
-
-function mouseUpEvent(x, y, button) {
-	
-}
-
 function drawLine(ctx, a, b) {
 	ctx.lineTo(b.X, b.Y);
 	var width = Math.sqrt(Math.pow(a.X - b.X, 2) + Math.pow(a.Y - b.Y, 2));
