@@ -458,11 +458,12 @@ window.addEventListener('DOMContentLoaded', function() {
 				enableGestures = true;
 			}
         }
+		if (evt.button <= 1) {
+			isDown = true;
+		}
 		
 		if (enableGestures) {
-			if (evt.button <= 1)
-			{
-				isDown = true;
+			if (evt.button <= 1) {
 				if (strokeID == 0)	{
 					points.length = 0;
 				}
@@ -475,8 +476,7 @@ window.addEventListener('DOMContentLoaded', function() {
 				bctx.shadowColor = 'rgba(255,200,50,.25)';
 				console.log("Recording stroke #" + strokeID + "...");
 				bctx.beginPath();
-			}
-			else if (evt.button == 2) {
+			} else if (evt.button == 2) {
 				console.log("Recognizing gesture...");
 			}
 		}
@@ -486,9 +486,12 @@ window.addEventListener('DOMContentLoaded', function() {
 		var x = scene.pointerX;
 		var y = scene.pointerY;
         if (isDown) {
-			var point = new Point(x, y, strokeID);
-			points[points.length] = point; // append
-			drawLine(bufferCanv.getContext('2d'), points[points.length-2], point);
+			addRandomParticle(x, y);
+			if (enableGestures) {
+				var point = new Point(x, y, strokeID);
+				points[points.length] = point; // append
+				drawLine(bufferCanv.getContext('2d'), points[points.length-2], point);
+			}
 		}
     }
 
