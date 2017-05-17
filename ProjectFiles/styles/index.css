@@ -120,10 +120,12 @@ html, body {
 	width: calc(100% + 6.0rem);
 	height: 100%;
 	left: -3.0rem;
+	pointer-events: none;
 }
 
 #gestures.active {
 	pointer-events: auto;
+	pointer-events: none;
 }
 
 /* Top Bar */

@@ -35,62 +35,15 @@ function onLoadEvent() {
 // Mouse Events
 //
 function mouseDownEvent(x, y, button) {
-	document.onselectstart = function() { return false; } // disable drag-select
-	document.onmousedown = function() { return false; } // disable drag-select
-	if (button <= 1)
-	{
-		isDown = true;
-		if (strokeID == 0)	{
-			points.length = 0;
-		}
-		points[points.length] = new Point(x, y, ++strokeID);
-		var bctx = bufferCanv.getContext('2d');
-		bctx.lineWidth = 3;
-		bctx.moveTo(x, y);
-		bctx.strokeStyle = '#ffffff';
-		bctx.shadowBlur = 10;
-		bctx.shadowColor = 'rgba(255,200,50,.25)';
-		console.log("Recording stroke #" + strokeID + "...");
-		bctx.beginPath();
-		
-		circles.unshift({
-			x: x,
-			y: y,
-			radius: 10,
-			color: '255,255,0'
-		});
-	}
-	else if (button == 2) {
-		console.log("Recognizing gesture...");
-	}
+	
 }
 
 function mouseMoveEvent(x, y, button) {
-	if (isDown) {
-		var point = new Point(x, y, strokeID);
-		points[points.length] = point; // append
-		drawLine(bufferCanv.getContext('2d'), points[points.length-2], point);
-	}
+	
 }
 
 function mouseUpEvent(x, y, button) {
-	document.onselectstart = function() { return true; } // enable drag-select
-	document.onmousedown = function() { return true; } // enable drag-select
-	if (button <= 1) {
-		if (isDown) {
-			isDown = false;
-			console.log("Stroke #" + strokeID + " recorded.");
-			gestureCanv.getContext('2d').drawImage(bufferCanv, 0, 0);
-		}
-	} else if (button == 2) {
-		if (points.length >= 10){
-			var result = recog.Recognize(points);
-			console.log("Result: " + result.Name + " (" + (Math.round(result.Score * 100) / 100) + ").");
-		} else {
-			console.log("Too little input made. Please try again.");
-		}
-		clearStrokes();
-	}
+	
 }
 
 function drawLine(ctx, a, b) {
@@ -193,6 +146,8 @@ window.addEventListener('DOMContentLoaded', function() {
 	var canvas = document.getElementById('renderCanvas');
 	var engine = new BABYLON.Engine(canvas, true);
 	var scene = new BABYLON.Scene(engine);
+	
+	var enableGestures = false;
 	
 	// Engine functions
 	window.addEventListener('resize', function() {
@@ -396,7 +351,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
         // check if we are under a mesh
         var pickInfo = scene.pick(scene.pointerX, scene.pointerY, function (mesh) { return mesh !== pot; });
-        if (pickInfo.hit) {
+        if (pickInfo.hit && !enableGestures) {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
 				var info = mesh.cameraInfo;
@@ -417,16 +372,74 @@ window.addEventListener('DOMContentLoaded', function() {
 				
 				var canvas = document.getElementById('gestures').className = 'active';
 				clearStrokes();
+				enableGestures = true;
 			}
         }
+		
+		if (enableGestures) {
+			var x = scene.pointerX;
+			var y = scene.pointerY;
+			document.onselectstart = function() { return false; } // disable drag-select
+			document.onmousedown = function() { return false; } // disable drag-select
+			if (evt.button <= 1)
+			{
+				isDown = true;
+				if (strokeID == 0)	{
+					points.length = 0;
+				}
+				points[points.length] = new Point(x, y, ++strokeID);
+				var bctx = bufferCanv.getContext('2d');
+				bctx.lineWidth = 3;
+				bctx.moveTo(x, y);
+				bctx.strokeStyle = '#ffffff';
+				bctx.shadowBlur = 10;
+				bctx.shadowColor = 'rgba(255,200,50,.25)';
+				console.log("Recording stroke #" + strokeID + "...");
+				bctx.beginPath();
+				
+				circles.unshift({
+					x: x,
+					y: y,
+					radius: 10,
+					color: '255,255,0'
+				});
+			}
+			else if (evt.button == 2) {
+				console.log("Recognizing gesture...");
+			}
+		}
     }
 
-    var onPointerUp = function () {
-        
+    var onPointerMove = function () {
+		var x = scene.pointerX;
+		var y = scene.pointerY;
+        if (isDown) {
+			var point = new Point(x, y, strokeID);
+			points[points.length] = point; // append
+			drawLine(bufferCanv.getContext('2d'), points[points.length-2], point);
+		}
     }
 
-    var onPointerMove = function (evt) {
-        
+    var onPointerUp = function (evt) {
+        document.onselectstart = function() { return true; } // enable drag-select
+		document.onmousedown = function() { return true; } // enable drag-select
+		var x = scene.pointerX;
+		var y = scene.pointerY;
+		if (evt.button <= 1) {
+			if (isDown) {
+				isDown = false;
+				console.log("Stroke #" + strokeID + " recorded.");
+				gestureCanv.getContext('2d').drawImage(bufferCanv, 0, 0);
+			}
+		} else if (evt.button == 2) {
+			if (points.length >= 10){
+				var result = recog.Recognize(points);
+				console.log("Result: " + result.Name + " (" + (Math.round(result.Score * 100) / 100) + ").");
+			} else {
+				console.log("Too little input made. Please try again.");
+			}
+			clearStrokes();
+		}
     }
 	
 	zoomOut = function() {
@@ -436,6 +449,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		
 		rotateCameraTo(DEFAULT_CAMERA_TARGET, camera.alpha,
 			Math.PI / 3, 40, 0.75, false);
+		enableGestures = false;
 	}
 
     canvas.addEventListener("pointerdown", onPointerDown, false);
