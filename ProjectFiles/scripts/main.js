@@ -364,6 +364,9 @@ window.addEventListener('DOMContentLoaded', function() {
 			color: '255,255,0'
 		});
 		
+		document.onselectstart = function() { return false; } // disable drag-select
+		document.onmousedown = function() { return false; } // disable drag-select
+		
         // check if we are under a mesh
         var pickInfo = scene.pick(scene.pointerX, scene.pointerY, function (mesh) { return mesh !== pot; });
         if (pickInfo.hit && !enableGestures) {
@@ -392,8 +395,6 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 		
 		if (enableGestures) {
-			document.onselectstart = function() { return false; } // disable drag-select
-			document.onmousedown = function() { return false; } // disable drag-select
 			if (evt.button <= 1)
 			{
 				isDown = true;
