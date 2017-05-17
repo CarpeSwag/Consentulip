@@ -344,6 +344,8 @@ window.addEventListener('DOMContentLoaded', function() {
 		animationDelta.y = (target.y - camera.target.y) / frameCount;
 		animationDelta.z = (target.z - camera.target.z) / frameCount;
 		
+		// Lock camera at the end
+		animationDelta.lockCamera = lockCamera;
 		
 		// Start the animation
 		window.requestAnimationFrame(adjustCamera);
@@ -373,9 +375,9 @@ window.addEventListener('DOMContentLoaded', function() {
 		)
 		
 		// Decrement frame counter or end
-		if (frameCounter-- > 0)
+		if (frameCounter-- > 1) {
 			window.requestAnimationFrame(adjustCamera);
-		else if (!animationDelta.lockCamera) {
+		} else if (!animationDelta.lockCamera) {
 			// Fix camera limits to default
 			camera.lowerAlphaLimit = null;
 			camera.upperAlphaLimit = null;
