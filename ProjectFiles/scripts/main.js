@@ -400,7 +400,7 @@ window.addEventListener('DOMContentLoaded', function() {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
 				var info = mesh.cameraInfo;
-				camera.target = new BABYLON.Vector3(
+				var target = new BABYLON.Vector3(
 					mesh.position.x,
 					mesh.position.y + info.yOffset,
 					mesh.position.z
@@ -413,20 +413,7 @@ window.addEventListener('DOMContentLoaded', function() {
 				var beta = Math.PI / 2;
 				var radius = info.radius;
 				
-				// Lock the camera alpha angle
-				camera.alpha = alpha;
-				camera.lowerAlphaLimit = alpha;
-				camera.upperAlphaLimit = alpha;
-				
-				// Lock the camera beta angle
-				camera.beta = Math.PI / 2;
-				camera.lowerBetaLimit = beta;
-				camera.upperBetaLimit = beta;
-				
-				// Lock the camera radius
-				camera.radius = info.radius;
-				camera.lowerRadiusLimit = radius;
-				camera.upperRadiusLimit = radius;
+				rotateCameraTo(target, alpha, beta, radius, 0.75, true);
 				
 				var canvas = document.getElementById('gestures').className = 'active';
 				clearStrokes();
@@ -447,21 +434,8 @@ window.addEventListener('DOMContentLoaded', function() {
 		var canvas = document.getElementById('gestures').className = '';
 		clearStrokes();
 		
-		camera.target = DEFAULT_CAMERA_TARGET;
-		
-		// Lock the camera alpha angle
-		camera.lowerAlphaLimit = null;
-		camera.upperAlphaLimit = null;
-		
-		// Lock the camera beta angle
-		camera.beta = Math.PI / 3
-		camera.lowerBetaLimit = 0.1;
-		camera.upperBetaLimit = Math.PI / 2;
-		
-		// Lock the camera radius
-		camera.radius = 30;
-		camera.lowerRadiusLimit = 7.5;
-		camera.upperRadiusLimit = 500;
+		rotateCameraTo(DEFAULT_CAMERA_TARGET, camera.alpha,
+			Math.PI / 3, 40, 0.75, false);
 	}
 
     canvas.addEventListener("pointerdown", onPointerDown, false);
