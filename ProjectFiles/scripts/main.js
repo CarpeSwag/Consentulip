@@ -340,6 +340,10 @@ window.addEventListener('DOMContentLoaded', function() {
 		animationDelta.alpha = (alpha - camera.alpha) / frameCount;
 		animationDelta.beta = (beta - camera.beta) / frameCount;
 		animationDelta.radius = (radius - camera.radius) / frameCount;
+		animationDelta.x = (target.x - camera.target.x) / frameCount;
+		animationDelta.y = (target.y - camera.target.y) / frameCount;
+		animationDelta.z = (target.z - camera.target.z) / frameCount;
+		
 		
 		// Start the animation
 		window.requestAnimationFrame(adjustCamera);
@@ -360,6 +364,13 @@ window.addEventListener('DOMContentLoaded', function() {
 		camera.radius += animationDelta.radius;
 		camera.lowerRadiusLimit = camera.radius;
 		camera.upperRadiusLimit = camera.radius;
+		
+		// Target
+		camera.target = new BABYLON.Vector3(
+			camera.target.x + animationDelta.x,
+			camera.target.y + animationDelta.y,
+			camera.target.z + animationDelta.z
+		)
 		
 		// Decrement frame counter or end
 		if (frameCounter-- > 0)
