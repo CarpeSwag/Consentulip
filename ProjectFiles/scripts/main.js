@@ -486,7 +486,9 @@ window.addEventListener('DOMContentLoaded', function() {
 		var x = scene.pointerX;
 		var y = scene.pointerY;
         if (isDown) {
-			addRandomParticle(x, y);
+			for (var i = Math.random() * 2 + 1; i >= 0; --i) {
+				addRandomParticle(x, y);
+			}
 			if (enableGestures) {
 				var point = new Point(x, y, strokeID);
 				points[points.length] = point; // append
