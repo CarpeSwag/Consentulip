@@ -436,7 +436,8 @@ window.addEventListener('DOMContentLoaded', function() {
 		)
 		
 		// Decrement frame counter or end
-		if (frameCounter-- > 1) {
+		if (--frameCounter >= 0) {
+			console.log(frameCounter);
 			window.requestAnimationFrame(adjustCamera);
 		} else if (!animationDelta.lockCamera) {
 			// Fix camera limits to default
