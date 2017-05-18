@@ -117,6 +117,7 @@ function createLine(ctx, a, b, width, blurWidth, col, blurCol) {
 	ctx.moveTo(a.x, a.y);
 	ctx.lineTo(b.x, b.y);
 	ctx.closePath();
+	ctx.stroke();
 }
 
 function moveToRotated(ctx, x1, y1, x2, y2, rad) {
