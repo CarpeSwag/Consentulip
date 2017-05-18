@@ -9,10 +9,16 @@
 var isDown, points, strokeID, recog, iter, glow, gdx;
 var circles, particles;
 var circleCanv, gestureCanv, bufferCanv;
-
 var zoomOut;
 
 // Constants
+var FLOWER_COLORS = [
+	{r: 1, g: 0, b: 0},
+	{r: 0, g: 0, b: 1},
+	{r: 1, g: 1, b: 0},
+	{r: 1, g: 0, b: 1},
+	{r: 0, g: 1, b: 1}
+]
 
 function onLoadEvent() {
 	points = new Array(); // point array for current stroke
@@ -210,6 +216,8 @@ function isInFront(cameraAlpha) {
 		(Math.abs(cameraAlpha) % (Math.PI * 2)) >= Math.PI;
 }
 
+var randomizeFlower;
+
 window.addEventListener('DOMContentLoaded', function() {
 	var canvas = document.getElementById('renderCanvas');
 	var engine = new BABYLON.Engine(canvas, true);
@@ -217,6 +225,17 @@ window.addEventListener('DOMContentLoaded', function() {
 	
 	var enableGestures = false;
 	var gesturesEnabled = false;
+	
+	// Generate a random color for the flower
+	var randomColor = {r:0, g:0, b:0};
+	randomizeFlower = function() {
+		var random = FLOWER_COLORS[Math.floor(Math.random() * FLOWER_COLORS.length)];
+		randomColor.r = random.r;
+		randomColor.g = random.g;
+		randomColor.b = random.b;
+		
+	}
+	randomizeFlower();
 	
 	// Engine functions
 	window.addEventListener('resize', function() {
@@ -307,12 +326,19 @@ window.addEventListener('DOMContentLoaded', function() {
 					radius: 7.5,
 					yOffset: 1.5
 				}
+				
+				// Change flower scaling
 				var FLOWER_HEAD_SIZE = 1.5;
 				mesh[i].scaling.x *= FLOWER_HEAD_SIZE;
 				mesh[i].scaling.y *= FLOWER_HEAD_SIZE;
 				mesh[i].scaling.z *= FLOWER_HEAD_SIZE;
 				mesh[i].position.x *= FLOWER_HEAD_SIZE;
 				mesh[i].position.z *= FLOWER_HEAD_SIZE;
+				
+				// Adjust color
+				mesh[i].renderOverlay = true;
+				mesh[i].overlayAlpha = 0.25;
+				mesh[i].overlayColor = randomColor;
 			}
 			mesh[i].flowerPart = type;
 			mesh[i].cameraInfo = info;
