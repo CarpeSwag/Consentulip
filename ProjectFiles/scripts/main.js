@@ -88,7 +88,34 @@ function addRandomParticle(x, y) {
 		da: -.05,
 		dr: (Math.random() * Math.PI / 12) - Math.PI / 24,
 		dy: Math.random() * 0.25
-	})
+	});
+}
+
+function drawLineTimed(a, b, seconds, delay, lifetime) {
+	// Figure out the timings
+	var moveCounter = Math.ceil(seconds * 60);
+	var delayCounter = Math.ceil(delay * 60);
+	var frameCounter = Math.ceil((lifetime - seconds - delay) * 60);
+	
+	// Add the increments
+	var dx = (b.x - a.x) / moveCounter;
+	var dy = (b.y - a.y) / moveCounter;
+	
+	// Push the line
+	lines.push({
+		a: { x: a.x, y: a.y, dx: 0, dy: 0 },
+		b: { x: a.x, y: a.y, dx: dx, dy: dy },
+		width: 4,
+		color: '255,255,255',
+		blurWidth: 10,
+		blurCol: 'rgba(255,200,50,0.5)',
+		alpha: 1,
+		da: 0,
+		glowing: true,
+		moveCounter: moveCounter,
+		frameCounter: frameCounter,
+		delayCounter: delayCounter
+	});
 }
 
 function createParticle(ctx, x, y, radius, innerRadius, col, radians) {
