@@ -108,6 +108,17 @@ function createParticle(ctx, x, y, radius, innerRadius, col, radians) {
 	ctx.fill();
 }
 
+function createLine(ctx, a, b, width, blurWidth, col, blurCol) {
+	ctx.strokeStyle = col;
+	ctx.lineWidth = width;
+	ctx.shadowBlur = blurWidth;
+	ctx.shadowColor = blurCol;
+	ctx.beginPath();
+	ctx.moveTo(a.x, a.y);
+	ctx.lineTo(b.x, b.y);
+	ctx.closePath();
+}
+
 function moveToRotated(ctx, x1, y1, x2, y2, rad) {
 	var point = rotateAroundPoint(x1, y1, x2, y2, rad);
 	ctx.moveTo(point[0], point[1]);
