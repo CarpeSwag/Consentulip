@@ -63,7 +63,6 @@ function clearStrokes() {
 	sctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 	gctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 	bctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-	console.log("Canvas cleared.");
 }
 
 function createCircle(ctx, x, y, rad, col) {
@@ -438,7 +437,6 @@ window.addEventListener('DOMContentLoaded', function() {
 		
 		// Decrement frame counter or end
 		if (--frameCounter >= 0) {
-			console.log(frameCounter);
 			window.requestAnimationFrame(adjustCamera);
 		} else if (!animationDelta.lockCamera) {
 			// Fix camera limits to default
@@ -495,10 +493,8 @@ window.addEventListener('DOMContentLoaded', function() {
 				bctx.strokeStyle = '#ffffff';
 				bctx.shadowBlur = 10;
 				bctx.shadowColor = 'rgba(255,200,50,.25)';
-				console.log("Recording stroke #" + strokeID + "...");
 				bctx.beginPath();
 			} else if (evt.button == 2) {
-				console.log("Recognizing gesture...");
 			}
 		}
 		
@@ -554,7 +550,6 @@ window.addEventListener('DOMContentLoaded', function() {
 			if (isDown) {
 				isDown = false;
 				gesturesEnabled = false;
-				console.log("Stroke #" + strokeID + " recorded.");
 				gestureCanv.getContext('2d').drawImage(bufferCanv, 0, 0);
 			}
 		} else if (evt.button == 2) {
