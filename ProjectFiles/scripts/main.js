@@ -508,7 +508,29 @@ window.addEventListener('DOMContentLoaded', function() {
 			camera.upperBetaLimit = Math.PI / 2;
 			camera.lowerRadiusLimit = 7.5;
 			camera.upperRadiusLimit = 500;
+	var panToMesh = function(mesh, seconds, rotateClockwise) {
+		rotateClockwise = rotateClockwise || false;
+		var info = mesh.cameraInfo;
+		var target = new BABYLON.Vector3(
+			mesh.position.x,
+			mesh.position.y + info.yOffset,
+			mesh.position.z
+		);
+		
+		// Grab camera info for mesh
+		var alpha = info.alpha;
+		if (info.alpha == 0)
+			alpha = (isInFront(camera.alpha))? Math.PI / 2: 3 * Math.PI / 2;
+		var beta = Math.PI / 2;
+		var radius = info.radius;
+		
+		if (rotateClockwise && camera.alpha > alpha) {
+			alpha += Math.PI * 2;
 		}
+		
+		rotateCameraTo(target, alpha, beta, radius, seconds, true);
+		
+		clearStrokes();
 	}
 	
 	// Mouse events
@@ -565,24 +587,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		if (pickInfo.hit && !enableGestures) {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
-				var info = mesh.cameraInfo;
-				var target = new BABYLON.Vector3(
-					mesh.position.x,
-					mesh.position.y + info.yOffset,
-					mesh.position.z
-				);
-				
-				// Grab camera info for mesh
-				var alpha = info.alpha;
-				if (info.alpha == 0)
-					alpha = (isInFront(camera.alpha))? Math.PI / 2: 3 * Math.PI / 2;
-				var beta = Math.PI / 2;
-				var radius = info.radius;
-				
-				rotateCameraTo(target, alpha, beta, radius, 0.75, true);
-				
-				var canvas = document.getElementById('gestures').className = 'active';
-				clearStrokes();
+				panToMesh(mesh, 0.75);
 				enableGestures = true;
 			}
         }
