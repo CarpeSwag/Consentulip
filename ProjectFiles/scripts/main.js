@@ -7,7 +7,7 @@
 
 // Global Variables
 var isDown, points, strokeID, recog, iter, glow, gdx;
-var circles, particles;
+var circles, particles, lines;
 var circleCanv, gestureCanv, bufferCanv;
 var zoomOut;
 
@@ -37,6 +37,7 @@ function onLoadEvent() {
 	iter = 0;
 	circles = [];
 	particles = [];
+	lines = [];
 	glow = 100;
 	gdx = 1;
 	window.requestAnimationFrame(draw);
@@ -191,6 +192,39 @@ function draw() {
 			particles.splice(i, 1);
 		}
 	}
+	sctx.shadowBlur = 0;
+	
+	// Draw lines
+	for (var i = lines.length - 1; i >= 0; --i) {
+		if (lines[i].delayCounter <= 0) {
+			var rgb = lines[i].color;
+			var a = lines[i].alpha;
+			var rgba = 'rgba(' + rgb + ',' + a + ')'; 
+			
+			var drawCount = (lines[i].glowing)? glowLoop: 1;
+			for (var j = 0; j < drawCount; ++j) {
+				createLine(sctx, lines[i].a, lines[i].b, lines[i].width, 
+				lines[i].blurWidth, rgba, lines[i].blurCol);
+			}
+			
+			if (lines[i].moveCounter <= 0) {
+				if (--(lines[i].frameCounter) <= 0) {
+					lines.splice(i, 1);
+				}
+			} else {
+				lines[i].a.x += lines[i].a.dx;
+				lines[i].a.y += lines[i].a.dy;
+				lines[i].b.x += lines[i].b.dx;
+				lines[i].b.y += lines[i].b.dy;
+				lines[i].alpha += lines[i].da;
+				
+				--(lines[i].moveCounter);
+			}
+		} else {
+			--(lines[i].delayCounter);
+		}
+	}
+	
 	sctx.shadowBlur = 0;
 	
 	// Draw gestures
