@@ -152,6 +152,12 @@ function draw() {
 	sctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 	bctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 	
+	// Update the glow amount
+	glow += gdx;
+	if(glow == 60 || glow == 120)
+		gdx *= -1;
+	var glowLoop = Math.floor(glow / 10)
+	
 	// Create the circles
 	for (var i = circles.length - 1; i >= 0; --i) {
 		circles[i].radius += 3;
@@ -188,15 +194,10 @@ function draw() {
 	}
 	sctx.shadowBlur = 0;
 	
+	// Draw gestures
 	if (points.length > 0) {
-		// Change the glow amount
-		glow += gdx;
-		if(glow == 60 || glow == 120)
-			gdx *= -1;
-		
 		bctx.stroke();
-		var glowLoop = Math.floor(glow / 10)
-		for (i = 0; i < glowLoop; ++i) {
+		for (var i = 0; i < glowLoop; ++i) {
 			ctx.drawImage(gestureCanv, 0, 0);
 			ctx.drawImage(bufferCanv, 0, 0);
 		}
