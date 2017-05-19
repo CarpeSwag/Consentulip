@@ -552,7 +552,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	
 	// Mouse events
 	var onPointerDown = function (evt) {
-        if (evt.button !== 0) {
+		if (evt.button !== 0) {
             return;
         }
 		
@@ -610,7 +610,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    var onPointerMove = function () {
+    var onPointerMove = function (evt) {
 		var x = scene.pointerX;
 		var y = scene.pointerY;
         if (isDown) {
@@ -657,9 +657,9 @@ window.addEventListener('DOMContentLoaded', function() {
 		enableGestures = false;
 	}
 
-    canvas.addEventListener("pointerdown", onPointerDown, false);
-    canvas.addEventListener("pointerup", onPointerUp, false);
-    canvas.addEventListener("pointermove", onPointerMove, false);
+	canvas.addEventListener("pointerdown", onPointerDown, false);
+	canvas.addEventListener("pointerup", onPointerUp, false);
+	canvas.addEventListener("pointermove", onPointerMove, false);
 	
 	// Ensure screen is sized correctly.
 	engine.resize();
