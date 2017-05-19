@@ -340,12 +340,13 @@ window.addEventListener('DOMContentLoaded', function() {
 	light2.intensity = 2.0;
 	
 	// Load in the model
-	var stem, leaves, petals;
+	var stem, leaves, petals, outerPetals;
 	BABYLON.SceneLoader.ImportMesh('', 'art/models/',
 		'tulip.babylon', scene, function (mesh) {
 		var SCALE = 5.0;
 		leaves = [];
 		petals = [];
+		outerPetals = [];
 		for (var i = 0; i < mesh.length; ++i) {
 			mesh[i].scaling.x *= SCALE;
 			mesh[i].scaling.y *= SCALE;
@@ -377,6 +378,8 @@ window.addEventListener('DOMContentLoaded', function() {
 				petals.push(mesh[i]);
 				type = 'petal';
 				var alpha = 0;
+				if (+(name.substring(8)) > 3)
+					outerPetals.push(mesh[i]);
 				switch(+(name.substring(8))) {
 					case 4:
 						alpha = Math.PI / 4;
@@ -397,7 +400,7 @@ window.addEventListener('DOMContentLoaded', function() {
 				info = {
 					alpha: alpha,
 					radius: 7.5,
-					yOffset: 1.5
+					yOffset: 1.33
 				}
 				
 				// Change flower scaling
