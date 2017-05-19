@@ -671,6 +671,19 @@ window.addEventListener('DOMContentLoaded', function() {
 		
 		// Messages played during the introduction
 		topText.innerHTML = "Hey Bud! I'm Tulip.";
+		setTimeout(function() {
+			topText.innerHTML = "You can take care of me by watering me"
+				+ " or tending to my soil.";
+			setTimeout(function() {
+				topText.innerHTML = "You can also control the camera by clicking me.";
+				setTimeout(function() {
+					topText.innerHTML = "Sometimes we can play some pattern games.";
+					setTimeout(function() {
+						topText.innerHTML = "Here, try it yourself!";
+						tutorialGesture = true;
+					}, 4000);
+				}, 3000);
+			}, 4000);
 		}, 2000);
 		
 		
