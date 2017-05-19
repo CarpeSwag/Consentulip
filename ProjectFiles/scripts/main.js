@@ -698,5 +698,25 @@ window.addEventListener('DOMContentLoaded', function() {
 			panToMesh(petals[0], 2.5, true);
 			enableGestures = true;
 		}, 7000);
+		
+		// Gesture teaching
+		setTimeout(function() {
+			var centerX = window.innerWidth / 2;
+			var centerY = window.innerHeight / 2;
+			var radius = (window.innerWidth < window.innerHeight)?
+				window.innerWidth * 0.25: window.innerHeight * 0.5;
+			var starPoints = [
+				{x: centerX + radius * -0.75, y: centerY + radius * -0.33},
+				{x: centerX + radius *  0.75, y: centerY + radius * -0.33},
+				{x: centerX + radius * -0.50, y: centerY + radius *  0.50},
+				{x: centerX                 , y: centerY + radius * -0.75},
+				{x: centerX + radius *  0.50, y: centerY + radius *  0.50}
+			];
+			drawLineTimed(starPoints[0], starPoints[1], 0.5, 1.0, 4.00);
+			drawLineTimed(starPoints[1], starPoints[2], 0.5, 1.5, 4.00);
+			drawLineTimed(starPoints[2], starPoints[3], 0.5, 2.0, 4.00);
+			drawLineTimed(starPoints[3], starPoints[4], 0.5, 2.5, 4.00);
+			drawLineTimed(starPoints[4], starPoints[0], 0.5, 3.0, 4.00);
+		}, 8500);
 	};
 });
