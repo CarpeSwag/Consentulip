@@ -441,6 +441,13 @@ window.addEventListener('DOMContentLoaded', function() {
 	// Load in the ground
 	scene.clearColor = new BABYLON.Color3(.2, .6, .75);
 	
+	var modCameraAlpha = function() {
+		// Clean the alpha value to be between 0 and 2 pi
+		if (camera.alpha < 0)
+			camera.alpha = (2 * Math.PI) - (Math.abs(camera.alpha) % (Math.PI * 2));
+		camera.alpha = camera.alpha % (Math.PI * 2);
+	}
+	
 	// Pan
 	var animationDelta = {
 		alpha: 0,
@@ -457,10 +464,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		var frameCount = Math.floor(seconds * 60);
 		frameCounter = frameCount;
 		
-		// Clean the alpha value
-		if (camera.alpha < 0)
-			camera.alpha = (2 * Math.PI) - (Math.abs(camera.alpha) % (Math.PI * 2));
-		camera.alpha = camera.alpha % (Math.PI * 2);
+		modCameraAlpha();
 		
 		// Set the info for the camera animation
 		animationDelta.alpha = (alpha - camera.alpha) / frameCount;
@@ -503,14 +507,20 @@ window.addEventListener('DOMContentLoaded', function() {
 		// Decrement frame counter or end
 		if (--frameCounter >= 0) {
 			window.requestAnimationFrame(adjustCamera);
-		} else if (!animationDelta.lockCamera) {
-			// Fix camera limits to default
-			camera.lowerAlphaLimit = null;
-			camera.upperAlphaLimit = null;
-			camera.lowerBetaLimit = 0.1;
-			camera.upperBetaLimit = Math.PI / 2;
-			camera.lowerRadiusLimit = 7.5;
-			camera.upperRadiusLimit = 500;
+		} else {
+			modCameraAlpha();
+			if (!animationDelta.lockCamera) {
+				// Fix camera limits to default
+				camera.lowerAlphaLimit = null;
+				camera.upperAlphaLimit = null;
+				camera.lowerBetaLimit = 0.1;
+				camera.upperBetaLimit = Math.PI / 2;
+				camera.lowerRadiusLimit = 7.5;
+				camera.upperRadiusLimit = 500;
+			}
+		}
+	}
+	
 	var panToMesh = function(mesh, seconds, rotateClockwise) {
 		rotateClockwise = rotateClockwise || false;
 		var info = mesh.cameraInfo;
