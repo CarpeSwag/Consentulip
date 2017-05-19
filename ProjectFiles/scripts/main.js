@@ -15,7 +15,7 @@ var zoomOut;
 var FLOWER_COLORS = [
 	{r: 1, g: 0, b: 0},
 	{r: 0, g: 0, b: 1},
-	{r: 1, g: 1, b: 0},
+	{r: 1, g: 0.25, b: 0},
 	{r: 1, g: 0, b: 1},
 	{r: 0, g: 1, b: 1}
 ]
@@ -693,5 +693,10 @@ window.addEventListener('DOMContentLoaded', function() {
 		// Rotate around flower, and zoom into it.
 		rotateCameraTo(DEFAULT_CAMERA_TARGET, Math.PI * 3.5,
 			Math.PI / 3, 40, 7.000, false);
+		setTimeout(function() {
+			modCameraAlpha();
+			panToMesh(petals[0], 2.5, true);
+			enableGestures = true;
+		}, 7000);
 	};
 });
