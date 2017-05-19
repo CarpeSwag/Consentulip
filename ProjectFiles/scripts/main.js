@@ -289,6 +289,7 @@ function isInFront(cameraAlpha) {
 		(Math.abs(cameraAlpha) % (Math.PI * 2)) >= Math.PI;
 }
 
+var startTutorial;
 var randomizeFlower;
 
 window.addEventListener('DOMContentLoaded', function() {
@@ -298,6 +299,8 @@ window.addEventListener('DOMContentLoaded', function() {
 	
 	var enableGestures = false;
 	var gesturesEnabled = false;
+	var tutorialActive = false;
+	var tutorialGesture = false;
 	
 	// Generate a random color for the flower
 	var randomColor = {r:0, g:0, b:0};
@@ -383,6 +386,7 @@ window.addEventListener('DOMContentLoaded', function() {
 				switch(+(name.substring(8))) {
 					case 4:
 						alpha = Math.PI / 4;
+						TEST = mesh[i];
 						break;
 					case 5:
 						alpha = 5 * Math.PI / 4; 
@@ -661,4 +665,20 @@ window.addEventListener('DOMContentLoaded', function() {
 	engine.resize();
 	
 	onLoadEvent();
+	
+	startTutorial = function() {
+		var topText = document.getElementById('flower-name');
+		
+		// Messages played during the introduction
+		topText.innerHTML = "Hey Bud! I'm Tulip.";
+		}, 2000);
+		
+		
+		modCameraAlpha();
+		tutorialActive = true;
+		
+		// Rotate around flower, and zoom into it.
+		rotateCameraTo(DEFAULT_CAMERA_TARGET, Math.PI * 3.5,
+			Math.PI / 3, 40, 7.000, false);
+	};
 });
