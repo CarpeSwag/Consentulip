@@ -230,7 +230,7 @@ function draw() {
 			var rgba = 'rgba(' + rgb + ',' + a + ')'; 
 			
 			var drawCount = (lines[i].glowing)? glowLoop: 1;
-			for (var j = 0; j < drawCount; ++j) {
+			for (var j = 0; j < 3; ++j) {
 				createLine(sctx, lines[i].a, lines[i].b, lines[i].width, 
 				lines[i].blurWidth, rgba, lines[i].blurCol);
 			}
