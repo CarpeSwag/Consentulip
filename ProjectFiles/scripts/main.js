@@ -579,18 +579,9 @@ window.addEventListener('DOMContentLoaded', function() {
 		
 		var x = scene.pointerX;
 		var y = scene.pointerY;
-		circles.push({
-			x: x,
-			y: y,
-			radius: 10,
-			color: '255,255,0'
-		});
-		circles.push({
-			x: x,
-			y: y,
-			radius: 20,
-			color: '255,255,0'
-		});
+		circles.push({x: x, y: y, radius: 10, color: '255,255,0'});
+		circles.push({x: x, y: y, radius: 20, color: '255,255,0'});
+		
 		for (var i = Math.random() * 5 + 3; i >= 0; --i) {
 			addRandomParticle(x, y);
 		}
@@ -617,7 +608,6 @@ window.addEventListener('DOMContentLoaded', function() {
 				bctx.shadowBlur = 10;
 				bctx.shadowColor = 'rgba(255,200,50,.25)';
 				bctx.beginPath();
-			} else if (evt.button == 2) {
 			}
 		}
 		
