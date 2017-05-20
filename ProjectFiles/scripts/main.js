@@ -326,13 +326,27 @@ window.addEventListener('DOMContentLoaded', function() {
 	var gestureRecognized = null;
 	var gestureCounter = -1;
 	var recognizeGesture = function() {
+		var respText = '';
 		if (points.length >= 10){
 			gestureRecognized = recog.Recognize(points);
 			console.log("Result: " + gestureRecognized.Name + " (" +
 				(Math.round(gestureRecognized.Score * 100) / 100) + ").");
-		} else {
-			console.log("Too little input made. Please try again.");
+			console.log(gestureRecognized);
 		}
+		
+		if (tutorialActive) {
+			if (gestureRecognized.Name === 'five-point star') {
+				respText = 'Good job!';
+				tutorialActive = false;
+			} else {
+				respText = 'Oops! Try again.';
+			}
+		}
+		
+		// Set text to response
+		var topText = document.getElementById('flower-name');
+		topText.innerHTML = respText;
+		
 		clearStrokes();
 	}
 	
