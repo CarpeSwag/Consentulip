@@ -334,7 +334,7 @@ window.addEventListener('DOMContentLoaded', function() {
 			console.log(gestureRecognized);
 		}
 		
-		if (tutorialActive) {
+		if (tutorialActive && gestureRecognized) {
 			if (gestureRecognized.Name === 'five-point star') {
 				respText = 'Good job!';
 				tutorialActive = false;
@@ -665,7 +665,7 @@ window.addEventListener('DOMContentLoaded', function() {
 							enableGestures = true;
 							tutorialGesture = true;
 							startTutorialGesture();
-						}, 2500);
+						}, 2000);
 					}
 				} else {					
 					panToMesh(mesh, 0.75);
