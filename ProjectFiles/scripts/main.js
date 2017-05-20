@@ -388,16 +388,16 @@ window.addEventListener('DOMContentLoaded', function() {
 		Math.PI / 3, 40, DEFAULT_CAMERA_TARGET, scene);
 	camera.upperBetaLimit = Math.PI / 2;
 	camera.lowerRadiusLimit = 7.5;
-	camera.upperRadiusLimit = 500;
+	camera.upperRadiusLimit = 300;
 	camera.attachControl(canvas, true, true);
 	scene.activeCamera.panningSensibility = 0; // disables camera panning
 	
 	// Set up the light
 	var light = new BABYLON.HemisphericLight("light",
-		new BABYLON.Vector3(0, 1000, 0), scene);
-	light.intensity = 0.7;
+		new BABYLON.Vector3(0, 10, 0), scene);
+	light.intensity = 0.5;
 	
-	var light2 = new BABYLON.HemisphericLight("light",
+	var light2 = new BABYLON.HemisphericLight("light2",
 		new BABYLON.Vector3(0, 0, 0), scene);
 	light2.intensity = 2.0;
 	
@@ -436,6 +436,9 @@ window.addEventListener('DOMContentLoaded', function() {
 					yOffset: 0
 				}
 				mesh[i].position.y += 0.4 * SCALE;
+				if (leaves.length == 1) {
+					mesh[i].position.y += 0.4 * SCALE;
+				}
 			} else if (name.substring(0,5) === 'petal') {
 				petals.push(mesh[i]);
 				type = 'petal';
@@ -445,7 +448,6 @@ window.addEventListener('DOMContentLoaded', function() {
 				switch(+(name.substring(8))) {
 					case 4:
 						alpha = Math.PI / 4;
-						TEST = mesh[i];
 						break;
 					case 5:
 						alpha = 5 * Math.PI / 4; 
@@ -579,7 +581,7 @@ window.addEventListener('DOMContentLoaded', function() {
 				camera.lowerBetaLimit = 0.1;
 				camera.upperBetaLimit = Math.PI / 2;
 				camera.lowerRadiusLimit = 7.5;
-				camera.upperRadiusLimit = 500;
+				camera.upperRadiusLimit = 300;
 			}
 		}
 	}
@@ -785,4 +787,15 @@ window.addEventListener('DOMContentLoaded', function() {
 			tutorialGesture = false;
 		}, 4000);
 	}
+	
+	// Skybox
+    var skybox = BABYLON.Mesh.CreateBox("skyBox", 2000.0, scene);
+    var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+    skyboxMaterial.backFaceCulling = false;
+    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("art/textures/TropicalSunnyDay", scene);
+    skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+    skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+    skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+    skyboxMaterial.disableLighting = true;
+    skybox.material = skyboxMaterial;
 });
