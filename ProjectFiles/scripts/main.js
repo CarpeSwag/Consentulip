@@ -302,6 +302,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	var tutorialActive = false;
 	var tutorialGesture = false;
 	var waitingForInput = false;
+	var tutorialBlinkGesture = 0;
 	
 	// Generate a random color for the flower
 	var randomColor = {r:0, g:0, b:0};
@@ -337,6 +338,26 @@ window.addEventListener('DOMContentLoaded', function() {
 	
 	engine.runRenderLoop(function() {
 		scene.render();
+		if (tutorialActive) {
+			if (waitingForInput) {
+				if (tutorialBlinkGesture == 0) {
+					tutorialBlinkGesture = 20
+					var pos = new BABYLON.Vector3(
+						petals[0].position.x,
+						petals[0].position.y + 1,
+						petals[0].position.z
+					)
+					var loc = BABYLON.Vector3.Project(pos, BABYLON.Matrix.Identity(),
+						scene.getTransformMatrix(), camera.viewport.toGlobal(engine.getRenderWidth(), 
+						engine.getRenderHeight()));
+					
+					circles.push({x: loc.x, y: loc.y, radius: 10, color: '255,255,0'});
+				} else {
+					--tutorialBlinkGesture;
+				}
+			}
+		}
+		
 		if (enableGestures && gestureCounter >= 0) {
 			if (gestureCounter == 0) {
 				recognizeGesture()
