@@ -15,7 +15,7 @@ var zoomOut;
 var FLOWER_COLORS = [
 	{r: 1, g: 0, b: 0},
 	{r: 0, g: 0, b: 1},
-	{r: 1, g: 1, b: 0},
+	{r: 1, g: 0.25, b: 0},
 	{r: 1, g: 0, b: 1},
 	{r: 0, g: 1, b: 1}
 ]
@@ -230,7 +230,7 @@ function draw() {
 			var rgba = 'rgba(' + rgb + ',' + a + ')'; 
 			
 			var drawCount = (lines[i].glowing)? glowLoop: 1;
-			for (var j = 0; j < drawCount; ++j) {
+			for (var j = 0; j < 3; ++j) {
 				createLine(sctx, lines[i].a, lines[i].b, lines[i].width, 
 				lines[i].blurWidth, rgba, lines[i].blurCol);
 			}
@@ -289,6 +289,7 @@ function isInFront(cameraAlpha) {
 		(Math.abs(cameraAlpha) % (Math.PI * 2)) >= Math.PI;
 }
 
+var startTutorial;
 var randomizeFlower;
 
 window.addEventListener('DOMContentLoaded', function() {
@@ -298,6 +299,8 @@ window.addEventListener('DOMContentLoaded', function() {
 	
 	var enableGestures = false;
 	var gesturesEnabled = false;
+	var tutorialActive = false;
+	var tutorialGesture = false;
 	
 	// Generate a random color for the flower
 	var randomColor = {r:0, g:0, b:0};
@@ -340,12 +343,13 @@ window.addEventListener('DOMContentLoaded', function() {
 	light2.intensity = 2.0;
 	
 	// Load in the model
-	var stem, leaves, petals;
+	var stem, leaves, petals, outerPetals;
 	BABYLON.SceneLoader.ImportMesh('', 'art/models/',
 		'tulip.babylon', scene, function (mesh) {
 		var SCALE = 5.0;
 		leaves = [];
 		petals = [];
+		outerPetals = [];
 		for (var i = 0; i < mesh.length; ++i) {
 			mesh[i].scaling.x *= SCALE;
 			mesh[i].scaling.y *= SCALE;
@@ -377,9 +381,12 @@ window.addEventListener('DOMContentLoaded', function() {
 				petals.push(mesh[i]);
 				type = 'petal';
 				var alpha = 0;
+				if (+(name.substring(8)) > 3)
+					outerPetals.push(mesh[i]);
 				switch(+(name.substring(8))) {
 					case 4:
 						alpha = Math.PI / 4;
+						TEST = mesh[i];
 						break;
 					case 5:
 						alpha = 5 * Math.PI / 4; 
@@ -397,7 +404,7 @@ window.addEventListener('DOMContentLoaded', function() {
 				info = {
 					alpha: alpha,
 					radius: 7.5,
-					yOffset: 1.5
+					yOffset: 1.33
 				}
 				
 				// Change flower scaling
@@ -438,6 +445,13 @@ window.addEventListener('DOMContentLoaded', function() {
 	// Load in the ground
 	scene.clearColor = new BABYLON.Color3(.2, .6, .75);
 	
+	var modCameraAlpha = function() {
+		// Clean the alpha value to be between 0 and 2 pi
+		if (camera.alpha < 0)
+			camera.alpha = (2 * Math.PI) - (Math.abs(camera.alpha) % (Math.PI * 2));
+		camera.alpha = camera.alpha % (Math.PI * 2);
+	}
+	
 	// Pan
 	var animationDelta = {
 		alpha: 0,
@@ -454,10 +468,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		var frameCount = Math.floor(seconds * 60);
 		frameCounter = frameCount;
 		
-		// Clean the alpha value
-		if (camera.alpha < 0)
-			camera.alpha = (2 * Math.PI) - (Math.abs(camera.alpha) % (Math.PI * 2));
-		camera.alpha = camera.alpha % (Math.PI * 2);
+		modCameraAlpha();
 		
 		// Set the info for the camera animation
 		animationDelta.alpha = (alpha - camera.alpha) / frameCount;
@@ -500,20 +511,48 @@ window.addEventListener('DOMContentLoaded', function() {
 		// Decrement frame counter or end
 		if (--frameCounter >= 0) {
 			window.requestAnimationFrame(adjustCamera);
-		} else if (!animationDelta.lockCamera) {
-			// Fix camera limits to default
-			camera.lowerAlphaLimit = null;
-			camera.upperAlphaLimit = null;
-			camera.lowerBetaLimit = 0.1;
-			camera.upperBetaLimit = Math.PI / 2;
-			camera.lowerRadiusLimit = 7.5;
-			camera.upperRadiusLimit = 500;
+		} else {
+			modCameraAlpha();
+			if (!animationDelta.lockCamera) {
+				// Fix camera limits to default
+				camera.lowerAlphaLimit = null;
+				camera.upperAlphaLimit = null;
+				camera.lowerBetaLimit = 0.1;
+				camera.upperBetaLimit = Math.PI / 2;
+				camera.lowerRadiusLimit = 7.5;
+				camera.upperRadiusLimit = 500;
+			}
 		}
+	}
+	
+	var panToMesh = function(mesh, seconds, rotateClockwise) {
+		rotateClockwise = rotateClockwise || false;
+		var info = mesh.cameraInfo;
+		var target = new BABYLON.Vector3(
+			mesh.position.x,
+			mesh.position.y + info.yOffset,
+			mesh.position.z
+		);
+		
+		// Grab camera info for mesh
+		var alpha = info.alpha;
+		if (info.alpha == 0)
+			alpha = (isInFront(camera.alpha))? Math.PI / 2: 3 * Math.PI / 2;
+		var beta = Math.PI / 2;
+		var radius = info.radius;
+		
+		if (rotateClockwise && camera.alpha > alpha) {
+			alpha += Math.PI * 2;
+		}
+		
+		rotateCameraTo(target, alpha, beta, radius, seconds, true);
+		
+		clearStrokes();
 	}
 	
 	// Mouse events
 	var onPointerDown = function (evt) {
-        if (evt.button !== 0) {
+		if (evt.button !== 0) {
             return;
         }
 		
@@ -565,30 +604,13 @@ window.addEventListener('DOMContentLoaded', function() {
 		if (pickInfo.hit && !enableGestures) {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
-				var info = mesh.cameraInfo;
-				var target = new BABYLON.Vector3(
-					mesh.position.x,
-					mesh.position.y + info.yOffset,
-					mesh.position.z
-				);
-				
-				// Grab camera info for mesh
-				var alpha = info.alpha;
-				if (info.alpha == 0)
-					alpha = (isInFront(camera.alpha))? Math.PI / 2: 3 * Math.PI / 2;
-				var beta = Math.PI / 2;
-				var radius = info.radius;
-				
-				rotateCameraTo(target, alpha, beta, radius, 0.75, true);
-				
-				var canvas = document.getElementById('gestures').className = 'active';
-				clearStrokes();
+				panToMesh(mesh, 0.75);
 				enableGestures = true;
 			}
         }
     }
 
-    var onPointerMove = function () {
+    var onPointerMove = function (evt) {
 		var x = scene.pointerX;
 		var y = scene.pointerY;
         if (isDown) {
@@ -635,12 +657,66 @@ window.addEventListener('DOMContentLoaded', function() {
 		enableGestures = false;
 	}
 
-    canvas.addEventListener("pointerdown", onPointerDown, false);
-    canvas.addEventListener("pointerup", onPointerUp, false);
-    canvas.addEventListener("pointermove", onPointerMove, false);
+	canvas.addEventListener("pointerdown", onPointerDown, false);
+	canvas.addEventListener("pointerup", onPointerUp, false);
+	canvas.addEventListener("pointermove", onPointerMove, false);
 	
 	// Ensure screen is sized correctly.
 	engine.resize();
 	
 	onLoadEvent();
+	
+	startTutorial = function() {
+		var topText = document.getElementById('flower-name');
+		
+		// Messages played during the introduction
+		topText.innerHTML = "Hey Bud! I'm Tulip.";
+		setTimeout(function() {
+			topText.innerHTML = "You can take care of me by watering me"
+				+ " or tending to my soil.";
+			setTimeout(function() {
+				topText.innerHTML = "You can also control the camera by clicking me.";
+				setTimeout(function() {
+					topText.innerHTML = "Sometimes we can play some pattern games.";
+					setTimeout(function() {
+						topText.innerHTML = "Here, try it yourself!";
+						tutorialGesture = true;
+					}, 4000);
+				}, 3000);
+			}, 4000);
+		}, 2000);
+		
+		
+		modCameraAlpha();
+		tutorialActive = true;
+		
+		// Rotate around flower, and zoom into it.
+		rotateCameraTo(DEFAULT_CAMERA_TARGET, Math.PI * 3.5,
+			Math.PI / 3, 40, 7.000, false);
+		setTimeout(function() {
+			modCameraAlpha();
+			panToMesh(petals[0], 2.5, true);
+			enableGestures = true;
+		}, 7000);
+		
+		// Gesture teaching
+		setTimeout(function() {
+			var centerX = window.innerWidth / 2;
+			var centerY = window.innerHeight / 2;
+			var radius = (window.innerWidth < window.innerHeight)?
+				window.innerWidth * 0.25: window.innerHeight * 0.5;
+			var starPoints = [
+				{x: centerX + radius * -0.75, y: centerY + radius * -0.33},
+				{x: centerX + radius *  0.75, y: centerY + radius * -0.33},
+				{x: centerX + radius * -0.50, y: centerY + radius *  0.50},
+				{x: centerX                 , y: centerY + radius * -0.75},
+				{x: centerX + radius *  0.50, y: centerY + radius *  0.50}
+			];
+			drawLineTimed(starPoints[0], starPoints[1], 0.5, 1.0, 4.00);
+			drawLineTimed(starPoints[1], starPoints[2], 0.5, 1.5, 4.00);
+			drawLineTimed(starPoints[2], starPoints[3], 0.5, 2.0, 4.00);
+			drawLineTimed(starPoints[3], starPoints[4], 0.5, 2.5, 4.00);
+			drawLineTimed(starPoints[4], starPoints[0], 0.5, 3.0, 4.00);
+		}, 8500);
+	};
 });
