@@ -320,6 +320,9 @@ window.addEventListener('DOMContentLoaded', function() {
 	});
 	
 	// Recognize gestures
+	var REFRESH_GESTURE_COUNTER = 1.0 * 60;
+	var gestureRecognized = null;
+	var gestureCounter = -1;
 	var recognizeGesture = function() {
 		if (points.length >= 10){
 			gestureRecognized = recog.Recognize(points);
@@ -333,6 +336,12 @@ window.addEventListener('DOMContentLoaded', function() {
 	
 	engine.runRenderLoop(function() {
 		scene.render();
+		if (enableGestures && gestureCounter >= 0) {
+			if (gestureCounter == 0) {
+				recognizeGesture()
+			}
+			--gestureCounter;
+		}
 	});
 	
 	// Camera settings
@@ -595,6 +604,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		
 		if (enableGestures) {
 			if (evt.button <= 1) {
+				gestureCounter = REFRESH_GESTURE_COUNTER;
 				gesturesEnabled = true;
 				if (strokeID == 0)	{
 					points.length = 0;
@@ -633,6 +643,7 @@ window.addEventListener('DOMContentLoaded', function() {
 				var point = new Point(x, y, strokeID);
 				points[points.length] = point; // append
 				drawLine(bufferCanv.getContext('2d'), points[points.length-2], point);
+				gestureCounter = REFRESH_GESTURE_COUNTER;
 			}
 		}
     }
@@ -647,6 +658,7 @@ window.addEventListener('DOMContentLoaded', function() {
 				isDown = false;
 				gesturesEnabled = false;
 				gestureCanv.getContext('2d').drawImage(bufferCanv, 0, 0);
+				gestureCounter = REFRESH_GESTURE_COUNTER;
 			}
 		}
     }
