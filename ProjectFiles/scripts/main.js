@@ -617,7 +617,7 @@ window.addEventListener('DOMContentLoaded', function() {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
 				panToMesh(mesh, 0.75);
-				enableGestures = true;
+				setTimeout(function() {enableGestures = true;}, 750);
 			}
         }
     }
