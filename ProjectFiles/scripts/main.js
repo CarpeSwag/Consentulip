@@ -301,6 +301,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	var gesturesEnabled = false;
 	var tutorialActive = false;
 	var tutorialGesture = false;
+	var waitingForInput = false;
 	
 	// Generate a random color for the flower
 	var randomColor = {r:0, g:0, b:0};
@@ -682,13 +683,6 @@ window.addEventListener('DOMContentLoaded', function() {
 				+ " or tending to my soil.";
 			setTimeout(function() {
 				topText.innerHTML = "You can also control the camera by clicking me.";
-				setTimeout(function() {
-					topText.innerHTML = "Sometimes we can play some pattern games.";
-					setTimeout(function() {
-						topText.innerHTML = "Here, try it yourself!";
-						tutorialGesture = true;
-					}, 4000);
-				}, 3000);
 			}, 4000);
 		}, 2000);
 		
@@ -700,29 +694,45 @@ window.addEventListener('DOMContentLoaded', function() {
 		rotateCameraTo(DEFAULT_CAMERA_TARGET, Math.PI * 3.5,
 			Math.PI / 3, 40, 7.000, false);
 		setTimeout(function() {
-			modCameraAlpha();
+			// Wait for response
+			waitingForInput = true;
+			BABYLON.Vector3.Project(position, BABYLON.Matrix.Identity(), scene.getTransformMatrix(), camera.viewport.toGlobal(engine))
+			/*modCameraAlpha();
 			panToMesh(petals[0], 2.5, true);
 			enableGestures = true;
+			setTimeout(function() {
+				
+			}, 2500);*/
 		}, 7000);
-		
-		// Gesture teaching
-		setTimeout(function() {
-			var centerX = window.innerWidth / 2;
-			var centerY = window.innerHeight / 2;
-			var radius = (window.innerWidth < window.innerHeight)?
-				window.innerWidth * 0.25: window.innerHeight * 0.5;
-			var starPoints = [
-				{x: centerX + radius * -0.75, y: centerY + radius * -0.33},
-				{x: centerX + radius *  0.75, y: centerY + radius * -0.33},
-				{x: centerX + radius * -0.50, y: centerY + radius *  0.50},
-				{x: centerX                 , y: centerY + radius * -0.75},
-				{x: centerX + radius *  0.50, y: centerY + radius *  0.50}
-			];
-			drawLineTimed(starPoints[0], starPoints[1], 0.5, 1.0, 4.00);
-			drawLineTimed(starPoints[1], starPoints[2], 0.5, 1.5, 4.00);
-			drawLineTimed(starPoints[2], starPoints[3], 0.5, 2.0, 4.00);
-			drawLineTimed(starPoints[3], starPoints[4], 0.5, 2.5, 4.00);
-			drawLineTimed(starPoints[4], starPoints[0], 0.5, 3.0, 4.00);
-		}, 8500);
 	};
+	
+	var startTutorialGesture = function() {
+		waitingForInput = false;
+		var topText = document.getElementById('flower-name');
+		topText.innerHTML = "Sometimes we can play some pattern games.";
+		
+		// Teach gestures
+		var centerX = window.innerWidth / 2;
+		var centerY = window.innerHeight / 2;
+		var radius = (window.innerWidth < window.innerHeight)?
+			window.innerWidth * 0.25: window.innerHeight * 0.5;
+		var starPoints = [
+			{x: centerX + radius * -0.75, y: centerY + radius * -0.33},
+			{x: centerX + radius *  0.75, y: centerY + radius * -0.33},
+			{x: centerX + radius * -0.50, y: centerY + radius *  0.50},
+			{x: centerX                 , y: centerY + radius * -0.75},
+			{x: centerX + radius *  0.50, y: centerY + radius *  0.50}
+		];
+		drawLineTimed(starPoints[0], starPoints[1], 0.5, 1.0, 4.00);
+		drawLineTimed(starPoints[1], starPoints[2], 0.5, 1.5, 4.00);
+		drawLineTimed(starPoints[2], starPoints[3], 0.5, 2.0, 4.00);
+		drawLineTimed(starPoints[3], starPoints[4], 0.5, 2.5, 4.00);
+		drawLineTimed(starPoints[4], starPoints[0], 0.5, 3.0, 4.00);
+		
+		// Change the message after star is drawn.
+		setTimeout(function() {
+			topText.innerHTML = "Here, try it yourself!";
+			tutorialGesture = true;
+		}, 4000);
+	}
 });
