@@ -168,7 +168,7 @@ function rotateAroundPoint(x1, y1, x2, y2, rad) {
 }
 
 function draw() {
-	var THRESHOLD = 40;
+	var CIRCLE_THRESHOLD = 40;
 	var canvas = document.getElementById('gestures');
 	var ctx = canvas.getContext('2d');
 	var sctx = circleCanv.getContext('2d');
@@ -188,12 +188,12 @@ function draw() {
 	
 	// Create the circles
 	for (var i = circles.length - 1; i >= 0; --i) {
-		circles[i].radius += 3;
+		circles[i].radius += circles[i].dr;
 		var rgb = circles[i].color;
-		var a = 0.25 * (1 - (circles[i].radius / THRESHOLD));
+		var a = 0.25 * (1 - (circles[i].radius / CIRCLE_THRESHOLD));
 		var rgba = 'rgba(' + rgb + ',' + a + ')';
 		createCircle(sctx, circles[i].x, circles[i].y, circles[i].radius, rgba);
-		if (circles[i].radius > THRESHOLD) {
+		if (circles[i].radius > CIRCLE_THRESHOLD) {
 			circles.splice(i,1);
 		}
 	}
@@ -297,10 +297,13 @@ window.addEventListener('DOMContentLoaded', function() {
 	var engine = new BABYLON.Engine(canvas, true);
 	var scene = new BABYLON.Scene(engine);
 	
+	var cameraLockedToMesh = false;
 	var enableGestures = false;
 	var gesturesEnabled = false;
 	var tutorialActive = false;
 	var tutorialGesture = false;
+	var waitingForInput = false;
+	var tutorialBlinkGesture = 0;
 	
 	// Generate a random color for the flower
 	var randomColor = {r:0, g:0, b:0};
@@ -324,19 +327,54 @@ window.addEventListener('DOMContentLoaded', function() {
 	var gestureRecognized = null;
 	var gestureCounter = -1;
 	var recognizeGesture = function() {
+		var respText = '';
 		if (points.length >= 10){
 			gestureRecognized = recog.Recognize(points);
 			console.log("Result: " + gestureRecognized.Name + " (" +
 				(Math.round(gestureRecognized.Score * 100) / 100) + ").");
-		} else {
-			console.log("Too little input made. Please try again.");
+			console.log(gestureRecognized);
 		}
+		
+		if (tutorialActive && gestureRecognized) {
+			if (gestureRecognized.Name === 'five-point star') {
+				respText = 'Good job!';
+				tutorialActive = false;
+			} else {
+				respText = 'Oops! Try again.';
+			}
+		}
+		
+		// Set text to response
+		var topText = document.getElementById('flower-name');
+		topText.innerHTML = respText;
+		
 		clearStrokes();
 	}
 	
 	engine.runRenderLoop(function() {
 		scene.render();
-		if (enableGestures && gestureCounter >= 0) {
+		if (tutorialActive) {
+			if (waitingForInput) {
+				if (tutorialBlinkGesture == 0) {
+					tutorialBlinkGesture = 50;
+					var pos = new BABYLON.Vector3(
+						petals[0].position.x,
+						petals[0].position.y + 1,
+						petals[0].position.z
+					)
+					var loc = BABYLON.Vector3.Project(pos, BABYLON.Matrix.Identity(),
+						scene.getTransformMatrix(), camera.viewport.toGlobal(engine.getRenderWidth(), 
+						engine.getRenderHeight()));
+					
+					circles.push({x: loc.x, y: loc.y, radius: 20, dr: 1, color: '255,255,0'});
+					circles.push({x: loc.x, y: loc.y, radius: 5, dr: 1, color: '255,255,0'});
+				} else {
+					--tutorialBlinkGesture;
+				}
+			}
+		}
+		
+		if (enableGestures && gestureCounter >= 0 && !tutorialGesture) {
 			if (gestureCounter == 0) {
 				recognizeGesture()
 			}
@@ -350,16 +388,16 @@ window.addEventListener('DOMContentLoaded', function() {
 		Math.PI / 3, 40, DEFAULT_CAMERA_TARGET, scene);
 	camera.upperBetaLimit = Math.PI / 2;
 	camera.lowerRadiusLimit = 7.5;
-	camera.upperRadiusLimit = 500;
+	camera.upperRadiusLimit = 300;
 	camera.attachControl(canvas, true, true);
 	scene.activeCamera.panningSensibility = 0; // disables camera panning
 	
 	// Set up the light
 	var light = new BABYLON.HemisphericLight("light",
-		new BABYLON.Vector3(0, 1000, 0), scene);
-	light.intensity = 0.7;
+		new BABYLON.Vector3(0, 10, 0), scene);
+	light.intensity = 0.5;
 	
-	var light2 = new BABYLON.HemisphericLight("light",
+	var light2 = new BABYLON.HemisphericLight("light2",
 		new BABYLON.Vector3(0, 0, 0), scene);
 	light2.intensity = 2.0;
 	
@@ -398,6 +436,9 @@ window.addEventListener('DOMContentLoaded', function() {
 					yOffset: 0
 				}
 				mesh[i].position.y += 0.4 * SCALE;
+				if (leaves.length == 1) {
+					mesh[i].position.y += 0.4 * SCALE;
+				}
 			} else if (name.substring(0,5) === 'petal') {
 				petals.push(mesh[i]);
 				type = 'petal';
@@ -407,7 +448,6 @@ window.addEventListener('DOMContentLoaded', function() {
 				switch(+(name.substring(8))) {
 					case 4:
 						alpha = Math.PI / 4;
-						TEST = mesh[i];
 						break;
 					case 5:
 						alpha = 5 * Math.PI / 4; 
@@ -541,7 +581,7 @@ window.addEventListener('DOMContentLoaded', function() {
 				camera.lowerBetaLimit = 0.1;
 				camera.upperBetaLimit = Math.PI / 2;
 				camera.lowerRadiusLimit = 7.5;
-				camera.upperRadiusLimit = 500;
+				camera.upperRadiusLimit = 300;
 			}
 		}
 	}
@@ -579,8 +619,8 @@ window.addEventListener('DOMContentLoaded', function() {
 		
 		var x = scene.pointerX;
 		var y = scene.pointerY;
-		circles.push({x: x, y: y, radius: 10, color: '255,255,0'});
-		circles.push({x: x, y: y, radius: 20, color: '255,255,0'});
+		circles.push({x: x, y: y, radius: 10, dr: 3, color: '255,255,0'});
+		circles.push({x: x, y: y, radius: 20, dr: 3, color: '255,255,0'});
 		
 		for (var i = Math.random() * 5 + 3; i >= 0; --i) {
 			addRandomParticle(x, y);
@@ -593,7 +633,7 @@ window.addEventListener('DOMContentLoaded', function() {
 			isDown = true;
 		}
 		
-		if (enableGestures) {
+		if (enableGestures && !tutorialGesture) {
 			if (evt.button <= 1) {
 				gestureCounter = REFRESH_GESTURE_COUNTER;
 				gesturesEnabled = true;
@@ -613,11 +653,29 @@ window.addEventListener('DOMContentLoaded', function() {
 		
 		// check if we are under a mesh
         var pickInfo = scene.pick(scene.pointerX, scene.pointerY, function (mesh) { return mesh !== pot; });
-		if (pickInfo.hit && !enableGestures) {
+		if (pickInfo.hit && !cameraLockedToMesh) {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
-				panToMesh(mesh, 0.75);
-				setTimeout(function() {enableGestures = true;}, 750);
+				if (waitingForInput) {
+					if (mesh == petals[0]) {
+						waitingForInput = false;
+						
+						// Pan camera to the petal
+						modCameraAlpha();
+						panToMesh(petals[0], 2.5);
+						setTimeout(function() {
+							// Start the rest of the tutorial
+							enableGestures = true;
+							tutorialGesture = true;
+							startTutorialGesture();
+							cameraLockedToMesh = true;
+						}, 2000);
+					}
+				} else {					
+					panToMesh(mesh, 0.75);
+					cameraLockedToMesh = true;
+					setTimeout(function() {enableGestures = true;}, 750);
+				}
 			}
         }
     }
@@ -658,9 +716,11 @@ window.addEventListener('DOMContentLoaded', function() {
 		var canvas = document.getElementById('gestures').className = '';
 		clearStrokes();
 		
+		modCameraAlpha();
 		rotateCameraTo(DEFAULT_CAMERA_TARGET, camera.alpha,
 			Math.PI / 3, 40, 0.75, false);
 		enableGestures = false;
+		cameraLockedToMesh = false;
 	}
 
 	canvas.addEventListener("pointerdown", onPointerDown, false);
@@ -682,13 +742,6 @@ window.addEventListener('DOMContentLoaded', function() {
 				+ " or tending to my soil.";
 			setTimeout(function() {
 				topText.innerHTML = "You can also control the camera by clicking me.";
-				setTimeout(function() {
-					topText.innerHTML = "Sometimes we can play some pattern games.";
-					setTimeout(function() {
-						topText.innerHTML = "Here, try it yourself!";
-						tutorialGesture = true;
-					}, 4000);
-				}, 3000);
 			}, 4000);
 		}, 2000);
 		
@@ -697,32 +750,52 @@ window.addEventListener('DOMContentLoaded', function() {
 		tutorialActive = true;
 		
 		// Rotate around flower, and zoom into it.
-		rotateCameraTo(DEFAULT_CAMERA_TARGET, Math.PI * 3.5,
-			Math.PI / 3, 40, 7.000, false);
+		rotateCameraTo(DEFAULT_CAMERA_TARGET, Math.PI * 3.75,
+			Math.PI / 3, 40, 7.000, true);
 		setTimeout(function() {
-			modCameraAlpha();
-			panToMesh(petals[0], 2.5, true);
-			enableGestures = true;
+			// Wait for response
+			waitingForInput = true;
 		}, 7000);
-		
-		// Gesture teaching
-		setTimeout(function() {
-			var centerX = window.innerWidth / 2;
-			var centerY = window.innerHeight / 2;
-			var radius = (window.innerWidth < window.innerHeight)?
-				window.innerWidth * 0.25: window.innerHeight * 0.5;
-			var starPoints = [
-				{x: centerX + radius * -0.75, y: centerY + radius * -0.33},
-				{x: centerX + radius *  0.75, y: centerY + radius * -0.33},
-				{x: centerX + radius * -0.50, y: centerY + radius *  0.50},
-				{x: centerX                 , y: centerY + radius * -0.75},
-				{x: centerX + radius *  0.50, y: centerY + radius *  0.50}
-			];
-			drawLineTimed(starPoints[0], starPoints[1], 0.5, 1.0, 4.00);
-			drawLineTimed(starPoints[1], starPoints[2], 0.5, 1.5, 4.00);
-			drawLineTimed(starPoints[2], starPoints[3], 0.5, 2.0, 4.00);
-			drawLineTimed(starPoints[3], starPoints[4], 0.5, 2.5, 4.00);
-			drawLineTimed(starPoints[4], starPoints[0], 0.5, 3.0, 4.00);
-		}, 8500);
 	};
+	
+	var startTutorialGesture = function() {
+		waitingForInput = false;
+		var topText = document.getElementById('flower-name');
+		topText.innerHTML = "Sometimes we can play some pattern games.";
+		
+		// Teach gestures
+		var centerX = window.innerWidth / 2;
+		var centerY = window.innerHeight / 2;
+		var radius = (window.innerWidth < window.innerHeight)?
+			window.innerWidth * 0.25: window.innerHeight * 0.5;
+		var starPoints = [
+			{x: centerX + radius * -0.75, y: centerY + radius * -0.33},
+			{x: centerX + radius *  0.75, y: centerY + radius * -0.33},
+			{x: centerX + radius * -0.50, y: centerY + radius *  0.50},
+			{x: centerX                 , y: centerY + radius * -0.75},
+			{x: centerX + radius *  0.50, y: centerY + radius *  0.50}
+		];
+		drawLineTimed(starPoints[0], starPoints[1], 0.5, 1.0, 4.00);
+		drawLineTimed(starPoints[1], starPoints[2], 0.5, 1.5, 4.00);
+		drawLineTimed(starPoints[2], starPoints[3], 0.5, 2.0, 4.00);
+		drawLineTimed(starPoints[3], starPoints[4], 0.5, 2.5, 4.00);
+		drawLineTimed(starPoints[4], starPoints[0], 0.5, 3.0, 4.00);
+		
+		// Change the message after star is drawn.
+		setTimeout(function() {
+			topText.innerHTML = "Here, try it yourself!";
+			tutorialGesture = false;
+		}, 4000);
+	}
+	
+	// Skybox
+    var skybox = BABYLON.Mesh.CreateBox("skyBox", 2000.0, scene);
+    var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+    skyboxMaterial.backFaceCulling = false;
+    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("art/textures/TropicalSunnyDay", scene);
+    skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+    skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+    skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+    skyboxMaterial.disableLighting = true;
+    skybox.material = skyboxMaterial;
 });
