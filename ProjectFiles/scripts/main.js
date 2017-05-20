@@ -691,18 +691,11 @@ window.addEventListener('DOMContentLoaded', function() {
 		tutorialActive = true;
 		
 		// Rotate around flower, and zoom into it.
-		rotateCameraTo(DEFAULT_CAMERA_TARGET, Math.PI * 3.5,
-			Math.PI / 3, 40, 7.000, false);
+		rotateCameraTo(DEFAULT_CAMERA_TARGET, Math.PI * 3.75,
+			Math.PI / 3, 40, 7.000, true);
 		setTimeout(function() {
 			// Wait for response
 			waitingForInput = true;
-			BABYLON.Vector3.Project(position, BABYLON.Matrix.Identity(), scene.getTransformMatrix(), camera.viewport.toGlobal(engine))
-			/*modCameraAlpha();
-			panToMesh(petals[0], 2.5, true);
-			enableGestures = true;
-			setTimeout(function() {
-				
-			}, 2500);*/
 		}, 7000);
 	};
 	
