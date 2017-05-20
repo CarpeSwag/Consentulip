@@ -638,8 +638,23 @@ window.addEventListener('DOMContentLoaded', function() {
 		if (pickInfo.hit && !enableGestures) {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
-				panToMesh(mesh, 0.75);
-				setTimeout(function() {enableGestures = true;}, 750);
+				if (waitingForInput) {
+					if (mesh == petals[0]) {
+						waitingForInput = false;
+						
+						// Pan camera to the petal
+						modCameraAlpha();
+						panToMesh(petals[0], 2.5, true);
+						setTimeout(function() {
+							// Start the rest of the tutorial
+							enableGestures = true;
+							startTutorialGesture();
+						}, 2500);
+					}
+				} else {					
+					panToMesh(mesh, 0.75);
+					setTimeout(function() {enableGestures = true;}, 750);
+				}
 			}
         }
     }
