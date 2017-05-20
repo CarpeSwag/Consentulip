@@ -645,7 +645,7 @@ window.addEventListener('DOMContentLoaded', function() {
 						
 						// Pan camera to the petal
 						modCameraAlpha();
-						panToMesh(petals[0], 2.5, true);
+						panToMesh(petals[0], 2.5, false);
 						setTimeout(function() {
 							// Start the rest of the tutorial
 							enableGestures = true;
