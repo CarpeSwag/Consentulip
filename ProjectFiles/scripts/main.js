@@ -319,8 +319,29 @@ window.addEventListener('DOMContentLoaded', function() {
 		resizeCanvas();
 	});
 	
+	// Recognize gestures
+	var REFRESH_GESTURE_COUNTER = 1.0 * 60;
+	var gestureRecognized = null;
+	var gestureCounter = -1;
+	var recognizeGesture = function() {
+		if (points.length >= 10){
+			gestureRecognized = recog.Recognize(points);
+			console.log("Result: " + gestureRecognized.Name + " (" +
+				(Math.round(gestureRecognized.Score * 100) / 100) + ").");
+		} else {
+			console.log("Too little input made. Please try again.");
+		}
+		clearStrokes();
+	}
+	
 	engine.runRenderLoop(function() {
 		scene.render();
+		if (enableGestures && gestureCounter >= 0) {
+			if (gestureCounter == 0) {
+				recognizeGesture()
+			}
+			--gestureCounter;
+		}
 	});
 	
 	// Camera settings
@@ -558,18 +579,9 @@ window.addEventListener('DOMContentLoaded', function() {
 		
 		var x = scene.pointerX;
 		var y = scene.pointerY;
-		circles.push({
-			x: x,
-			y: y,
-			radius: 10,
-			color: '255,255,0'
-		});
-		circles.push({
-			x: x,
-			y: y,
-			radius: 20,
-			color: '255,255,0'
-		});
+		circles.push({x: x, y: y, radius: 10, color: '255,255,0'});
+		circles.push({x: x, y: y, radius: 20, color: '255,255,0'});
+		
 		for (var i = Math.random() * 5 + 3; i >= 0; --i) {
 			addRandomParticle(x, y);
 		}
@@ -583,6 +595,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		
 		if (enableGestures) {
 			if (evt.button <= 1) {
+				gestureCounter = REFRESH_GESTURE_COUNTER;
 				gesturesEnabled = true;
 				if (strokeID == 0)	{
 					points.length = 0;
@@ -595,7 +608,6 @@ window.addEventListener('DOMContentLoaded', function() {
 				bctx.shadowBlur = 10;
 				bctx.shadowColor = 'rgba(255,200,50,.25)';
 				bctx.beginPath();
-			} else if (evt.button == 2) {
 			}
 		}
 		
@@ -605,7 +617,7 @@ window.addEventListener('DOMContentLoaded', function() {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
 				panToMesh(mesh, 0.75);
-				enableGestures = true;
+				setTimeout(function() {enableGestures = true;}, 750);
 			}
         }
     }
@@ -621,6 +633,7 @@ window.addEventListener('DOMContentLoaded', function() {
 				var point = new Point(x, y, strokeID);
 				points[points.length] = point; // append
 				drawLine(bufferCanv.getContext('2d'), points[points.length-2], point);
+				gestureCounter = REFRESH_GESTURE_COUNTER;
 			}
 		}
     }
@@ -635,15 +648,8 @@ window.addEventListener('DOMContentLoaded', function() {
 				isDown = false;
 				gesturesEnabled = false;
 				gestureCanv.getContext('2d').drawImage(bufferCanv, 0, 0);
+				gestureCounter = REFRESH_GESTURE_COUNTER;
 			}
-		} else if (evt.button == 2) {
-			if (points.length >= 10){
-				var result = recog.Recognize(points);
-				console.log("Result: " + result.Name + " (" + (Math.round(result.Score * 100) / 100) + ").");
-			} else {
-				console.log("Too little input made. Please try again.");
-			}
-			clearStrokes();
 		}
     }
 	
