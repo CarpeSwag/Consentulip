@@ -297,6 +297,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	var engine = new BABYLON.Engine(canvas, true);
 	var scene = new BABYLON.Scene(engine);
 	
+	var cameraLockedToMesh = false;
 	var enableGestures = false;
 	var gesturesEnabled = false;
 	var tutorialActive = false;
@@ -650,7 +651,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		
 		// check if we are under a mesh
         var pickInfo = scene.pick(scene.pointerX, scene.pointerY, function (mesh) { return mesh !== pot; });
-		if (pickInfo.hit && !enableGestures) {
+		if (pickInfo.hit && !cameraLockedToMesh) {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
 				if (waitingForInput) {
@@ -659,16 +660,18 @@ window.addEventListener('DOMContentLoaded', function() {
 						
 						// Pan camera to the petal
 						modCameraAlpha();
-						panToMesh(petals[0], 2.5, false);
+						panToMesh(petals[0], 2.5);
 						setTimeout(function() {
 							// Start the rest of the tutorial
 							enableGestures = true;
 							tutorialGesture = true;
 							startTutorialGesture();
+							cameraLockedToMesh = true;
 						}, 2000);
 					}
 				} else {					
 					panToMesh(mesh, 0.75);
+					cameraLockedToMesh = true;
 					setTimeout(function() {enableGestures = true;}, 750);
 				}
 			}
@@ -711,9 +714,11 @@ window.addEventListener('DOMContentLoaded', function() {
 		var canvas = document.getElementById('gestures').className = '';
 		clearStrokes();
 		
+		modCameraAlpha();
 		rotateCameraTo(DEFAULT_CAMERA_TARGET, camera.alpha,
 			Math.PI / 3, 40, 0.75, false);
 		enableGestures = false;
+		cameraLockedToMesh = false;
 	}
 
 	canvas.addEventListener("pointerdown", onPointerDown, false);
