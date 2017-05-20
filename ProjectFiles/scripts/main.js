@@ -319,6 +319,18 @@ window.addEventListener('DOMContentLoaded', function() {
 		resizeCanvas();
 	});
 	
+	// Recognize gestures
+	var recognizeGesture = function() {
+		if (points.length >= 10){
+			gestureRecognized = recog.Recognize(points);
+			console.log("Result: " + gestureRecognized.Name + " (" +
+				(Math.round(gestureRecognized.Score * 100) / 100) + ").");
+		} else {
+			console.log("Too little input made. Please try again.");
+		}
+		clearStrokes();
+	}
+	
 	engine.runRenderLoop(function() {
 		scene.render();
 	});
@@ -636,14 +648,6 @@ window.addEventListener('DOMContentLoaded', function() {
 				gesturesEnabled = false;
 				gestureCanv.getContext('2d').drawImage(bufferCanv, 0, 0);
 			}
-		} else if (evt.button == 2) {
-			if (points.length >= 10){
-				var result = recog.Recognize(points);
-				console.log("Result: " + result.Name + " (" + (Math.round(result.Score * 100) / 100) + ").");
-			} else {
-				console.log("Too little input made. Please try again.");
-			}
-			clearStrokes();
 		}
     }
 	
