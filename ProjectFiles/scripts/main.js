@@ -358,7 +358,7 @@ window.addEventListener('DOMContentLoaded', function() {
 			}
 		}
 		
-		if (enableGestures && gestureCounter >= 0) {
+		if (enableGestures && gestureCounter >= 0 && !tutorialGesture) {
 			if (gestureCounter == 0) {
 				recognizeGesture()
 			}
@@ -615,7 +615,7 @@ window.addEventListener('DOMContentLoaded', function() {
 			isDown = true;
 		}
 		
-		if (enableGestures) {
+		if (enableGestures && !tutorialGesture) {
 			if (evt.button <= 1) {
 				gestureCounter = REFRESH_GESTURE_COUNTER;
 				gesturesEnabled = true;
@@ -648,6 +648,7 @@ window.addEventListener('DOMContentLoaded', function() {
 						setTimeout(function() {
 							// Start the rest of the tutorial
 							enableGestures = true;
+							tutorialGesture = true;
 							startTutorialGesture();
 						}, 2500);
 					}
@@ -761,7 +762,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		// Change the message after star is drawn.
 		setTimeout(function() {
 			topText.innerHTML = "Here, try it yourself!";
-			tutorialGesture = true;
+			tutorialGesture = false;
 		}, 4000);
 	}
 });
