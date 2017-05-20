@@ -168,7 +168,7 @@ function rotateAroundPoint(x1, y1, x2, y2, rad) {
 }
 
 function draw() {
-	var THRESHOLD = 40;
+	var CIRCLE_THRESHOLD = 40;
 	var canvas = document.getElementById('gestures');
 	var ctx = canvas.getContext('2d');
 	var sctx = circleCanv.getContext('2d');
@@ -188,12 +188,12 @@ function draw() {
 	
 	// Create the circles
 	for (var i = circles.length - 1; i >= 0; --i) {
-		circles[i].radius += 3;
+		circles[i].radius += circles[i].dr;
 		var rgb = circles[i].color;
-		var a = 0.25 * (1 - (circles[i].radius / THRESHOLD));
+		var a = 0.25 * (1 - (circles[i].radius / CIRCLE_THRESHOLD));
 		var rgba = 'rgba(' + rgb + ',' + a + ')';
 		createCircle(sctx, circles[i].x, circles[i].y, circles[i].radius, rgba);
-		if (circles[i].radius > THRESHOLD) {
+		if (circles[i].radius > CIRCLE_THRESHOLD) {
 			circles.splice(i,1);
 		}
 	}
@@ -341,7 +341,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		if (tutorialActive) {
 			if (waitingForInput) {
 				if (tutorialBlinkGesture == 0) {
-					tutorialBlinkGesture = 20
+					tutorialBlinkGesture = 50;
 					var pos = new BABYLON.Vector3(
 						petals[0].position.x,
 						petals[0].position.y + 1,
@@ -351,7 +351,8 @@ window.addEventListener('DOMContentLoaded', function() {
 						scene.getTransformMatrix(), camera.viewport.toGlobal(engine.getRenderWidth(), 
 						engine.getRenderHeight()));
 					
-					circles.push({x: loc.x, y: loc.y, radius: 10, color: '255,255,0'});
+					circles.push({x: loc.x, y: loc.y, radius: 20, dr: 1, color: '255,255,0'});
+					circles.push({x: loc.x, y: loc.y, radius: 5, dr: 1, color: '255,255,0'});
 				} else {
 					--tutorialBlinkGesture;
 				}
@@ -601,8 +602,8 @@ window.addEventListener('DOMContentLoaded', function() {
 		
 		var x = scene.pointerX;
 		var y = scene.pointerY;
-		circles.push({x: x, y: y, radius: 10, color: '255,255,0'});
-		circles.push({x: x, y: y, radius: 20, color: '255,255,0'});
+		circles.push({x: x, y: y, radius: 10, dr: 3, color: '255,255,0'});
+		circles.push({x: x, y: y, radius: 20, dr: 3, color: '255,255,0'});
 		
 		for (var i = Math.random() * 5 + 3; i >= 0; --i) {
 			addRandomParticle(x, y);
