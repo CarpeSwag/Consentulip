@@ -10,14 +10,14 @@ var Gestures = {
 	recognizeGesture: function() {
 		var respText = '';
 		if (this.points.length >= 10) {
-			this.gesture = this.recognizer.Recognize(points);
+			this.gesture = this.recognizer.Recognize(this.points);
 			console.log("Result: " + this.gesture.Name + " (" +
 				(Math.round(this.gesture.Score * 100) / 100) + ").");
 			console.log(this.gesture);
 		}
 		
 		if (this.gesture) {
-			respText = Game.processGesture(this.gesture);
+			//respText = Game.processGesture(this.gesture);
 		}
 		
 		// Set text to response

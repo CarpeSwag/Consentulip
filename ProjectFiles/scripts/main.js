@@ -32,7 +32,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	Game.engine = new BABYLON.Engine(Game.canvas, true);
 	Game.scene = new BABYLON.Scene(Game.engine);
 	
-	var enableGestures = false;
+	Game.enableGestures = false;
 	var tutorialActive = false;
 	var tutorialGesture = false;
 	var waitingForInput = false;
@@ -93,7 +93,7 @@ window.addEventListener('DOMContentLoaded', function() {
 			}
 		}
 		
-		if (enableGestures && !tutorialGesture) {
+		if (Game.enableGestures && !tutorialGesture) {
 			Gestures.onFrame();
 		}
 		
@@ -236,7 +236,7 @@ window.addEventListener('DOMContentLoaded', function() {
 			UI.isPointerDown = true;
 		}
 		
-		if (enableGestures && !tutorialGesture) {
+		if (Game.enableGestures && !tutorialGesture) {
 			if (evt.button <= 1) {
 				Gestures.onPointerDown(x, y);
 				UI.bctx.lineWidth = 3;
@@ -262,7 +262,7 @@ window.addEventListener('DOMContentLoaded', function() {
 						Camera.panToMesh(petals[0], 2.5);
 						setTimeout(function() {
 							// Start the rest of the tutorial
-							enableGestures = true;
+							Game.enableGestures = true;
 							tutorialGesture = true;
 							startTutorialGesture();
 							Camera.cameraLockedToMesh = true;
@@ -271,7 +271,7 @@ window.addEventListener('DOMContentLoaded', function() {
 				} else {					
 					Camera.panToMesh(mesh, 0.75);
 					Camera.cameraLockedToMesh = true;
-					setTimeout(function() {enableGestures = true;}, 750);
+					setTimeout(function() {Game.enableGestures = true;}, 750);
 				}
 			}
         }
