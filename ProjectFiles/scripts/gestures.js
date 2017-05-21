@@ -31,10 +31,6 @@ var Gestures = {
 		UI.clearCanvases();
 	},
 	
-	onLoad: function() {
-		// Nothing needed to be done
-	},
-	
 	onPointerDown: function(x, y) {
 		this.gesturesEnabled = true;
 		this.counter = Constants.REFRESH_GESTURE_COUNTER;

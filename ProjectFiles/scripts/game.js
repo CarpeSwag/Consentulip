@@ -27,6 +27,9 @@ var Game = {
 			Gestures.onFrame();
 		});
 		
+		// Start camera
+		Camera:onLoad();
+		
 		// Set up the light
 		this.light = new BABYLON.HemisphericLight("light",
 			new BABYLON.Vector3(0, 10, 0), this.scene);

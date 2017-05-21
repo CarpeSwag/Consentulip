@@ -5,10 +5,6 @@ var Flower = {
 	outerPetals: [],
 	pot: null,
 	
-	onLoad: function() {
-		
-	},
-	
 	loadModels: function() {
 		// Load in the model
 		BABYLON.SceneLoader.ImportMesh('', 'art/models/',
