@@ -6,9 +6,6 @@
 //
 
 // Global Variables
-var isDown, glow, gdx;
-var circles, particles, lines;
-var circleCanv, gestureCanv, bufferCanv;
 var zoomOut;
 
 // Constants
@@ -21,260 +18,7 @@ var FLOWER_COLORS = [
 ]
 
 function onLoadEvent() {
-	points = new Array(); // point array for current stroke
-	strokeID = 0;
-	recog = new PDollarRecognizer();
-	isDown = false;
-	
-	circleCanv = document.createElement('canvas');
-	gestureCanv = document.createElement('canvas');
-	bufferCanv = document.createElement('canvas');
-	resizeCanvas();
-	
-	var sctx = circleCanv.getContext('2d');
-	sctx.shadowColor = 'rgba(255,200,50,2)';
-	
-	circles = [];
-	particles = [];
-	lines = [];
-	glow = 100;
-	gdx = 1;
 	window.requestAnimationFrame(draw);
-}
-
-function drawLine(ctx, a, b) {
-	ctx.lineTo(b.X, b.Y);
-	var width = Math.sqrt(Math.pow(a.X - b.X, 2) + Math.pow(a.Y - b.Y, 2));
-	ctx.lineWidth = 4 - (3 * (width/200));
-	ctx.shadowBlur = 10 + (3 * (width/200));
-}
-
-function clearStrokes() {
-	var ctx = document.getElementById('gestures').getContext('2d');
-	ctx.closePath();
-	var sctx = circleCanv.getContext('2d');
-	var gctx = gestureCanv.getContext('2d');
-	var bctx = bufferCanv.getContext('2d');
-	
-	// Clear the canvas
-	ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-	sctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-	gctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-	bctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-}
-
-function createCircle(ctx, x, y, rad, col) {
-    ctx.fillStyle = col;
-    ctx.beginPath();
-    ctx.arc(x, y, rad, 0, 2 * Math.PI, false);
-    ctx.closePath();
-    ctx.fill();
-}
-
-function addRandomParticle(x, y) {
-	var r = 155 + Math.round(Math.random() * 100);
-	var g = 150 + Math.round(Math.random() * 155);
-	var b = Math.round(Math.random() * 255);
-	particles.push({
-		x: x + Math.random() * 40 - 20,
-		y: y + Math.random() * 40 - 20,
-		size: Math.random() * 2.5 + 2.5,
-		rad: Math.random() * Math.PI,
-		color: r + ',' + g + ',' + b,
-		alpha: 1,
-		da: -.05,
-		dr: (Math.random() * Math.PI / 12) - Math.PI / 24,
-		dy: Math.random() * 0.25
-	});
-}
-
-function drawLineTimed(a, b, seconds, delay, lifetime) {
-	// Figure out the timings
-	var moveCounter = Math.ceil(seconds * 60);
-	var delayCounter = Math.ceil(delay * 60);
-	var frameCounter = Math.ceil((lifetime - seconds - delay) * 60);
-	
-	// Add the increments
-	var dx = (b.x - a.x) / moveCounter;
-	var dy = (b.y - a.y) / moveCounter;
-	
-	// Push the line
-	lines.push({
-		a: { x: a.x, y: a.y, dx: 0, dy: 0 },
-		b: { x: a.x, y: a.y, dx: dx, dy: dy },
-		width: 4,
-		color: '255,255,255',
-		blurWidth: 10,
-		blurCol: 'rgba(255,200,50,0.5)',
-		alpha: 1,
-		da: 0,
-		glowing: true,
-		moveCounter: moveCounter,
-		frameCounter: frameCounter,
-		delayCounter: delayCounter
-	});
-}
-
-function createParticle(ctx, x, y, radius, innerRadius, col, radians) {
-	var inner = radius * innerRadius;
-	ctx.fillStyle = col;
-	ctx.beginPath();
-	moveToRotated(ctx, x, y, x - radius, y, radians);
-    lineToRotated(ctx, x, y, x - inner, y - inner, radians);
-	lineToRotated(ctx, x, y, x, y - radius, radians);
-	lineToRotated(ctx, x, y, x + inner, y - inner, radians);
-	lineToRotated(ctx, x, y, x + radius, y, radians);
-	lineToRotated(ctx, x, y, x + inner, y + inner, radians);
-	lineToRotated(ctx, x, y, x, y + radius, radians);
-	lineToRotated(ctx, x, y, x - inner, y + inner, radians);
-	lineToRotated(ctx, x, y, x - radius, y, radians);
-    ctx.closePath();
-	ctx.fill();
-}
-
-function createLine(ctx, a, b, width, blurWidth, col, blurCol) {
-	ctx.strokeStyle = col;
-	ctx.lineWidth = width;
-	ctx.shadowBlur = blurWidth;
-	ctx.shadowColor = blurCol;
-	ctx.beginPath();
-	ctx.moveTo(a.x, a.y);
-	ctx.lineTo(b.x, b.y);
-	ctx.closePath();
-	ctx.stroke();
-}
-
-function moveToRotated(ctx, x1, y1, x2, y2, rad) {
-	var point = rotateAroundPoint(x1, y1, x2, y2, rad);
-	ctx.moveTo(point[0], point[1]);
-}
-
-function lineToRotated(ctx, x1, y1, x2, y2, rad) {
-	var point = rotateAroundPoint(x1, y1, x2, y2, rad);
-	ctx.lineTo(point[0], point[1]);
-}
-
-function rotateAroundPoint(x1, y1, x2, y2, rad) {
-	var dx = x2 - x1;
-	var dy = y2 - y1;
-	var sin = Math.sin(rad);
-	var cos = Math.cos(rad);
-	var newX = x1 + dx * cos - dy * sin;
-	var newY = y1 + dx * sin + dy * cos;
-	return [newX, newY];
-}
-
-function draw() {
-	var CIRCLE_THRESHOLD = 40;
-	var canvas = document.getElementById('gestures');
-	var ctx = canvas.getContext('2d');
-	var sctx = circleCanv.getContext('2d');
-	var gctx = gestureCanv.getContext('2d');
-	var bctx = bufferCanv.getContext('2d');
-	
-	// Clear the canvas
-	ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-	sctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-	bctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-	
-	// Update the glow amount
-	glow += gdx;
-	if(glow == 60 || glow == 120)
-		gdx *= -1;
-	var glowLoop = Math.floor(glow / 10)
-	
-	// Create the circles
-	for (var i = circles.length - 1; i >= 0; --i) {
-		circles[i].radius += circles[i].dr;
-		var rgb = circles[i].color;
-		var a = 0.25 * (1 - (circles[i].radius / CIRCLE_THRESHOLD));
-		var rgba = 'rgba(' + rgb + ',' + a + ')';
-		createCircle(sctx, circles[i].x, circles[i].y, circles[i].radius, rgba);
-		if (circles[i].radius > CIRCLE_THRESHOLD) {
-			circles.splice(i,1);
-		}
-	}
-	
-	// Create the particles
-	for (var i = particles.length - 1; i >= 0; --i) {
-		sctx.shadowBlur = particles[i].size;
-		var rgb = particles[i].color;
-		var a = particles[i].alpha / 3;
-		var rgba = 'rgba(' + rgb + ',' + a + ')';
-		
-		// Draw the particle
-		for (var j = 0; j < 3; ++j) {
-			createParticle(sctx, particles[i].x, particles[i].y, particles[i].size,
-				.45, rgba, particles[i].rad);
-		}
-		
-		// Adjust it
-		particles[i].rad += particles[i].dr;
-		particles[i].y += particles[i].dy;
-		particles[i].alpha += particles[i].da;
-		
-		if (a <= 0) {
-			particles.splice(i, 1);
-		}
-	}
-	sctx.shadowBlur = 0;
-	
-	// Draw lines
-	for (var i = lines.length - 1; i >= 0; --i) {
-		if (lines[i].delayCounter <= 0) {
-			var rgb = lines[i].color;
-			var a = lines[i].alpha;
-			var rgba = 'rgba(' + rgb + ',' + a + ')'; 
-			
-			var drawCount = (lines[i].glowing)? glowLoop: 1;
-			for (var j = 0; j < 3; ++j) {
-				createLine(sctx, lines[i].a, lines[i].b, lines[i].width, 
-				lines[i].blurWidth, rgba, lines[i].blurCol);
-			}
-			
-			if (lines[i].moveCounter <= 0) {
-				if (--(lines[i].frameCounter) <= 0) {
-					lines.splice(i, 1);
-				}
-			} else {
-				lines[i].a.x += lines[i].a.dx;
-				lines[i].a.y += lines[i].a.dy;
-				lines[i].b.x += lines[i].b.dx;
-				lines[i].b.y += lines[i].b.dy;
-				lines[i].alpha += lines[i].da;
-				
-				--(lines[i].moveCounter);
-			}
-		} else {
-			--(lines[i].delayCounter);
-		}
-	}
-	
-	sctx.shadowBlur = 0;
-	
-	// Draw gestures
-	if (points.length > 0) {
-		bctx.stroke();
-		for (var i = 0; i < glowLoop; ++i) {
-			ctx.drawImage(gestureCanv, 0, 0);
-			ctx.drawImage(bufferCanv, 0, 0);
-		}
-	}
-	
-	ctx.drawImage(circleCanv, 0, 0);
-	window.requestAnimationFrame(draw);
-}
-
-function resizeCanvas() {
-	var width = window.innerWidth;
-	var height = window.innerHeight;
-	var canvases = [document.getElementById('gestures'), circleCanv, gestureCanv, bufferCanv];
-	
-	for (var i = 0; i < canvases.length; ++i) {
-		var ctx = canvases[i].getContext('2d');
-		ctx.canvas.width = width;
-		ctx.canvas.height = height;
-	}
 }
 
 /**
@@ -334,6 +78,8 @@ window.addEventListener('DOMContentLoaded', function() {
 	
 	engine.runRenderLoop(function() {
 		scene.render();
+		UI.onFrame();
+		
 		if (tutorialActive) {
 			if (waitingForInput) {
 				if (tutorialBlinkGesture == 0) {
@@ -586,7 +332,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		
 		rotateCameraTo(target, alpha, beta, radius, seconds, true);
 		
-		clearStrokes();
+		UI.clearCanvases();
 	}
 	
 	// Mouse events
@@ -597,30 +343,30 @@ window.addEventListener('DOMContentLoaded', function() {
 		
 		var x = scene.pointerX;
 		var y = scene.pointerY;
-		circles.push({x: x, y: y, radius: 10, dr: 3, color: '255,255,0'});
-		circles.push({x: x, y: y, radius: 20, dr: 3, color: '255,255,0'});
+		UI.circles.push({x: x, y: y, radius: 10, dr: 3, color: '255,255,0'});
+		UI.circles.push({x: x, y: y, radius: 20, dr: 3, color: '255,255,0'});
 		
 		for (var i = Math.random() * 5 + 3; i >= 0; --i) {
-			addRandomParticle(x, y);
+			UI.addRandomParticle(x, y);
 		}
 		
 		document.onselectstart = function() { return false; } // disable drag-select
 		document.onmousedown = function() { return false; } // disable drag-select
 		
 		if (evt.button <= 1) {
-			isDown = true;
+			UI.isDown = true;
 		}
 		
 		if (enableGestures && !tutorialGesture) {
 			if (evt.button <= 1) {
 				Gestures.onPointerDown(x, y);
-				var bctx = bufferCanv.getContext('2d');
-				bctx.lineWidth = 3;
-				bctx.moveTo(x, y);
-				bctx.strokeStyle = '#ffffff';
-				bctx.shadowBlur = 10;
-				bctx.shadowColor = 'rgba(255,200,50,.25)';
-				bctx.beginPath();
+				UI.bctx = bufferCanv.getContext('2d');
+				UI.bctx.lineWidth = 3;
+				UI.bctx.moveTo(x, y);
+				UI.bctx.strokeStyle = '#ffffff';
+				UI.bctx.shadowBlur = 10;
+				UI.bctx.shadowColor = 'rgba(255,200,50,.25)';
+				UI.bctx.beginPath();
 			}
 		}
 		
@@ -656,9 +402,9 @@ window.addEventListener('DOMContentLoaded', function() {
     var onPointerMove = function (evt) {
 		var x = scene.pointerX;
 		var y = scene.pointerY;
-        if (isDown) {
+        if (UI.isDown) {
 			for (var i = Math.random() * 2 + 1; i >= 0; --i) {
-				addRandomParticle(x, y);
+				UI.addRandomParticle(x, y);
 			}
 			Gestures.onPointerMove(x, y);
 		}
@@ -670,18 +416,18 @@ window.addEventListener('DOMContentLoaded', function() {
 		var x = scene.pointerX;
 		var y = scene.pointerY;
 		if (evt.button <= 1) {
-			if (isDown) {
-				isDown = false;
+			if (UI.isDown) {
+				UI.isDown = false;
 				Gestures.onPointerUp(x, y);
-				gestureCanv.getContext('2d').drawImage(bufferCanv, 0, 0);
+				UI.gctx.drawImage(bufferCanv, 0, 0);
 			}
 		}
     }
 	
 	zoomOut = function() {
 		// Hide gesture canvas
-		var canvas = document.getElementById('gestures').className = '';
-		clearStrokes();
+		document.getElementById('gestures').className = '';
+		UI.clearCanvases();
 		
 		modCameraAlpha();
 		rotateCameraTo(DEFAULT_CAMERA_TARGET, camera.alpha,
