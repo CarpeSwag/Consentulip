@@ -15,7 +15,9 @@ var FLOWER_COLORS = [
 ]
 
 function onLoadEvent() {
-	window.requestAnimationFrame(draw);
+	Gestures.onLoad();
+	UI.onLoad();
+	Camera.onLoad();
 }
 
 /**
@@ -26,9 +28,9 @@ var startTutorial;
 var randomizeFlower;
 
 window.addEventListener('DOMContentLoaded', function() {
-	var canvas = document.getElementById('renderCanvas');
-	var engine = new BABYLON.Engine(canvas, true);
-	var scene = new BABYLON.Scene(engine);
+	Game.canvas = document.getElementById('renderCanvas');
+	Game.engine = new BABYLON.Engine(Game.canvas, true);
+	Game.scene = new BABYLON.Scene(Game.engine);
 	
 	var enableGestures = false;
 	var tutorialActive = false;
@@ -49,7 +51,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	
 	// Engine functions
 	window.addEventListener('resize', function() {
-		engine.resize();
+		Game.engine.resize();
 		resizeCanvas();
 	});
 	
@@ -66,8 +68,8 @@ window.addEventListener('DOMContentLoaded', function() {
 		}
 	}
 	
-	engine.runRenderLoop(function() {
-		scene.render();
+	Game.engine.runRenderLoop(function() {
+		Game.scene.render();
 		UI.onFrame();
 		
 		if (tutorialActive) {
@@ -80,8 +82,8 @@ window.addEventListener('DOMContentLoaded', function() {
 						petals[0].position.z
 					)
 					var loc = BABYLON.Vector3.Project(pos, BABYLON.Matrix.Identity(),
-						scene.getTransformMatrix(), camera.viewport.toGlobal(engine.getRenderWidth(), 
-						engine.getRenderHeight()));
+						Game.scene.getTransformMatrix(), camera.viewport.toGlobal(
+						Game.engine.getRenderWidth(), Game.engine.getRenderHeight()));
 					
 					UI.circles.push({x: loc.x, y: loc.y, radius: 20, dr: 1, color: '255,255,0'});
 					UI.circles.push({x: loc.x, y: loc.y, radius: 5, dr: 1, color: '255,255,0'});
@@ -98,17 +100,17 @@ window.addEventListener('DOMContentLoaded', function() {
 	
 	// Set up the light
 	var light = new BABYLON.HemisphericLight("light",
-		new BABYLON.Vector3(0, 10, 0), scene);
+		new BABYLON.Vector3(0, 10, 0), Game.scene);
 	light.intensity = 0.5;
 	
 	var light2 = new BABYLON.HemisphericLight("light2",
-		new BABYLON.Vector3(0, 0, 0), scene);
+		new BABYLON.Vector3(0, 0, 0), Game.scene);
 	light2.intensity = 2.0;
 	
 	// Load in the model
 	var stem, leaves, petals, outerPetals;
 	BABYLON.SceneLoader.ImportMesh('', 'art/models/',
-		'tulip.babylon', scene, function (mesh) {
+		'tulip.babylon', Game.scene, function (mesh) {
 		var SCALE = 5.0;
 		leaves = [];
 		petals = [];
@@ -193,7 +195,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	// Load in the pot
 	var pot;
 	BABYLON.SceneLoader.ImportMesh('', 'art/models/',
-		'pot.babylon', scene, function (mesh) {
+		'pot.babylon', Game.scene, function (mesh) {
 		var SCALE = 4.5;
 		for (var i = 0; i < mesh.length; ++i) {
 			pot = mesh[i];
@@ -208,7 +210,7 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 	
 	// Load in the ground
-	scene.clearColor = new BABYLON.Color3(.2, .6, .75);
+	Game.scene.clearColor = new BABYLON.Color3(.2, .6, .75);
 	
 	// Mouse events
 	var onPointerDown = function (evt) {
@@ -216,8 +218,8 @@ window.addEventListener('DOMContentLoaded', function() {
             return;
         }
 		
-		var x = scene.pointerX;
-		var y = scene.pointerY;
+		var x = Game.scene.pointerX;
+		var y = Game.scene.pointerY;
 		UI.circles.push({x: x, y: y, radius: 10, dr: 3, color: '255,255,0'});
 		UI.circles.push({x: x, y: y, radius: 20, dr: 3, color: '255,255,0'});
 		
@@ -229,13 +231,12 @@ window.addEventListener('DOMContentLoaded', function() {
 		document.onmousedown = function() { return false; } // disable drag-select
 		
 		if (evt.button <= 1) {
-			UI.isDown = true;
+			UI.isPointerDown = true;
 		}
 		
 		if (enableGestures && !tutorialGesture) {
 			if (evt.button <= 1) {
 				Gestures.onPointerDown(x, y);
-				UI.bctx = bufferCanv.getContext('2d');
 				UI.bctx.lineWidth = 3;
 				UI.bctx.moveTo(x, y);
 				UI.bctx.strokeStyle = '#ffffff';
@@ -246,7 +247,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		}
 		
 		// check if we are under a mesh
-        var pickInfo = scene.pick(scene.pointerX, scene.pointerY, function (mesh) { return mesh !== pot; });
+        var pickInfo = Game.scene.pick(x, y, function (mesh) { return mesh !== pot; });
 		if (pickInfo.hit && !Camera.cameraLockedToMesh) {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
@@ -275,9 +276,9 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     var onPointerMove = function (evt) {
-		var x = scene.pointerX;
-		var y = scene.pointerY;
-        if (UI.isDown) {
+		var x = Game.scene.pointerX;
+		var y = Game.scene.pointerY;
+        if (UI.isPointerDown) {
 			for (var i = Math.random() * 2 + 1; i >= 0; --i) {
 				UI.addRandomParticle(x, y);
 			}
@@ -288,23 +289,23 @@ window.addEventListener('DOMContentLoaded', function() {
     var onPointerUp = function (evt) {
         document.onselectstart = function() { return true; } // enable drag-select
 		document.onmousedown = function() { return true; } // enable drag-select
-		var x = scene.pointerX;
-		var y = scene.pointerY;
+		var x = Game.scene.pointerX;
+		var y = Game.scene.pointerY;
 		if (evt.button <= 1) {
-			if (UI.isDown) {
-				UI.isDown = false;
+			if (UI.isPointerDown) {
+				UI.isPointerDown = false;
 				Gestures.onPointerUp(x, y);
-				UI.gctx.drawImage(bufferCanv, 0, 0);
+				UI.gctx.drawImage(UI.bufferCanv, 0, 0);
 			}
 		}
     }
 	
-	canvas.addEventListener("pointerdown", onPointerDown, false);
-	canvas.addEventListener("pointerup", onPointerUp, false);
-	canvas.addEventListener("pointermove", onPointerMove, false);
+	Game.canvas.addEventListener("pointerdown", onPointerDown, false);
+	Game.canvas.addEventListener("pointerup", onPointerUp, false);
+	Game.canvas.addEventListener("pointermove", onPointerMove, false);
 	
 	// Ensure screen is sized correctly.
-	engine.resize();
+	Game.engine.resize();
 	
 	onLoadEvent();
 	
@@ -365,10 +366,10 @@ window.addEventListener('DOMContentLoaded', function() {
 	}
 	
 	// Skybox
-    var skybox = BABYLON.Mesh.CreateBox("skyBox", 2000.0, scene);
-    var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+    var skybox = BABYLON.Mesh.CreateBox("skyBox", 2000.0, Game.scene);
+    var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", Game.scene);
     skyboxMaterial.backFaceCulling = false;
-    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("art/textures/TropicalSunnyDay", scene);
+    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("art/textures/TropicalSunnyDay", Game.scene);
     skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
     skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
     skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);

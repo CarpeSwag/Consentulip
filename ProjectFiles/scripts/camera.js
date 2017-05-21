@@ -13,7 +13,7 @@ var Camera = {
 	counter: 0,
 	animate: false,
 	
-	preload: function() {
+	onLoad: function() {
 		// Initialize the camera
 		this.camera = new BABYLON.ArcRotateCamera("Camera", 
 			Math.random() * (Math.PI * 2), Constants.CAMERA_BETA_DEFAULT,
@@ -33,7 +33,7 @@ var Camera = {
 		this.camera.upperBetaLimit = Constants.CAMERA_BETA_UPPER;
 		this.camera.lowerRadiusLimit = Constants.CAMERA_RADIUS_LOWER;
 		this.camera.upperRadiusLimit = Constants.CAMERA_RADIUS_UPPER;
-	}
+	},
 	
 	isInFront: function(alpha) {
 		return (alpha >= 0)? (alpha % (Math.PI * 2)) < Math.PI:
@@ -121,7 +121,7 @@ var Camera = {
 		// Grab camera info for mesh
 		var alpha = info.alpha;
 		if (info.alpha == 0)
-			alpha = (isInFront(camera.alpha))? Math.PI / 2: 3 * Math.PI / 2;
+			alpha = (this.isInFront(this.camera.alpha))? Math.PI / 2: 3 * Math.PI / 2;
 		var beta = Math.PI / 2;
 		var radius = info.radius;
 		
@@ -141,7 +141,7 @@ var Camera = {
 		
 		// Rotate camera
 		this.modCameraAlpha();
-		this.rotateCameraTo(DEFAULT_CAMERA_TARGET, this.camera.alpha,
+		this.rotateCameraTo(Constants.CAMERA_DEFAULT_TARGET, this.camera.alpha,
 			Constants.CAMERA_BETA_DEFAULT, 40, 0.75, false);
 		this.cameraLockedToMesh = false;
 	},

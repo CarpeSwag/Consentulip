@@ -137,15 +137,15 @@ var UI = {
 		var inner = radius * innerRadius;
 		this.sctx.fillStyle = col;
 		this.sctx.beginPath();
-		moveToRotated(this.sctx, x, y, x - radius, y, radians);
-		lineToRotated(this.sctx, x, y, x - inner, y - inner, radians);
-		lineToRotated(this.sctx, x, y, x, y - radius, radians);
-		lineToRotated(this.sctx, x, y, x + inner, y - inner, radians);
-		lineToRotated(this.sctx, x, y, x + radius, y, radians);
-		lineToRotated(this.sctx, x, y, x + inner, y + inner, radians);
-		lineToRotated(this.sctx, x, y, x, y + radius, radians);
-		lineToRotated(this.sctx, x, y, x - inner, y + inner, radians);
-		lineToRotated(this.sctx, x, y, x - radius, y, radians);
+		this.moveToRotated(this.sctx, x, y, x - radius, y, radians);
+		this.lineToRotated(this.sctx, x, y, x - inner, y - inner, radians);
+		this.lineToRotated(this.sctx, x, y, x, y - radius, radians);
+		this.lineToRotated(this.sctx, x, y, x + inner, y - inner, radians);
+		this.lineToRotated(this.sctx, x, y, x + radius, y, radians);
+		this.lineToRotated(this.sctx, x, y, x + inner, y + inner, radians);
+		this.lineToRotated(this.sctx, x, y, x, y + radius, radians);
+		this.lineToRotated(this.sctx, x, y, x - inner, y + inner, radians);
+		this.lineToRotated(this.sctx, x, y, x - radius, y, radians);
 		this.sctx.closePath();
 		this.sctx.fill();
 	},
@@ -164,12 +164,12 @@ var UI = {
 	
 	// Shape helper methods
 	moveToRotated: function(ctx, x1, y1, x2, y2, rad) {
-		var point = rotateAroundPoint(x1, y1, x2, y2, rad);
+		var point = this.rotateAroundPoint(x1, y1, x2, y2, rad);
 		ctx.moveTo(point[0], point[1]);
 	},
 
 	lineToRotated: function(ctx, x1, y1, x2, y2, rad) {
-		var point = rotateAroundPoint(x1, y1, x2, y2, rad);
+		var point = this.rotateAroundPoint(x1, y1, x2, y2, rad);
 		ctx.lineTo(point[0], point[1]);
 	},
 
@@ -268,7 +268,7 @@ var UI = {
 		this.sctx.shadowBlur = 0;
 		
 		// Draw gestures
-		if (this.points.length > 0) {
+		if (Gestures.points.length > 0) {
 			this.bctx.stroke();
 			for (var i = 0; i < glowLoop; ++i) {
 				this.ctx.drawImage(this.gestureCanv, 0, 0);
@@ -276,6 +276,6 @@ var UI = {
 			}
 		}
 		
-		this.ctx.drawImage(this.circleCanv, 0, 0);
+		this.ctx.drawImage(this.shapeCanv, 0, 0);
 	}
 };

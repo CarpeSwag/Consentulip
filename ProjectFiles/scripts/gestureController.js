@@ -27,11 +27,15 @@ var Gestures = {
 		UI.clearCanvases();
 	},
 	
+	onLoad: function() {
+		// Nothing needed to be done
+	},
+	
 	onPointerDown: function(x, y) {
 		this.gesturesEnabled = true;
 		this.counter = Constants.REFRESH_GESTURE_COUNTER;
 		this.points.length = (this.strokeID == 0)? 0: this.points.length;
-		this.points[points.length] = new Point(x, y, ++this.strokeID);
+		this.points[this.points.length] = new Point(x, y, ++this.strokeID);
 	},
 	
 	onPointerMove: function(x, y) {
@@ -63,7 +67,7 @@ var Gestures = {
 			}
 			--this.counter;
 		}
-	}
+	},
 	
 	clearStrokes: function() {
 		this.points.length = 0;
