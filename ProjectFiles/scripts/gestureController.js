@@ -17,7 +17,11 @@ var Gestures = {
 		}
 		
 		if (this.gesture) {
-			//respText = Game.processGesture(this.gesture);
+			if (Tutorial.active) {
+				respText = Tutorial.gestureInput(this.gesture);
+			} else {
+				//respText = Game.processGesture(this.gesture);
+			}
 		}
 		
 		// Set text to response

@@ -78,6 +78,16 @@ var Tutorial = {
 		}, 4000);
 	},
 	
+	gestureInput: function(gesture) {
+		if (Tutorial.active) {
+			if (gesture.Name === 'five-point star') {
+				Tutorial.active = false;
+				return 'Good job!';
+			}
+			return 'Oops! Try again.';
+		}
+	},
+	
 	onFrame: function() {
 		if (this.active) {
 			if (this.waitingForInput) {
