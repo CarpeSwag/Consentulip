@@ -94,9 +94,9 @@ var Camera = {
 		
 		// Target
 		this.camera.target = new BABYLON.Vector3(
-			this.camera.target.x + animationDelta.x,
-			this.camera.target.y + animationDelta.y,
-			this.camera.target.z + animationDelta.z
+			this.camera.target.x + this.animationDelta.x,
+			this.camera.target.y + this.animationDelta.y,
+			this.camera.target.z + this.animationDelta.z
 		)
 		
 		// Decrement frame counter or end

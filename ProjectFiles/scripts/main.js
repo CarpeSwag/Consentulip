@@ -96,6 +96,8 @@ window.addEventListener('DOMContentLoaded', function() {
 		if (enableGestures && !tutorialGesture) {
 			Gestures.onFrame();
 		}
+		
+		Camera.onFrame();
 	});
 	
 	// Set up the light
