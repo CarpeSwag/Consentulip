@@ -5,9 +5,6 @@
 // Startup
 //
 
-// Global Variables
-var zoomOut;
-
 // Constants
 var FLOWER_COLORS = [
 	{r: 1, g: 0, b: 0},
@@ -25,11 +22,6 @@ function onLoadEvent() {
 * Babylon Things
 **/
 
-function isInFront(cameraAlpha) {
-	return (cameraAlpha >= 0)? (cameraAlpha % (Math.PI * 2)) < Math.PI:
-		(Math.abs(cameraAlpha) % (Math.PI * 2)) >= Math.PI;
-}
-
 var startTutorial;
 var randomizeFlower;
 
@@ -38,9 +30,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	var engine = new BABYLON.Engine(canvas, true);
 	var scene = new BABYLON.Scene(engine);
 	
-	var cameraLockedToMesh = false;
 	var enableGestures = false;
-	var gesturesEnabled = false;
 	var tutorialActive = false;
 	var tutorialGesture = false;
 	var waitingForInput = false;
@@ -93,8 +83,8 @@ window.addEventListener('DOMContentLoaded', function() {
 						scene.getTransformMatrix(), camera.viewport.toGlobal(engine.getRenderWidth(), 
 						engine.getRenderHeight()));
 					
-					circles.push({x: loc.x, y: loc.y, radius: 20, dr: 1, color: '255,255,0'});
-					circles.push({x: loc.x, y: loc.y, radius: 5, dr: 1, color: '255,255,0'});
+					UI.circles.push({x: loc.x, y: loc.y, radius: 20, dr: 1, color: '255,255,0'});
+					UI.circles.push({x: loc.x, y: loc.y, radius: 5, dr: 1, color: '255,255,0'});
 				} else {
 					--tutorialBlinkGesture;
 				}
@@ -105,16 +95,6 @@ window.addEventListener('DOMContentLoaded', function() {
 			Gestures.onFrame();
 		}
 	});
-	
-	// Camera settings
-	var DEFAULT_CAMERA_TARGET = new BABYLON.Vector3(0,5,0);
-	var camera = new BABYLON.ArcRotateCamera("Camera", Math.random() * (Math.PI * 2),
-		Math.PI / 3, 40, DEFAULT_CAMERA_TARGET, scene);
-	camera.upperBetaLimit = Math.PI / 2;
-	camera.lowerRadiusLimit = 7.5;
-	camera.upperRadiusLimit = 300;
-	camera.attachControl(canvas, true, true);
-	scene.activeCamera.panningSensibility = 0; // disables camera panning
 	
 	// Set up the light
 	var light = new BABYLON.HemisphericLight("light",
@@ -230,111 +210,6 @@ window.addEventListener('DOMContentLoaded', function() {
 	// Load in the ground
 	scene.clearColor = new BABYLON.Color3(.2, .6, .75);
 	
-	var modCameraAlpha = function() {
-		// Clean the alpha value to be between 0 and 2 pi
-		if (camera.alpha < 0)
-			camera.alpha = (2 * Math.PI) - (Math.abs(camera.alpha) % (Math.PI * 2));
-		camera.alpha = camera.alpha % (Math.PI * 2);
-	}
-	
-	// Pan
-	var animationDelta = {
-		alpha: 0,
-		beta: 0,
-		radius: 0,
-		x: 0,
-		y: 0,
-		z: 0,
-		lockCamera: false
-	}
-	var frameCounter = 0;
-	var rotateCameraTo = function(target, alpha, beta, radius, seconds, lockCamera) {
-		// Determine the frames (60 fps)
-		var frameCount = Math.floor(seconds * 60);
-		frameCounter = frameCount;
-		
-		modCameraAlpha();
-		
-		// Set the info for the camera animation
-		animationDelta.alpha = (alpha - camera.alpha) / frameCount;
-		animationDelta.beta = (beta - camera.beta) / frameCount;
-		animationDelta.radius = (radius - camera.radius) / frameCount;
-		animationDelta.x = (target.x - camera.target.x) / frameCount;
-		animationDelta.y = (target.y - camera.target.y) / frameCount;
-		animationDelta.z = (target.z - camera.target.z) / frameCount;
-		
-		// Lock camera at the end
-		animationDelta.lockCamera = lockCamera;
-		
-		// Start the animation
-		window.requestAnimationFrame(adjustCamera);
-	}
-	
-	var adjustCamera = function() {
-		// Alpha
-		camera.alpha += animationDelta.alpha;
-		camera.lowerAlphaLimit = camera.alpha;
-		camera.upperAlphaLimit = camera.alpha;
-		
-		// Beta
-		camera.beta += animationDelta.beta;
-		camera.lowerBetaLimit = camera.beta;
-		camera.upperBetaLimit = camera.beta;
-		
-		// Radius
-		camera.radius += animationDelta.radius;
-		camera.lowerRadiusLimit = camera.radius;
-		camera.upperRadiusLimit = camera.radius;
-		
-		// Target
-		camera.target = new BABYLON.Vector3(
-			camera.target.x + animationDelta.x,
-			camera.target.y + animationDelta.y,
-			camera.target.z + animationDelta.z
-		)
-		
-		// Decrement frame counter or end
-		if (--frameCounter >= 0) {
-			window.requestAnimationFrame(adjustCamera);
-		} else {
-			modCameraAlpha();
-			if (!animationDelta.lockCamera) {
-				// Fix camera limits to default
-				camera.lowerAlphaLimit = null;
-				camera.upperAlphaLimit = null;
-				camera.lowerBetaLimit = 0.1;
-				camera.upperBetaLimit = Math.PI / 2;
-				camera.lowerRadiusLimit = 7.5;
-				camera.upperRadiusLimit = 300;
-			}
-		}
-	}
-	
-	var panToMesh = function(mesh, seconds, rotateClockwise) {
-		rotateClockwise = rotateClockwise || false;
-		var info = mesh.cameraInfo;
-		var target = new BABYLON.Vector3(
-			mesh.position.x,
-			mesh.position.y + info.yOffset,
-			mesh.position.z
-		);
-		
-		// Grab camera info for mesh
-		var alpha = info.alpha;
-		if (info.alpha == 0)
-			alpha = (isInFront(camera.alpha))? Math.PI / 2: 3 * Math.PI / 2;
-		var beta = Math.PI / 2;
-		var radius = info.radius;
-		
-		if (rotateClockwise && camera.alpha > alpha) {
-			alpha += Math.PI * 2;
-		}
-		
-		rotateCameraTo(target, alpha, beta, radius, seconds, true);
-		
-		UI.clearCanvases();
-	}
-	
 	// Mouse events
 	var onPointerDown = function (evt) {
 		if (evt.button !== 0) {
@@ -372,7 +247,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		
 		// check if we are under a mesh
         var pickInfo = scene.pick(scene.pointerX, scene.pointerY, function (mesh) { return mesh !== pot; });
-		if (pickInfo.hit && !cameraLockedToMesh) {
+		if (pickInfo.hit && !Camera.cameraLockedToMesh) {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
 				if (waitingForInput) {
@@ -380,19 +255,19 @@ window.addEventListener('DOMContentLoaded', function() {
 						waitingForInput = false;
 						
 						// Pan camera to the petal
-						modCameraAlpha();
-						panToMesh(petals[0], 2.5);
+						Camera.modCameraAlpha();
+						Camera.panToMesh(petals[0], 2.5);
 						setTimeout(function() {
 							// Start the rest of the tutorial
 							enableGestures = true;
 							tutorialGesture = true;
 							startTutorialGesture();
-							cameraLockedToMesh = true;
+							Camera.cameraLockedToMesh = true;
 						}, 2000);
 					}
 				} else {					
-					panToMesh(mesh, 0.75);
-					cameraLockedToMesh = true;
+					Camera.panToMesh(mesh, 0.75);
+					Camera.cameraLockedToMesh = true;
 					setTimeout(function() {enableGestures = true;}, 750);
 				}
 			}
@@ -424,18 +299,6 @@ window.addEventListener('DOMContentLoaded', function() {
 		}
     }
 	
-	zoomOut = function() {
-		// Hide gesture canvas
-		document.getElementById('gestures').className = '';
-		UI.clearCanvases();
-		
-		modCameraAlpha();
-		rotateCameraTo(DEFAULT_CAMERA_TARGET, camera.alpha,
-			Math.PI / 3, 40, 0.75, false);
-		enableGestures = false;
-		cameraLockedToMesh = false;
-	}
-
 	canvas.addEventListener("pointerdown", onPointerDown, false);
 	canvas.addEventListener("pointerup", onPointerUp, false);
 	canvas.addEventListener("pointermove", onPointerMove, false);
@@ -459,11 +322,11 @@ window.addEventListener('DOMContentLoaded', function() {
 		}, 2000);
 		
 		
-		modCameraAlpha();
+		Camera.modCameraAlpha();
 		tutorialActive = true;
 		
 		// Rotate around flower, and zoom into it.
-		rotateCameraTo(DEFAULT_CAMERA_TARGET, Math.PI * 3.75,
+		Camera.rotateCameraTo(DEFAULT_CAMERA_TARGET, Math.PI * 3.75,
 			Math.PI / 3, 40, 7.000, true);
 		setTimeout(function() {
 			// Wait for response
@@ -488,11 +351,11 @@ window.addEventListener('DOMContentLoaded', function() {
 			{x: centerX                 , y: centerY + radius * -0.75},
 			{x: centerX + radius *  0.50, y: centerY + radius *  0.50}
 		];
-		drawLineTimed(starPoints[0], starPoints[1], 0.5, 1.0, 4.00);
-		drawLineTimed(starPoints[1], starPoints[2], 0.5, 1.5, 4.00);
-		drawLineTimed(starPoints[2], starPoints[3], 0.5, 2.0, 4.00);
-		drawLineTimed(starPoints[3], starPoints[4], 0.5, 2.5, 4.00);
-		drawLineTimed(starPoints[4], starPoints[0], 0.5, 3.0, 4.00);
+		UI.drawLineTimed(starPoints[0], starPoints[1], 0.5, 1.0, 4.00);
+		UI.drawLineTimed(starPoints[1], starPoints[2], 0.5, 1.5, 4.00);
+		UI.drawLineTimed(starPoints[2], starPoints[3], 0.5, 2.0, 4.00);
+		UI.drawLineTimed(starPoints[3], starPoints[4], 0.5, 2.5, 4.00);
+		UI.drawLineTimed(starPoints[4], starPoints[0], 0.5, 3.0, 4.00);
 		
 		// Change the message after star is drawn.
 		setTimeout(function() {
