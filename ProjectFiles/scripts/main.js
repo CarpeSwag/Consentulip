@@ -6,7 +6,7 @@
 //
 
 // Global Variables
-var isDown, points, strokeID, recog, iter, glow, gdx;
+var isDown, glow, gdx;
 var circles, particles, lines;
 var circleCanv, gestureCanv, bufferCanv;
 var zoomOut;
@@ -34,7 +34,6 @@ function onLoadEvent() {
 	var sctx = circleCanv.getContext('2d');
 	sctx.shadowColor = 'rgba(255,200,50,2)';
 	
-	iter = 0;
 	circles = [];
 	particles = [];
 	lines = [];
@@ -51,8 +50,6 @@ function drawLine(ctx, a, b) {
 }
 
 function clearStrokes() {
-	points.length = 0;
-	strokeID = 0;
 	var ctx = document.getElementById('gestures').getContext('2d');
 	ctx.closePath();
 	var sctx = circleCanv.getContext('2d');
@@ -323,17 +320,7 @@ window.addEventListener('DOMContentLoaded', function() {
 	});
 	
 	// Recognize gestures
-	var REFRESH_GESTURE_COUNTER = 1.0 * 60;
-	var gestureRecognized = null;
-	var gestureCounter = -1;
 	var recognizeGesture = function() {
-		var respText = '';
-		if (points.length >= 10){
-			gestureRecognized = recog.Recognize(points);
-			console.log("Result: " + gestureRecognized.Name + " (" +
-				(Math.round(gestureRecognized.Score * 100) / 100) + ").");
-			console.log(gestureRecognized);
-		}
 		
 		if (tutorialActive && gestureRecognized) {
 			if (gestureRecognized.Name === 'five-point star') {
@@ -343,12 +330,6 @@ window.addEventListener('DOMContentLoaded', function() {
 				respText = 'Oops! Try again.';
 			}
 		}
-		
-		// Set text to response
-		var topText = document.getElementById('flower-name');
-		topText.innerHTML = respText;
-		
-		clearStrokes();
 	}
 	
 	engine.runRenderLoop(function() {
@@ -374,11 +355,8 @@ window.addEventListener('DOMContentLoaded', function() {
 			}
 		}
 		
-		if (enableGestures && gestureCounter >= 0 && !tutorialGesture) {
-			if (gestureCounter == 0) {
-				recognizeGesture()
-			}
-			--gestureCounter;
+		if (enableGestures && !tutorialGesture) {
+			Gestures.onFrame();
 		}
 	});
 	
@@ -635,12 +613,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		
 		if (enableGestures && !tutorialGesture) {
 			if (evt.button <= 1) {
-				gestureCounter = REFRESH_GESTURE_COUNTER;
-				gesturesEnabled = true;
-				if (strokeID == 0)	{
-					points.length = 0;
-				}
-				points[points.length] = new Point(x, y, ++strokeID);
+				Gestures.onPointerDown(x, y);
 				var bctx = bufferCanv.getContext('2d');
 				bctx.lineWidth = 3;
 				bctx.moveTo(x, y);
@@ -687,12 +660,7 @@ window.addEventListener('DOMContentLoaded', function() {
 			for (var i = Math.random() * 2 + 1; i >= 0; --i) {
 				addRandomParticle(x, y);
 			}
-			if (gesturesEnabled) {
-				var point = new Point(x, y, strokeID);
-				points[points.length] = point; // append
-				drawLine(bufferCanv.getContext('2d'), points[points.length-2], point);
-				gestureCounter = REFRESH_GESTURE_COUNTER;
-			}
+			Gestures.onPointerMove(x, y);
 		}
     }
 
@@ -704,9 +672,8 @@ window.addEventListener('DOMContentLoaded', function() {
 		if (evt.button <= 1) {
 			if (isDown) {
 				isDown = false;
-				gesturesEnabled = false;
+				Gestures.onPointerUp(x, y);
 				gestureCanv.getContext('2d').drawImage(bufferCanv, 0, 0);
-				gestureCounter = REFRESH_GESTURE_COUNTER;
 			}
 		}
     }
