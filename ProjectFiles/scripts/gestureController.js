@@ -69,4 +69,4 @@ var Gestures = {
 		this.points.length = 0;
 		this.strokeID = 0;
 	}
-}
+};

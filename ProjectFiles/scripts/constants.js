@@ -4,4 +4,4 @@ var Constants = {
 	
 	// Gesture constants
 	REFRESH_GESTURE_COUNTER: 1.0 * FPS
-}
+};
