@@ -61,11 +61,13 @@ var Gestures = {
 	},
 	
 	onFrame: function() {
-		if (this.counter >= 0) {
-			if (this.counter == 0) {
-				this.recognizeGesture();
+		if (Game.enableGestures && !Tutorial.gesture) {
+			if (this.counter >= 0) {
+				if (this.counter == 0) {
+					Gestures.recognizeGesture();
+				}
+				--this.counter;
 			}
-			--this.counter;
 		}
 	},
 	

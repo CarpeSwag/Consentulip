@@ -54,7 +54,12 @@ var UI = {
 	},
 	
 	setText: function(txt) {
-		this.text = txt;
+		this.text.innerHTML = txt;
+	},
+	
+	setDelayedText: function(txt, ms) {
+		var textBox = this.text;
+		setTimeout(function() {textBox.innerHTML = txt;}, ms);
 	},
 	
 	clearCanvases: function() {
@@ -202,7 +207,7 @@ var UI = {
 			var rgb = this.circles[i].color;
 			var a = 0.25 * (1 - (this.circles[i].radius / Constants.CIRCLE_THRESHOLD));
 			var rgba = 'rgba(' + rgb + ',' + a + ')';
-			this.createCircle(this.sctx, this.circles[i].x, this.circles[i].y, 
+			this.createCircle(this.circles[i].x, this.circles[i].y, 
 				this.circles[i].radius, rgba);
 			if (this.circles[i].radius > Constants.CIRCLE_THRESHOLD) {
 				this.circles.splice(i,1);
@@ -218,7 +223,7 @@ var UI = {
 			
 			// Draw the particle
 			for (var j = 0; j < 3; ++j) {
-				this.createParticle(this.sctx, this.particles[i].x, this.particles[i].y,
+				this.createParticle(this.particles[i].x, this.particles[i].y,
 					this.particles[i].size, .45, rgba, this.particles[i].rad);
 			}
 			
@@ -242,7 +247,7 @@ var UI = {
 				
 				var drawCount = (this.lines[i].glowing)? glowLoop: 1;
 				for (var j = 0; j < 3; ++j) {
-					this.createLine(this.sctx, this.lines[i].a, this.lines[i].b,
+					this.createLine(this.lines[i].a, this.lines[i].b,
 						this.lines[i].width, this.lines[i].blurWidth,
 						rgba, this.lines[i].blurCol);
 				}

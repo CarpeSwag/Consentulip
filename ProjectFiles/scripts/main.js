@@ -33,10 +33,6 @@ window.addEventListener('DOMContentLoaded', function() {
 	Game.scene = new BABYLON.Scene(Game.engine);
 	
 	Game.enableGestures = false;
-	var tutorialActive = false;
-	var tutorialGesture = false;
-	var waitingForInput = false;
-	var tutorialBlinkGesture = 0;
 	
 	// Generate a random color for the flower
 	var randomColor = {r:0, g:0, b:0};
@@ -58,10 +54,10 @@ window.addEventListener('DOMContentLoaded', function() {
 	// Recognize gestures
 	var recognizeGesture = function() {
 		
-		if (tutorialActive && gestureRecognized) {
+		if (Tutorial.active && gestureRecognized) {
 			if (gestureRecognized.Name === 'five-point star') {
 				respText = 'Good job!';
-				tutorialActive = false;
+				Tutorial.active = false;
 			} else {
 				respText = 'Oops! Try again.';
 			}
@@ -70,34 +66,10 @@ window.addEventListener('DOMContentLoaded', function() {
 	
 	Game.engine.runRenderLoop(function() {
 		Game.scene.render();
-		UI.onFrame();
-		
-		if (tutorialActive) {
-			if (waitingForInput) {
-				if (tutorialBlinkGesture == 0) {
-					tutorialBlinkGesture = 50;
-					var pos = new BABYLON.Vector3(
-						petals[0].position.x,
-						petals[0].position.y + 1,
-						petals[0].position.z
-					)
-					var loc = BABYLON.Vector3.Project(pos, BABYLON.Matrix.Identity(),
-						Game.scene.getTransformMatrix(), camera.viewport.toGlobal(
-						Game.engine.getRenderWidth(), Game.engine.getRenderHeight()));
-					
-					UI.circles.push({x: loc.x, y: loc.y, radius: 20, dr: 1, color: '255,255,0'});
-					UI.circles.push({x: loc.x, y: loc.y, radius: 5, dr: 1, color: '255,255,0'});
-				} else {
-					--tutorialBlinkGesture;
-				}
-			}
-		}
-		
-		if (Game.enableGestures && !tutorialGesture) {
-			Gestures.onFrame();
-		}
-		
 		Camera.onFrame();
+		UI.onFrame();
+		Tutorial.onFrame();
+		Gestures.onFrame();
 	});
 	
 	// Set up the light
@@ -110,13 +82,12 @@ window.addEventListener('DOMContentLoaded', function() {
 	light2.intensity = 2.0;
 	
 	// Load in the model
-	var stem, leaves, petals, outerPetals;
 	BABYLON.SceneLoader.ImportMesh('', 'art/models/',
 		'tulip.babylon', Game.scene, function (mesh) {
 		var SCALE = 5.0;
-		leaves = [];
-		petals = [];
-		outerPetals = [];
+		Game.leaves = [];
+		Game.petals = [];
+		Game.outerPetals = [];
 		for (var i = 0; i < mesh.length; ++i) {
 			mesh[i].scaling.x *= SCALE;
 			mesh[i].scaling.y *= SCALE;
@@ -136,7 +107,7 @@ window.addEventListener('DOMContentLoaded', function() {
 					yOffset: 0
 				}
 			} else if (name.substring(0,4) === 'leaf') {
-				leaves.push(mesh[i]);
+				Game.leaves.push(mesh[i]);
 				type = 'leaf';
 				info = {
 					alpha: 0,
@@ -144,15 +115,15 @@ window.addEventListener('DOMContentLoaded', function() {
 					yOffset: 0
 				}
 				mesh[i].position.y += 0.4 * SCALE;
-				if (leaves.length == 1) {
+				if (Game.leaves.length == 1) {
 					mesh[i].position.y += 0.4 * SCALE;
 				}
 			} else if (name.substring(0,5) === 'petal') {
-				petals.push(mesh[i]);
+				Game.petals.push(mesh[i]);
 				type = 'petal';
 				var alpha = 0;
 				if (+(name.substring(8)) > 3)
-					outerPetals.push(mesh[i]);
+					Game.outerPetals.push(mesh[i]);
 				switch(+(name.substring(8))) {
 					case 4:
 						alpha = Math.PI / 4;
@@ -236,7 +207,7 @@ window.addEventListener('DOMContentLoaded', function() {
 			UI.isPointerDown = true;
 		}
 		
-		if (Game.enableGestures && !tutorialGesture) {
+		if (Game.enableGestures && !Tutorial.gesture) {
 			if (evt.button <= 1) {
 				Gestures.onPointerDown(x, y);
 				UI.bctx.lineWidth = 3;
@@ -253,21 +224,7 @@ window.addEventListener('DOMContentLoaded', function() {
 		if (pickInfo.hit && !Camera.cameraLockedToMesh) {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
-				if (waitingForInput) {
-					if (mesh == petals[0]) {
-						waitingForInput = false;
-						
-						// Pan camera to the petal
-						Camera.modCameraAlpha();
-						Camera.panToMesh(petals[0], 2.5);
-						setTimeout(function() {
-							// Start the rest of the tutorial
-							Game.enableGestures = true;
-							tutorialGesture = true;
-							startTutorialGesture();
-							Camera.cameraLockedToMesh = true;
-						}, 2000);
-					}
+				if (Tutorial.tutorialPause(mesh)) {
 				} else {					
 					Camera.panToMesh(mesh, 0.75);
 					Camera.cameraLockedToMesh = true;
@@ -310,62 +267,6 @@ window.addEventListener('DOMContentLoaded', function() {
 	Game.engine.resize();
 	
 	onLoadEvent();
-	
-	startTutorial = function() {
-		var topText = document.getElementById('flower-name');
-		
-		// Messages played during the introduction
-		topText.innerHTML = "Hey Bud! I'm Tulip.";
-		setTimeout(function() {
-			topText.innerHTML = "You can take care of me by watering me"
-				+ " or tending to my soil.";
-			setTimeout(function() {
-				topText.innerHTML = "You can also control the camera by clicking me.";
-			}, 4000);
-		}, 2000);
-		
-		
-		Camera.modCameraAlpha();
-		tutorialActive = true;
-		
-		// Rotate around flower, and zoom into it.
-		Camera.rotateCameraTo(DEFAULT_CAMERA_TARGET, Math.PI * 3.75,
-			Math.PI / 3, 40, 7.000, true);
-		setTimeout(function() {
-			// Wait for response
-			waitingForInput = true;
-		}, 7000);
-	};
-	
-	var startTutorialGesture = function() {
-		waitingForInput = false;
-		var topText = document.getElementById('flower-name');
-		topText.innerHTML = "Sometimes we can play some pattern games.";
-		
-		// Teach gestures
-		var centerX = window.innerWidth / 2;
-		var centerY = window.innerHeight / 2;
-		var radius = (window.innerWidth < window.innerHeight)?
-			window.innerWidth * 0.25: window.innerHeight * 0.5;
-		var starPoints = [
-			{x: centerX + radius * -0.75, y: centerY + radius * -0.33},
-			{x: centerX + radius *  0.75, y: centerY + radius * -0.33},
-			{x: centerX + radius * -0.50, y: centerY + radius *  0.50},
-			{x: centerX                 , y: centerY + radius * -0.75},
-			{x: centerX + radius *  0.50, y: centerY + radius *  0.50}
-		];
-		UI.drawLineTimed(starPoints[0], starPoints[1], 0.5, 1.0, 4.00);
-		UI.drawLineTimed(starPoints[1], starPoints[2], 0.5, 1.5, 4.00);
-		UI.drawLineTimed(starPoints[2], starPoints[3], 0.5, 2.0, 4.00);
-		UI.drawLineTimed(starPoints[3], starPoints[4], 0.5, 2.5, 4.00);
-		UI.drawLineTimed(starPoints[4], starPoints[0], 0.5, 3.0, 4.00);
-		
-		// Change the message after star is drawn.
-		setTimeout(function() {
-			topText.innerHTML = "Here, try it yourself!";
-			tutorialGesture = false;
-		}, 4000);
-	}
 	
 	// Skybox
     var skybox = BABYLON.Mesh.CreateBox("skyBox", 2000.0, Game.scene);
