@@ -13,6 +13,9 @@ var UI = {
 	// Pointer related
 	isPointerDown: false,
 	
+	// Text variable
+	textCounter: 0,
+	
 	// Glow variables
 	glow: Constants.GLOW_START,
 	dGlow: Constants.GLOW_CHANGE,

@@ -10,15 +10,15 @@ var Tutorial = {
 	
 	tutorialPause: function(mesh) {
 		if (this.waitingForInput) {
-			if (mesh == Game.petals[0]) {
+			if (mesh == Flower.petals[0]) {
 				this.waitingForInput = false;
 				
 				// Pan camera to the petal
 				Camera.modCameraAlpha();
-				Camera.panToMesh(Game.petals[0], 1.5);
+				Camera.panToMesh(Flower.petals[0], 1.5);
 				setTimeout(function() {
 					// Start the rest of the tutorial
-					Game.enableGestures = true;
+					Flower.enableGestures = true;
 					Tutorial.gesture = true;
 					Tutorial.startGestureSection();
 					Camera.cameraLockedToMesh = true;
@@ -94,9 +94,9 @@ var Tutorial = {
 				if (this.counter <= 0) {
 					this.counter = 50;
 					var pos = new BABYLON.Vector3(
-						Game.petals[0].position.x,
-						Game.petals[0].position.y + 1,
-						Game.petals[0].position.z
+						Flower.petals[0].position.x,
+						Flower.petals[0].position.y + 1,
+						Flower.petals[0].position.z
 					)
 					var loc = BABYLON.Vector3.Project(pos, 
 						BABYLON.Matrix.Identity(),

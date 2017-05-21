@@ -23,5 +23,14 @@ var Constants = {
 	CAMERA_BETA_UPPER: Math.PI / 2,
 	CAMERA_BETA_LOWER: 0.1,
 	CAMERA_RADIUS_LOWER: 7.5,
-	CAMERA_RADIUS_UPPER: 300
+	CAMERA_RADIUS_UPPER: 300,
+	
+	// Flower colors
+	FLOWER_COLORS: [
+		{r: 1, g: 0, b: 0},
+		{r: 0, g: 0, b: 1},
+		{r: 1, g: 0.25, b: 0},
+		{r: 1, g: 0, b: 1},
+		{r: 0, g: 1, b: 1}
+	]
 };
