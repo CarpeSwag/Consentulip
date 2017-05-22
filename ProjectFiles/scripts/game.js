@@ -28,7 +28,7 @@ var Game = {
 		});
 		
 		// Start camera
-		Camera:onLoad();
+		Camera.onLoad();
 		
 		// Set up the light
 		this.light = new BABYLON.HemisphericLight("light",
