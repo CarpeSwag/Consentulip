@@ -135,7 +135,7 @@ html, body {
 	height: 50px;
 }
 
-#menu-btn {
+#revoke-btn {
 	position: absolute;
 	margin-left: 15px;
 	margin-top: -10px;
@@ -144,9 +144,11 @@ html, body {
 	pointer-events: auto;
 }
 
-#menu-btn div.sandwich-button {
+#revoke-btn h1 {
 	width: 40px;
-	padding-bottom: 40px;
+	padding: 0px;
+	margin: 0px;
+	color: #ffffff;
 }
 
 #menu-btn::before {
