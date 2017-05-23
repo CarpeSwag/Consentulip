@@ -248,7 +248,7 @@ html, body {
 	border-radius: 10px;
 }
 
-#ingame-menu {
+#ingame-menu-container {
 	position: absolute;
 	left: calc(50% - 220px);
 	top: calc(50% - 342px);
@@ -256,8 +256,15 @@ html, body {
 	transition: opacity 0.25s ease-in-out;
 }
 
-#ingame-menu.active {
+#ingame-menu-container.active {
 	opacity: 1;
+}
+
+#ingame-menu h1 {
+	width: 100%;
+	position: absolute;
+	top: 30px;
+	text-align: center;
 }
 
 /* Trust Container */

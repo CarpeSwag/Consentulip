@@ -90,7 +90,7 @@ var UI = {
 		this.menuOpen = !this.menuOpen;
 		
 		// Toggle the elements
-		document.getElementById('ingame-menu').className =
+		document.getElementById('ingame-menu-container').className =
 			((this.menuOpen)? 'active': '');
 	},
 	
