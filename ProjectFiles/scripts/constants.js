@@ -1,9 +1,8 @@
+var FPS = 60;
+
 var Constants = {
-	// Frame Counter
-	FPS: 60,
-	
 	// Gesture constants
-	REFRESH_GESTURE_COUNTER: 60,
+	REFRESH_GESTURE_COUNTER: 0.75 * FPS,
 	
 	// Glow constants
 	GLOW_START: 100,
