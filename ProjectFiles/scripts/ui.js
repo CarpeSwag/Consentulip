@@ -25,6 +25,9 @@ var UI = {
 	particles: [],
 	lines: [],
 	
+	// Visual elements
+	sandwichOpen: false,
+	
 	onLoad: function() {
 		this.text = document.getElementById('flower-name');
 		
@@ -68,6 +71,17 @@ var UI = {
 	toggleRevokeConsent: function(toggle) {
 		document.getElementById('revoke-btn').className = 
 			'button' + ((toggle)? ' active': '');
+	},
+	
+	toggleSandwich: function() {
+		// Toggle the flag
+		this.sandwichOpen = !this.sandwichOpen;
+		
+		// Toggle the elements
+		document.getElementById('sandwich-btn').className = 'button' +
+			((this.sandwichOpen)? ' down': '');
+		document.getElementById('sandwich-container').className = 
+			((this.sandwichOpen)? 'active': '');
 	},
 	
 	clearCanvases: function() {
