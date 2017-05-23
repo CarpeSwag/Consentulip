@@ -336,7 +336,11 @@ html, body {
 	top: 360px;
 }
 
-#menu-back-btn {
+#about-tutorial-btn {
+	top: 360px;
+}
+
+#menu-back-btn, #about-back-btn {
 	top: 500px;
 }
 
