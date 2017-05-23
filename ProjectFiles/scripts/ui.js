@@ -92,6 +92,8 @@ var UI = {
 		// Toggle the elements
 		document.getElementById('ingame-menu-container').className =
 			((this.menuOpen)? 'active': '');
+		document.getElementById('overlay').className =
+			((this.menuOpen)? 'menuActive': '');
 	},
 	
 	closeMenu: function() {
@@ -100,6 +102,8 @@ var UI = {
 		// Toggle the elements
 		document.getElementById('ingame-menu-container').className =
 			((this.menuOpen)? 'active': '');
+		document.getElementById('overlay').className =
+			((this.menuOpen)? 'menuActive': '');
 	},
 	
 	clearCanvases: function() {
