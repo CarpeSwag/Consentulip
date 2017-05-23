@@ -89,6 +89,18 @@ var Tutorial = {
 		}
 	},
 	
+	replayTutorial: function() {
+		// Close the menu
+		UI.closeMenu();
+		
+		// Reset the camera angle (menu should be hiding it).
+		Camera.rotateCameraTo(Constants.CAMERA_DEFAULT_TARGET,
+			0.0, Math.PI / 3, 40, 0.000, true);
+		
+		// Start the tutorial.
+		this.start();
+	},
+	
 	onFrame: function() {
 		if (this.active) {
 			if (this.waitingForInput) {
