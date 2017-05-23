@@ -281,10 +281,12 @@ html, body {
 .menu-ctnr {
 	opacity: 0;
 	transition: opacity 0.25s ease-in-out;
+	pointer-events: none;
 }
 
 .curr-menu {
 	opacity: 1;
+	pointer-events: auto;
 }
 
 .menu-ctnr h1 {
