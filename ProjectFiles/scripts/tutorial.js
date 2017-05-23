@@ -18,7 +18,7 @@ var Tutorial = {
 				Camera.panToMesh(Flower.petals[0], 1.5);
 				setTimeout(function() {
 					// Start the rest of the tutorial
-					Flower.enableGestures = true;
+					Game.enableGestures = true;
 					Tutorial.gesture = true;
 					Tutorial.startGestureSection();
 					Camera.cameraLockedToMesh = true;
@@ -26,7 +26,7 @@ var Tutorial = {
 				return true;
 			}
 		}
-		return this.waitingForInput;
+		return this.active;
 	},
 	
 	start: function() {
@@ -79,9 +79,9 @@ var Tutorial = {
 	},
 	
 	gestureInput: function(gesture) {
-		if (Tutorial.active) {
+		if (this.active) {
 			if (gesture.Name === 'five-point star') {
-				Tutorial.active = false;
+				this.active = false;
 				UI.toggleRevokeConsent(true);
 				return 'Good job!';
 			}
