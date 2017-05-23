@@ -2,7 +2,7 @@ var Tutorial = {
 	waitingForInput: false,
 	active: false,
 	gesture: false,
-	counter: 0,
+	counter: 25,
 	
 	onLoad: function() {
 		
