@@ -26,6 +26,7 @@ var UI = {
 	lines: [],
 	
 	// Visual elements
+	menuOpen: false,
 	sandwichOpen: false,
 	
 	onLoad: function() {
@@ -82,6 +83,15 @@ var UI = {
 			((this.sandwichOpen)? ' down': '');
 		document.getElementById('sandwich-container').className = 
 			((this.sandwichOpen)? 'active': '');
+	},
+	
+	toggleMenu: function() {
+		// Toggle the flag
+		this.menuOpen = !this.menuOpen;
+		
+		// Toggle the elements
+		document.getElementById('ingame-menu').className =
+			((this.menuOpen)? 'active': '');
 	},
 	
 	clearCanvases: function() {
