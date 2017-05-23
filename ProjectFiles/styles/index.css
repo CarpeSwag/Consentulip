@@ -312,6 +312,22 @@ html, body {
 	margin-left: -5px;
 }
 
+#menu-about-btn {
+	top: 160px;
+}
+
+#menu-settings-btn {
+	top: 260px;
+}
+
+#menu-credits-btn {
+	top: 360px;
+}
+
+#menu-back-btn {
+	top: 500px;
+}
+
 /* Trust Container */
 
 #trust-container {
