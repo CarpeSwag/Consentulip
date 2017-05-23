@@ -196,7 +196,7 @@ html, body {
 	position: absolute;
 	right: 0;
 	margin-left: 15px;
-	margin-top: 0px;
+	margin-top: 10px;
 	padding: 5px;
 	padding-top: 25px;
 	border-radius: 10px;
@@ -208,7 +208,7 @@ html, body {
 }
 
 #sandwich-container.active {
-	height: 130px;
+	height: 180px;
 }
 
 #settings-btn {
@@ -230,7 +230,7 @@ html, body {
 	border: 8px solid #DDDDDD;
 }
 
-#water-btn {
+#water-btn, #tender-btn {
 	padding: 5px;
 	border-radius: 10px;
 	margin-left: -5px;
@@ -240,7 +240,7 @@ html, body {
 	height: 40px;
 }
 
-#water-btn img {
+#water-btn img, #tender-btn img {
 	position: relative;
 	width: 40px;
 	height: 40px;
