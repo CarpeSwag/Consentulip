@@ -94,6 +94,14 @@ var UI = {
 			((this.menuOpen)? 'active': '');
 	},
 	
+	closeMenu: function() {
+		this.menuOpen = false;
+		
+		// Toggle the elements
+		document.getElementById('ingame-menu-container').className =
+			((this.menuOpen)? 'active': '');
+	},
+	
 	clearCanvases: function() {
 		// Clear gesture strokes
 		Gestures.clearStrokes();

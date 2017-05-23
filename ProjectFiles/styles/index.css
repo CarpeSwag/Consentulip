@@ -254,6 +254,7 @@ html, body {
 	top: calc(50% - 342px);
 	opacity: 0;
 	transition: opacity 0.25s ease-in-out;
+	pointer-events: auto;
 }
 
 #ingame-menu-container.active {

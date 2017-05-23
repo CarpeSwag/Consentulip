@@ -117,6 +117,8 @@ var Game = {
 				}
 			}
 		}
+		
+		UI.closeMenu();
 	},
 
 	onPointerMove: function (evt) {
