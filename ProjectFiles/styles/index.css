@@ -142,6 +142,7 @@ html, body {
 	padding: 5px;
 	border-radius: 10px;
 	pointer-events: auto;
+	display: none;
 }
 
 #revoke-btn h1 {
@@ -149,6 +150,9 @@ html, body {
 	padding: 0px;
 	margin: 0px;
 	color: #ffffff;
+
+#revoke-btn.active {
+	display: block;
 }
 
 #menu-btn::before {

@@ -65,6 +65,11 @@ var UI = {
 		setTimeout(function() {textBox.innerHTML = txt;}, ms);
 	},
 	
+	toggleRevokeConsent: function(toggle) {
+		document.getElementById('revoke-btn').className = 
+			'button' + ((toggle)? ' active': '');
+	},
+	
 	clearCanvases: function() {
 		// Clear gesture strokes
 		Gestures.clearStrokes();

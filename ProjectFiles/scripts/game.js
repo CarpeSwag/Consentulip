@@ -107,10 +107,13 @@ var Game = {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
 				if (Tutorial.tutorialPause(mesh)) {
-				} else {					
+				} else {
 					Camera.panToMesh(mesh, 0.75);
 					Camera.cameraLockedToMesh = true;
-					setTimeout(function() {Game.enableGestures = true;}, 750);
+					setTimeout(function() {
+						Game.enableGestures = true;
+						UI.toggleRevokeConsent(true);
+					}, 750);
 				}
 			}
 		}

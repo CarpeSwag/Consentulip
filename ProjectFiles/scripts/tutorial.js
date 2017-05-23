@@ -82,6 +82,7 @@ var Tutorial = {
 		if (Tutorial.active) {
 			if (gesture.Name === 'five-point star') {
 				Tutorial.active = false;
+				UI.toggleRevokeConsent(true);
 				return 'Good job!';
 			}
 			return 'Oops! Try again.';
