@@ -248,6 +248,18 @@ html, body {
 	border-radius: 10px;
 }
 
+#ingame-menu {
+	position: absolute;
+	left: calc(50% - 220px);
+	top: calc(50% - 342px);
+	opacity: 0;
+	transition: opacity 0.25s ease-in-out;
+}
+
+#ingame-menu.active {
+	opacity: 1;
+}
+
 /* Trust Container */
 
 #trust-container {

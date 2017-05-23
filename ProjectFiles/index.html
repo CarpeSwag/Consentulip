@@ -14,7 +14,7 @@
 				</div>
 				<h1 id='flower-name'> I AM A TULIP, HEAR ME ROAR. </h1>
 				<div id='sandwich-container'>
-					<div id='settings-btn' class='button'>
+					<div id='settings-btn' class='button' onclick='UI.toggleMenu();'>
 						<div class='gear-button'>
 							<div></div>
 							<div></div>
@@ -48,10 +48,15 @@
 					</div>
 				</div>
 			</div>
+			
+			<div id='ingame-menu'>
+				<img src='art/textures/menu.png' />
+			</div>
 		</div>
 		
 		
 		<!-- Scripts and Styles -->
+		<link href="styles/index.css" type="text/css" rel="stylesheet">
 		<script src="scripts/babylon.js"></script>
 		<script src="scripts/pdollar.js"></script>
 		<script src="scripts/constants.js"></script>
@@ -62,6 +67,5 @@
 		<script src="scripts/ui.js"></script>
 		<script src="scripts/tutorial.js"></script>
 		<script src="scripts/main.js"></script>
-		<link href="styles/index.css" type="text/css" rel="stylesheet">
 	</body>
 </html>
