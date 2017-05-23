@@ -23,7 +23,7 @@ html, body {
 	touch-action: none;
 }
 
-#overlay::before {
+#overlay::after {
 	position: absolute;
 	content: ' ';
 	left: -3.0rem;
@@ -35,7 +35,7 @@ html, body {
 	transition: opacity 0.25s ease-in-out;
 }
 
-#overlay.menuActive::before{
+#overlay.menuActive::after{
 	opacity: 0.75;
 }
 
@@ -46,7 +46,6 @@ html, body {
 	height: 0;
 	width: 100%;
 	padding-bottom: 100%;
-	z-index: 0;
 }
 
 .sandwich-button div, .sandwich-button div::before, .sandwich-button div::after {
@@ -76,7 +75,6 @@ html, body {
   height: 8px;
   border-radius: 50%;
   border: 5px solid #DDDDDD;
-  z-index: 10;
 }
 
 .gear-button div {
@@ -86,7 +84,6 @@ html, body {
   width: 50%;
   height: 100%;
   background:#DDDDDD;
-  z-index: 0;
 }
 
 .gear-button div:nth-child(2){
