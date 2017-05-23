@@ -106,6 +106,20 @@ var UI = {
 			((this.menuOpen)? 'menuActive': '');
 	},
 	
+	switchMenu: function(id) {
+		document.getElementById('ingame-menu').className = 'menu-ctnr';
+		document.getElementById('about-menu').className = 'menu-ctnr';
+		document.getElementById(id).className = 'menu-ctnr curr-menu';
+	},
+	
+	returnToMenu: function() {
+		this.switchMenu('ingame-menu');
+	},
+	
+	aboutMenu: function() {
+		this.switchMenu('about-menu');
+	},
+	
 	clearCanvases: function() {
 		// Clear gesture strokes
 		Gestures.clearStrokes();
