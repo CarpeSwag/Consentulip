@@ -109,6 +109,8 @@ var UI = {
 	switchMenu: function(id) {
 		document.getElementById('ingame-menu').className = 'menu-ctnr';
 		document.getElementById('about-menu').className = 'menu-ctnr';
+		document.getElementById('settings-menu').className = 'menu-ctnr';
+		document.getElementById('credits-menu').className = 'menu-ctnr';
 		document.getElementById(id).className = 'menu-ctnr curr-menu';
 	},
 	
@@ -118,6 +120,14 @@ var UI = {
 	
 	aboutMenu: function() {
 		this.switchMenu('about-menu');
+	},
+	
+	settingsMenu: function() {
+		this.switchMenu('settings-menu');
+	},
+	
+	creditsMenu: function() {
+		this.switchMenu('credits-menu');
 	},
 	
 	clearCanvases: function() {

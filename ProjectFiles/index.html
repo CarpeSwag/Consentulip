@@ -52,16 +52,16 @@
 		<div id='ingame-menu-container'>
 			<div id='ingame-menu' class='menu-ctnr curr-menu'>
 				<h1> Consentulip </h1>
-				<div id='menu-about-btn' class='menu-btn' onclick='UI.aboutMenu()'>
+				<div id='menu-about-btn' class='menu-btn' onclick='UI.aboutMenu();'>
 					<h3> About </h3>
 				</div>
-				<div id='menu-settings-btn' class='menu-btn'>
+				<div id='menu-settings-btn' class='menu-btn' onclick='UI.settingsMenu();'>
 					<h3> Settings </h3>
 				</div>
-				<div id='menu-credits-btn' class='menu-btn'>
+				<div id='menu-credits-btn' class='menu-btn' onclick='UI.creditsMenu();'>
 					<h3> Credits </h3>
 				</div>
-				<div id='menu-back-btn' class='menu-btn' onclick='UI.closeMenu()'>
+				<div id='menu-back-btn' class='menu-btn' onclick='UI.closeMenu();'>
 					<h3> Back to Game </h3>
 				</div>
 			</div>
@@ -73,7 +73,21 @@
 					<h3> Replay Tutorial </h3>
 				</div>
 				
-				<div id='about-back-btn' class='menu-btn' onclick='UI.returnToMenu()'>
+				<div id='about-back-btn' class='menu-btn' onclick='UI.returnToMenu();'>
+					<h3> Back to Menu </h3>
+				</div>
+			</div>
+			<div id='settings-menu' class='menu-ctnr'>
+				<h1> Settings </h1>
+				
+				<div id='settings-back-btn' class='menu-btn' onclick='UI.returnToMenu();'>
+					<h3> Back to Menu </h3>
+				</div>
+			</div>
+			<div id='credits-menu' class='menu-ctnr'>
+				<h1> Credits </h1>
+				
+				<div id='credits-back-btn' class='menu-btn' onclick='UI.returnToMenu();'>
 					<h3> Back to Menu </h3>
 				</div>
 			</div>

@@ -342,7 +342,8 @@ html, body {
 	top: 360px;
 }
 
-#menu-back-btn, #about-back-btn {
+#menu-back-btn, #about-back-btn,
+#settings-back-btn, #credits-back-btn {
 	top: 500px;
 }
 
