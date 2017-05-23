@@ -169,6 +169,14 @@ html, body {
 	font-weight: normal;
 }
 
+.button:hover {
+	background-color: rgba(217,222,228, 0.75);
+}
+
+.button.down {
+	background-color: rgba(207,212,218, 0.75);
+}
+
 #sandwich-btn {
 	position: absolute;
 	right: 0;
@@ -182,6 +190,25 @@ html, body {
 #sandwich-btn div.sandwich-button{
 	width: 40px;
 	padding-bottom: 40px;
+}
+
+#sandwich-container {
+	position: absolute;
+	right: 0;
+	margin-left: 15px;
+	margin-top: 0px;
+	padding: 5px;
+	padding-top: 25px;
+	border-radius: 10px;
+	pointer-events: auto;
+	width: 40px;
+	height: 0px;
+	transition: height 0.5s ease-in-out;
+	overflow: hidden;
+}
+
+#sandwich-container.active {
+	height: 130px;
 }
 
 #settings-btn {
@@ -203,31 +230,21 @@ html, body {
 	border: 8px solid #DDDDDD;
 }
 
-.button:hover {
-	background-color: rgba(217,222,228, 0.75);
-}
-
-.button.down {
-	background-color: rgba(207,212,218, 0.75);
-}
-
-#sandwich-container {
-	position: absolute;
-	right: 0;
-	margin-left: 15px;
-	margin-top: 0px;
+#water-btn {
 	padding: 5px;
-	padding-top: 25px;
 	border-radius: 10px;
-	pointer-events: auto;
+	margin-left: -5px;
+	margin-top: 17.5px;
+	margin-bottom: -10px;
 	width: 40px;
-	height: 0px;
-	transition: height 0.5s ease-in-out;
-	overflow: hidden;
+	height: 40px;
 }
 
-#sandwich-container.active {
-	height: 130px;
+#water-btn img {
+	position: relative;
+	width: 40px;
+	height: 40px;
+	border-radius: 10px;
 }
 
 /* Trust Container */
