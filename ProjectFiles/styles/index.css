@@ -279,11 +279,12 @@ html, body {
 }
 
 .menu-ctnr {
-	display: none;
+	opacity: 0;
+	transition: opacity 0.25s ease-in-out;
 }
 
 .curr-menu {
-	display: block;
+	opacity: 1;
 }
 
 .menu-ctnr h1 {
