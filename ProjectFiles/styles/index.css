@@ -267,11 +267,12 @@ html, body {
 	top: calc(50% - 342px);
 	opacity: 0;
 	transition: opacity 0.25s ease-in-out;
-	pointer-events: auto;
+	pointer-events: none;
 }
 
 #ingame-menu-container.active {
 	opacity: 1;
+	pointer-events: auto;
 }
 
 #ingame-menu h1 {
