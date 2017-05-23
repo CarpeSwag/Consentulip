@@ -278,7 +278,15 @@ html, body {
 	pointer-events: auto;
 }
 
-#ingame-menu h1 {
+.menu-ctnr {
+	display: none;
+}
+
+.curr-menu {
+	display: block;
+}
+
+.menu-ctnr h1 {
 	width: 100%;
 	position: absolute;
 	top: 30px;
