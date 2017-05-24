@@ -267,10 +267,10 @@ html, body {
 	top: calc(50% - 342px);
 	opacity: 0;
 	transition: opacity 0.25s ease-in-out;
-	pointer-events: none;
 	background-image: url('../art/textures/menu.png');
 	width: 440px;
 	height: 684px;
+	pointer-events: none;
 }
 
 #ingame-menu-container.active {

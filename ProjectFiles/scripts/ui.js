@@ -94,10 +94,17 @@ var UI = {
 			((this.menuOpen)? 'active': '');
 		document.getElementById('overlay').className =
 			((this.menuOpen)? 'menuActive': '');
+		
+		if (this.menuOpen) {
+			this.switchMenu('ingame-menu');
+		} else {
+			this.hideMenus();
+		}
 	},
 	
 	closeMenu: function() {
 		this.menuOpen = false;
+		this.hideMenus();
 		
 		// Toggle the elements
 		document.getElementById('ingame-menu-container').className =
@@ -106,11 +113,15 @@ var UI = {
 			((this.menuOpen)? 'menuActive': '');
 	},
 	
-	switchMenu: function(id) {
+	hideMenus: function() {
 		document.getElementById('ingame-menu').className = 'menu-ctnr';
 		document.getElementById('about-menu').className = 'menu-ctnr';
 		document.getElementById('settings-menu').className = 'menu-ctnr';
 		document.getElementById('credits-menu').className = 'menu-ctnr';
+	},
+	
+	switchMenu: function(id) {
+		this.hideMenus();
 		document.getElementById(id).className = 'menu-ctnr curr-menu';
 	},
 	
