@@ -142,6 +142,7 @@ var UI = {
 		document.getElementById('about-menu').className = 'menu-ctnr';
 		document.getElementById('settings-menu').className = 'menu-ctnr';
 		document.getElementById('credits-menu').className = 'menu-ctnr';
+		document.getElementById('tutorial-prompt').className = 'menu-ctnr';
 	},
 	
 	switchMenu: function(id) {

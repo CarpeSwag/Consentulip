@@ -186,15 +186,24 @@ html, body {
 	pointer-events: auto;
 }
 
-.menu-ctnr h1 {
-	width: 100%;
+.menu-ctnr h1, .menu-ctnr p {
 	position: absolute;
+	width: 85%;
+	left: 7.5%;
+	user-select: none;
+	cursor: default;
+	color: #faf69c;
+}
+
+.menu-ctnr h1 {
 	top: 30px;
 	text-align: center;
-	user-select: none;
 	font-size: 50px;
-	cursor: default;
-    color: #faf69c;
+}
+
+.menu-ctnr p {
+	text-align: center;
+	font-size: 30px;
 }
 
 .menu-btn {
@@ -211,7 +220,7 @@ html, body {
 	text-align: center;
 	user-select: none;
 	margin-top: 30px;
-	font-size: 30px;
+	font-size: 32px;
 }
 
 .menu-btn:active {
@@ -239,9 +248,18 @@ html, body {
 	top: 360px;
 }
 
+#play-tutorial-btn {
+	top: 400px;
+}
+
 #menu-back-btn, #about-back-btn,
-#settings-back-btn, #credits-back-btn {
+#settings-back-btn, #credits-back-btn,
+#skip-tutorial-btn {
 	top: 500px;
+}
+
+#tutorial-prompt {
+	top: 130px;
 }
 
 /* Trust Container */

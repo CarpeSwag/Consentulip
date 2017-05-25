@@ -81,7 +81,19 @@
 				</div>
 			</div>
 			<div id='tutorial-prompt' class='menu-ctnr'>
-				<h1> Play tutorial? </h1>
+				<h1> Welcome! </h1>
+				<p id='tutorial-prompt'>
+					It appears to be your first time playing! 
+					<br /><br />
+					Would you want to try the tutorial?
+				</p>
+				
+				<div id='play-tutorial-btn' class='menu-btn' onclick='Tutorial.replayTutorial();'>
+					<h3> Yes please! </h3>
+				</div>
+				<div id='skip-tutorial-btn' class='menu-btn' onclick='UI.closeMenu();'>
+					<h3> No, skip it! </h3>
+				</div>
 			</div>
 		</div>
 		
