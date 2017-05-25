@@ -85,6 +85,26 @@ var UI = {
 			((this.sandwichOpen)? 'active': '');
 	},
 	
+	toggleWater: function() {
+		Game.waterCan = !Game.waterCan;
+		Game.tendSoil = false;
+		
+		document.getElementById('water-btn').className = 'button' +
+			((Game.waterCan)? ' down': '');
+		document.getElementById('tender-btn').className = 'button' +
+			((Game.tendSoil)? ' down': '');
+	},
+	
+	toggleTend: function() {
+		Game.tendSoil = !Game.tendSoil;
+		Game.waterCan = false;
+		
+		document.getElementById('water-btn').className = 'button' +
+			((Game.waterCan)? ' down': '');
+		document.getElementById('tender-btn').className = 'button' +
+			((Game.tendSoil)? ' down': '');
+	},
+	
 	toggleMenu: function() {
 		// Toggle the flag
 		this.menuOpen = !this.menuOpen;

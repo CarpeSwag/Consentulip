@@ -8,7 +8,10 @@ var Game = {
 	light: null,
 	light2: null,
 	
+	// Flags
 	enableGestures: false,
+	waterCan: false,
+	tendSoil: false,
 	
 	onLoad: function() {
 		this.canvas = document.getElementById('renderCanvas');
