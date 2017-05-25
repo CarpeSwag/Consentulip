@@ -277,6 +277,55 @@ html, body {
 	top: 130px;
 }
 
+/* Watering Can */
+#watering-can {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 155px;
+	height: 155px;
+    animation-duration: 2000ms;
+    animation-timing-function: linear;
+	background-image: url('../art/textures/water.png');
+    background-size: 155px 155px;
+	user-select: none;
+	cursor: none;
+	display: none;
+}
+
+#watering-can.flip {
+	transform: scale(-1, 1);
+}
+
+#watering-can.water {
+	animation-name: water;
+	display: block;
+}
+
+#watering-can.water.flip {
+	animation-name: water-flip;
+}
+
+@keyframes water { 
+	0% { 
+		transform: rotate(0deg); 
+	} 50% { 
+		transform: rotate(45deg); 
+	} 100% {
+		transform: rotate(0deg); 
+	}
+}
+
+@keyframes water-flip {
+	0% { 
+		transform: rotate(0deg) scale(-1, 1); 
+	} 50% { 
+		transform: rotate(-45deg) scale(-1, 1); 
+	} 100% {
+		transform: rotate(0deg) scale(-1, 1); 
+	}
+}
+
 /* Trust Container */
 
 #trust-container {

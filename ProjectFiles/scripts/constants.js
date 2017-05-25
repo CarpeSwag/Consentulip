@@ -14,6 +14,9 @@ var Constants = {
 	// Shape constants
 	CIRCLE_THRESHOLD: 40,
 	
+	// Water can constants
+	WATER_CAN_ANIMATION_LENGTH: 2.00 * FPS,
+	
 	// Camera constants
 	CAMERA_DEFAULT_TARGET: new BABYLON.Vector3(0,5,0),
 	CAMERA_ALPHA_UPPER: null,
