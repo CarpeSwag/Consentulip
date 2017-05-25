@@ -15,15 +15,19 @@ var WaterCan = {
 		this.active = true;
 		
 		// Set point to center
-		this.x = x - (Constants.WATER_CAN_LENGTH / 2);
-		this.y = y - (Constants.WATER_CAN_LENGTH / 2);
+		this.x = x;
+		this.y = y - (Constants.WATER_CAN_LENGTH / 8 * 7);
+		
+		this.ele.className = 'water'
+		if (x > (window.innerWidth / 2)) {
+			this.ele.className += ' flip';
+			this.x += 10;
+		} else {
+			this.x -= Constants.WATER_CAN_LENGTH + 10;
+		}
 		
 		this.ele.style.left = this.x + 'px';
 		this.ele.style.top = this.y + 'px';
-		this.ele.className = 'water'
-		if (x > (window.innerWidth / 2)) {
-			this.ele.className += ' flip'
-		}
 		
 		setTimeout(function() {
 			WaterCan.ele.className = '';
