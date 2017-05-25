@@ -67,6 +67,8 @@ html, body {
 	border-radius: 10px;
 	pointer-events: auto;
 	display: none;
+	user-select: none;
+	cursor: pointer;
 }
 
 #revoke-btn h1 {
@@ -112,6 +114,8 @@ html, body {
 	padding: 5px;
 	border-radius: 10px;
 	pointer-events: auto;
+	user-select: none;
+	cursor: pointer;
 }
 
 #sandwich-btn div.sandwich-button{
@@ -147,6 +151,8 @@ html, body {
 	margin-bottom: -10px;
 	width: 40px;
 	height: 40px;
+	user-select: none;
+	cursor: pointer;
 }
 
 #water-btn img, #tender-btn img,
