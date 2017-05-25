@@ -39,95 +39,6 @@ html, body {
 	opacity: 0.75;
 }
 
-/* Sandwich Button */
-
-.sandwich-button {
-	position: relative;
-	height: 0;
-	width: 100%;
-	padding-bottom: 100%;
-}
-
-.sandwich-button div, .sandwich-button div::before, .sandwich-button div::after {
-	content: '';
-	position: absolute;
-	display: block;
-	width: 100%;
-	height: 12.5%;
-	margin-top: 17.5%;
-	background-color: #DDDDDD;
-	border-radius: 999999px;
-}
-
-.sandwich-button div::before {
-	margin-top: 25%;
-	height: 100%;
-}
-
-.sandwich-button div::after {
-	margin-top: 50%;
-	height: 100%;
-}
-
-.gear-button {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  border: 5px solid #DDDDDD;
-}
-
-.gear-button div {
-  position: absolute;
-  top: -100%;
-  left: 25%;
-  width: 50%;
-  height: 100%;
-  background:#DDDDDD;
-}
-
-.gear-button div:nth-child(2){
-  transform: rotate(45deg);
-  left: 96%;
-  top: -71%;
-}
-
-.gear-button div:nth-child(3){
-  left: 125%;
-  top: 0%;
-  transform: rotate(90deg);
-}
-
-.gear-button div:nth-child(4){
-  left: 96%;
-  top: 71%;
-  transform: rotate(135deg);
-}
-
-.gear-button div:nth-child(5){
-  left: 25%;
-  top: 100%;
-  transform: rotate(180deg);
-}
-
-.gear-button div:nth-child(6){
-  left: -46%;
-  top: 71%;
-  transform: rotate(225deg);
-}
-
-.gear-button div:nth-child(7){
-  left: -75%;
-  top: 0%;
-  transform: rotate(270deg);
-}
-
-.gear-button div:nth-child(8){
-  left: -46%;
-  top: -71%;
-  transform: rotate(315deg);
-}
-
 /* Gesture Menu */
 
 #gestures {
@@ -191,10 +102,13 @@ html, body {
 }
 
 #sandwich-btn {
+	width: 40px;
+	height: 40px;
 	position: absolute;
 	right: 0;
 	margin-left: 15px;
 	margin-top: -10px;
+	margin-bottom: -10px;
 	padding: 5px;
 	border-radius: 10px;
 	pointer-events: auto;
@@ -224,26 +138,8 @@ html, body {
 	height: 180px;
 }
 
+#water-btn, #tender-btn,
 #settings-btn {
-	position: relative;
-	width: 30px;
-	height: 30px;
-	padding: 10px;
-	margin-left: -5px;
-	margin-top: 17.5px;
-	margin-bottom: -10px;
-	border-radius: 10px;
-	pointer-events: auto;
-}
-
-#settings-btn div.gear-button  {
-	position: relative;
-	width: 14px;
-	height: 14px;
-	border: 8px solid #DDDDDD;
-}
-
-#water-btn, #tender-btn {
 	padding: 5px;
 	border-radius: 10px;
 	margin-left: -5px;
@@ -253,7 +149,8 @@ html, body {
 	height: 40px;
 }
 
-#water-btn img, #tender-btn img {
+#water-btn img, #tender-btn img,
+#settings-btn img, #sandwich-btn img {
 	position: relative;
 	width: 50px;
 	height: 50px;
