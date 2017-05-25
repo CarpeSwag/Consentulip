@@ -121,6 +121,10 @@ var Game = {
 			}
 		}
 		
+		if (Game.waterCan) {
+			WaterCan.onPointerDown(x, y);
+		}
+		
 		UI.closeMenu();
 	},
 
