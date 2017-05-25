@@ -182,12 +182,12 @@ html, body {
 	font-weight: normal;
 }
 
-.button:hover {
-	background-color: rgba(217,222,228, 0.75);
-}
-
 .button.down {
 	background-color: rgba(207,212,218, 0.75);
+}
+
+.button:hover {
+	background-color: rgba(217,222,228, 0.75);
 }
 
 #sandwich-btn {

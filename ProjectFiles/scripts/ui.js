@@ -110,6 +110,8 @@ var UI = {
 		this.menuOpen = !this.menuOpen;
 		
 		// Toggle the elements
+		document.getElementById('settings-btn').className = 'button' +
+			((this.menuOpen)? ' down': '');
 		document.getElementById('ingame-menu-container').className =
 			((this.menuOpen)? 'active': '');
 		document.getElementById('overlay').className =
@@ -127,6 +129,8 @@ var UI = {
 		this.hideMenus();
 		
 		// Toggle the elements
+		document.getElementById('settings-btn').className = 'button' +
+			((this.menuOpen)? ' down': '');
 		document.getElementById('ingame-menu-container').className =
 			((this.menuOpen)? 'active': '');
 		document.getElementById('overlay').className =
