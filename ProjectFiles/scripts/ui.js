@@ -219,6 +219,24 @@ var UI = {
 		});
 	},
 	
+	addWaterParticle: function(x, y, dir) {
+		var rand = Math.round(Math.random() * 200);
+		var r = rand;
+		var g = rand;
+		var b = 155 + Math.round(Math.random() * 100);
+		this.particles.push({
+			x: x + Math.random() * 20 - 10,
+			y: y + Math.random() * 20 - 10,
+			size: Math.random() * 2.5 + 2.5,
+			rad: Math.random() * Math.PI,
+			color: r + ',' + g + ',' + b,
+			alpha: 1,
+			da: -.01,
+			dr: (Math.random() * Math.PI / 12) * dir,
+			dy: (Math.random() * 0.5) + 1.5
+		});
+	},
+	
 	drawLineTimed: function(a, b, seconds, delay, lifetime) {
 		// Figure out the timings
 		var moveCounter = Math.ceil(seconds * 60);

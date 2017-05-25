@@ -28,6 +28,7 @@ var Game = {
 			UI.onFrame();
 			Tutorial.onFrame();
 			Gestures.onFrame();
+			WaterCan.onFrame();
 		});
 		
 		// Start camera

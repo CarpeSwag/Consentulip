@@ -15,7 +15,7 @@ var Constants = {
 	CIRCLE_THRESHOLD: 40,
 	
 	// Water can constants
-	WATER_CAN_ANIMATION_LENGTH: 2000,
+	WATER_CAN_ANIMATION_LENGTH: 1500,
 	WATER_CAN_LENGTH: 155,
 	
 	// Camera constants
