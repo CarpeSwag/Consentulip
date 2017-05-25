@@ -86,22 +86,34 @@ var UI = {
 	},
 	
 	toggleWater: function() {
-		this.disableWaterTend();
+		if(this.menuOpen) {
+			this.disableWaterTend();
+			return;
+		}
 		
 		Game.waterCan = !Game.waterCan;
+		Game.tendSoil = false;
+		
 		document.getElementById('water-btn').className = 'button' +
 			((Game.waterCan)? ' down': '');
+		document.getElementById('tender-btn').className = '';
 	},
 	
 	toggleTend: function() {
-		this.disableWaterTend();
+		if(this.menuOpen) {
+			this.disableWaterTend();
+			return;
+		}
 		
 		Game.tendSoil = !Game.tendSoil;
+		Game.waterCan = false;
+		
 		document.getElementById('tender-btn').className = 'button' +
 			((Game.tendSoil)? ' down': '');
+		document.getElementById('water-btn').className = '';
 	},
 	
-	disableWaterTend: function() {}
+	disableWaterTend: function() {
 		Game.waterCan = false;
 		Game.tendSoil = false;
 		
@@ -150,9 +162,6 @@ var UI = {
 		document.getElementById('settings-menu').className = 'menu-ctnr';
 		document.getElementById('credits-menu').className = 'menu-ctnr';
 		document.getElementById('tutorial-prompt').className = 'menu-ctnr';
-		
-		// Disable watering can and soil tending
-		this.disableWaterTend();
 	},
 	
 	switchMenu: function(id) {
