@@ -3,6 +3,7 @@ var Flower = {
 	leaves: [],
 	petals: [],
 	outerPetals: [],
+	stem: null,
 	pot: null,
 	
 	loadModels: function() {
@@ -21,7 +22,7 @@ var Flower = {
 				var type = 'ignore';
 				var info = {};
 				if (name === 'stem') {
-					stem = mesh[i];
+					Flower.stem = mesh[i];
 					type = 'stem';
 					info = {
 						alpha: 0,
