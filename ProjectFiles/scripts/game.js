@@ -65,6 +65,12 @@ var Game = {
 		// Load models
 		Flower.loadModels();
 		
+		// Create the "God Rays" effect (volumetric light scattering)
+		/*var godrays = new BABYLON.VolumetricLightScatteringPostProcess('godrays', 1.0, Camera.camera, null, 100, BABYLON.Texture.BILINEAR_SAMPLINGMODE, this.engine, false);
+
+		var SCALE = 50;
+		godrays.mesh.position = new BABYLON.Vector3(-100, 100, -300);
+		godrays.mesh.scaling = new BABYLON.Vector3(SCALE, SCALE, SCALE);*/
 		// Ensure screen is sized correctly.
 		this.engine.resize();
 	},

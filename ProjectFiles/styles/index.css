@@ -69,16 +69,10 @@ html, body {
 	display: none;
 	user-select: none;
 	cursor: pointer;
-}
-
-#revoke-btn h1 {
 	width: 40px;
-	padding: 0px;
-	margin: 0px;
-	color: #ffffff;
-	font-size: 30px;
-	margin: 5px;
-	margin-left: 0px;
+	height: 40px;	
+	background-image: url('../art/textures/no.png');
+    background-size: 50px 50px;
 }
 
 #revoke-btn.active {
