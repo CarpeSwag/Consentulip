@@ -223,7 +223,9 @@ var UI = {
 			alpha: 1,
 			da: -.05,
 			dr: (Math.random() * Math.PI / 12) - Math.PI / 24,
-			dy: Math.random() * 0.25
+			dx: 0,
+			dy: Math.random() * 0.25,
+			ddy: 0
 		});
 	},
 	
@@ -241,7 +243,12 @@ var UI = {
 			alpha: 1,
 			da: -.01,
 			dr: (Math.random() * Math.PI / 12) * dir,
-			dy: (Math.random() * 0.5) + 1.5
+			dx: 0,
+			dy: (Math.random() * 0.5) + 1.5,
+			ddy: 0
+		});
+	},
+	
 		});
 	},
 	
@@ -378,8 +385,10 @@ var UI = {
 			
 			// Adjust it
 			this.particles[i].rad += this.particles[i].dr;
+			this.particles[i].x += this.particles[i].dx;
 			this.particles[i].y += this.particles[i].dy;
 			this.particles[i].alpha += this.particles[i].da;
+			this.particles[i].dy += this.particles[i].ddy;
 			
 			if (a <= 0) {
 				this.particles.splice(i, 1);
