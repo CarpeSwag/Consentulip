@@ -252,10 +252,10 @@ var UI = {
 	},
 	
 	addDirtParticle: function(x, y) {
-		var rand = Math.round(Math.random() * 200);
-		var r = 255;
-		var g = 255;
-		var b = 255;
+		var rand = Math.round(Math.random() * 100) + 50;
+		var r = Math.round(Math.random() * 155) + 100;
+		var g = rand;
+		var b = rand / 2;
 		
 		var xOff = Math.random() * 40 - 20;
 		var yOff = Math.random() * 20 - 10;
