@@ -130,11 +130,9 @@ var Game = {
 			} else if (mesh === Flower.pot) {
 				if (Game.tendSoil) {
 					Game.soilClick = true;
-					var lol = Math.ceil(Math.random() * 5) + 3;
-					for (var i = lol; i >= 0; --i) {
+					for (var i = Math.ceil(Math.random() * 5) + 3; i >= 0; --i) {
 						UI.addDirtParticle(x, y);
 					}
-					console.log(lol);
 				}
 			}
 		}
