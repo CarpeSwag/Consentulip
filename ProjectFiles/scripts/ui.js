@@ -55,6 +55,8 @@ var UI = {
 			= filter;
 		document.getElementById('settings-btn').style.filter
 			= filter;
+		document.getElementById('revoke-btn').style.filter
+			= filter;
 	},
 	
 	resizeCanvases: function() {
@@ -249,6 +251,29 @@ var UI = {
 		});
 	},
 	
+	addDirtParticle: function(x, y) {
+		var rand = Math.round(Math.random() * 200);
+		var r = 255;
+		var g = 255;
+		var b = 255;
+		
+		var xOff = Math.random() * 40 - 20;
+		var yOff = Math.random() * 20 - 10;
+		var dx = Math.sqrt((xOff*xOff) + (yOff*yOff)) / 50;
+		var dir = (xOff < 0)? -1: 1;
+		
+		this.particles.push({
+			x: x + xOff,
+			y: y + yOff,
+			size: Math.random() * 2.5 + 2.5,
+			rad: Math.random() * Math.PI,
+			color: r + ',' + g + ',' + b,
+			alpha: 1,
+			da: -.025,
+			dr: (Math.random() * Math.PI / 12) * dir,
+			dx: dx * dir,
+			dy: (Math.random() * -0.5) - 1.5,
+			ddy: 0.15
 		});
 	},
 	
