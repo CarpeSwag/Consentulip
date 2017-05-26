@@ -25,6 +25,10 @@ var UI = {
 	particles: [],
 	lines: [],
 	
+	// Visual elements
+	menuOpen: false,
+	sandwichOpen: false,
+	
 	onLoad: function() {
 		this.text = document.getElementById('flower-name');
 		
@@ -45,6 +49,16 @@ var UI = {
 		this.resizeCanvases();
 	},
 	
+	filterButtonHue: function(degrees) {
+		var filter = 'hue-rotate(' + degrees + 'deg)';
+		document.getElementById('sandwich-btn').style.filter
+			= filter;
+		document.getElementById('settings-btn').style.filter
+			= filter;
+		document.getElementById('revoke-btn').style.filter
+			= filter;
+	},
+	
 	resizeCanvases: function() {
 		var width = window.innerWidth;
 		var height = window.innerHeight;
@@ -63,6 +77,122 @@ var UI = {
 	setDelayedText: function(txt, ms) {
 		var textBox = this.text;
 		setTimeout(function() {textBox.innerHTML = txt;}, ms);
+	},
+	
+	toggleRevokeConsent: function(toggle) {
+		document.getElementById('revoke-btn').className = 
+			'button' + ((toggle)? ' active': '');
+	},
+	
+	toggleSandwich: function() {
+		// Toggle the flag
+		this.sandwichOpen = !this.sandwichOpen;
+		
+		// Toggle the elements
+		document.getElementById('sandwich-btn').className = 'button' +
+			((this.sandwichOpen)? ' down': '');
+		document.getElementById('sandwich-container').className = 
+			((this.sandwichOpen)? 'active': '');
+	},
+	
+	toggleWater: function() {
+		if(this.menuOpen) {
+			this.disableWaterTend();
+			return;
+		}
+		
+		Game.waterCan = !Game.waterCan;
+		Game.tendSoil = false;
+		
+		document.getElementById('water-btn').className = 'button' +
+			((Game.waterCan)? ' down': '');
+		document.getElementById('tender-btn').className = '';
+	},
+	
+	toggleTend: function() {
+		if(this.menuOpen) {
+			this.disableWaterTend();
+			return;
+		}
+		
+		Game.tendSoil = !Game.tendSoil;
+		Game.waterCan = false;
+		
+		document.getElementById('tender-btn').className = 'button' +
+			((Game.tendSoil)? ' down': '');
+		document.getElementById('water-btn').className = '';
+	},
+	
+	disableWaterTend: function() {
+		Game.waterCan = false;
+		Game.tendSoil = false;
+		
+		document.getElementById('water-btn').className = '';
+		document.getElementById('tender-btn').className = '';
+	},
+	
+	toggleMenu: function() {
+		// Toggle the flag
+		this.menuOpen = !this.menuOpen;
+		
+		// Disable watering can and soil tending
+		this.disableWaterTend();
+		
+		// Toggle the elements
+		document.getElementById('settings-btn').className = 'button' +
+			((this.menuOpen)? ' down': '');
+		document.getElementById('ingame-menu-container').className =
+			((this.menuOpen)? 'active': '');
+		document.getElementById('overlay').className =
+			((this.menuOpen)? 'menuActive': '');
+		
+		if (this.menuOpen) {
+			this.switchMenu('ingame-menu');
+		} else {
+			this.hideMenus();
+		}
+	},
+	
+	closeMenu: function() {
+		this.menuOpen = false;
+		this.hideMenus();
+		
+		// Toggle the elements
+		document.getElementById('settings-btn').className = 'button' +
+			((this.menuOpen)? ' down': '');
+		document.getElementById('ingame-menu-container').className =
+			((this.menuOpen)? 'active': '');
+		document.getElementById('overlay').className =
+			((this.menuOpen)? 'menuActive': '');
+	},
+	
+	hideMenus: function() {
+		document.getElementById('ingame-menu').className = 'menu-ctnr';
+		document.getElementById('about-menu').className = 'menu-ctnr';
+		document.getElementById('settings-menu').className = 'menu-ctnr';
+		document.getElementById('credits-menu').className = 'menu-ctnr';
+		document.getElementById('tutorial-prompt').className = 'menu-ctnr';
+	},
+	
+	switchMenu: function(id) {
+		this.hideMenus();
+		document.getElementById(id).className = 'menu-ctnr curr-menu';
+	},
+	
+	returnToMenu: function() {
+		this.switchMenu('ingame-menu');
+	},
+	
+	aboutMenu: function() {
+		this.switchMenu('about-menu');
+	},
+	
+	settingsMenu: function() {
+		this.switchMenu('settings-menu');
+	},
+	
+	creditsMenu: function() {
+		this.switchMenu('credits-menu');
 	},
 	
 	clearCanvases: function() {
@@ -95,7 +225,55 @@ var UI = {
 			alpha: 1,
 			da: -.05,
 			dr: (Math.random() * Math.PI / 12) - Math.PI / 24,
-			dy: Math.random() * 0.25
+			dx: 0,
+			dy: Math.random() * 0.25,
+			ddy: 0
+		});
+	},
+	
+	addWaterParticle: function(x, y, dir) {
+		var rand = Math.round(Math.random() * 200);
+		var r = rand;
+		var g = rand;
+		var b = 155 + Math.round(Math.random() * 100);
+		this.particles.push({
+			x: x + Math.random() * 20 - 10,
+			y: y + Math.random() * 20 - 10,
+			size: Math.random() * 2.5 + 2.5,
+			rad: Math.random() * Math.PI,
+			color: r + ',' + g + ',' + b,
+			alpha: 1,
+			da: -.01,
+			dr: (Math.random() * Math.PI / 12) * dir,
+			dx: 0,
+			dy: (Math.random() * 0.5) + 1.5,
+			ddy: 0
+		});
+	},
+	
+	addDirtParticle: function(x, y) {
+		var rand = Math.round(Math.random() * 100) + 50;
+		var r = Math.round(Math.random() * 155) + 100;
+		var g = rand;
+		var b = rand / 2;
+		
+		var xOff = Math.random() * 40 - 20;
+		var yOff = Math.random() * 20 - 10;
+		var dx = Math.sqrt((xOff*xOff) + (yOff*yOff)) / 50;
+		var dir = (xOff < 0)? -1: 1;
+		
+		this.particles.push({
+			x: x + xOff,
+			y: y + yOff,
+			size: Math.random() * 2.5 + 2.5,
+			rad: Math.random() * Math.PI,
+			color: r + ',' + g + ',' + b,
+			alpha: 1,
+			da: -.025,
+			dr: (Math.random() * Math.PI / 12) * dir,
+			dx: dx * dir,
+			dy: (Math.random() * -0.5) - 1.5,
+			ddy: 0.15
 		});
 	},
 	
@@ -232,8 +410,10 @@ var UI = {
 			
 			// Adjust it
 			this.particles[i].rad += this.particles[i].dr;
+			this.particles[i].x += this.particles[i].dx;
 			this.particles[i].y += this.particles[i].dy;
 			this.particles[i].alpha += this.particles[i].da;
+			this.particles[i].dy += this.particles[i].ddy;
 			
 			if (a <= 0) {
 				this.particles.splice(i, 1);

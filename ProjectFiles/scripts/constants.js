@@ -1,9 +1,8 @@
+var FPS = 60;
+
 var Constants = {
-	// Frame Counter
-	FPS: 60,
-	
 	// Gesture constants
-	REFRESH_GESTURE_COUNTER: 60,
+	REFRESH_GESTURE_COUNTER: Math.ceil(0.75 * FPS),
 	
 	// Glow constants
 	GLOW_START: 100,
@@ -14,6 +13,10 @@ var Constants = {
 	
 	// Shape constants
 	CIRCLE_THRESHOLD: 40,
+	
+	// Water can constants
+	WATER_CAN_ANIMATION_LENGTH: 1500,
+	WATER_CAN_LENGTH: 155,
 	
 	// Camera constants
 	CAMERA_DEFAULT_TARGET: new BABYLON.Vector3(0,5,0),
@@ -27,10 +30,10 @@ var Constants = {
 	
 	// Flower colors
 	FLOWER_COLORS: [
-		{r: 1, g: 0, b: 0},
-		{r: 0, g: 0, b: 1},
-		{r: 1, g: 0.25, b: 0},
-		{r: 1, g: 0, b: 1},
-		{r: 0, g: 1, b: 1}
+		{r: 1, g: 0, b: 0, btn: 30},
+		{r: 0, g: 0, b: 1, btn: -60},
+		{r: 1, g: 0.25, b: 0, btn: 0},
+		{r: 1, g: 0, b: 1, btn: -30},
+		{r: 0, g: 1, b: 1, btn: -90}
 	]
 };

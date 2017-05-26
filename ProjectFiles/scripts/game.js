@@ -8,7 +8,11 @@ var Game = {
 	light: null,
 	light2: null,
 	
+	// Flags
 	enableGestures: false,
+	waterCan: false,
+	tendSoil: false,
+	soilClick: false,
 	
 	onLoad: function() {
 		this.canvas = document.getElementById('renderCanvas');
@@ -25,10 +29,11 @@ var Game = {
 			UI.onFrame();
 			Tutorial.onFrame();
 			Gestures.onFrame();
+			WaterCan.onFrame();
 		});
 		
 		// Start camera
-		Camera:onLoad();
+		Camera.onLoad();
 		
 		// Set up the light
 		this.light = new BABYLON.HemisphericLight("light",
@@ -61,6 +66,12 @@ var Game = {
 		// Load models
 		Flower.loadModels();
 		
+		// Create the "God Rays" effect (volumetric light scattering)
+		/*var godrays = new BABYLON.VolumetricLightScatteringPostProcess('godrays', 1.0, Camera.camera, null, 100, BABYLON.Texture.BILINEAR_SAMPLINGMODE, this.engine, false);
+
+		var SCALE = 50;
+		godrays.mesh.position = new BABYLON.Vector3(-100, 100, -300);
+		godrays.mesh.scaling = new BABYLON.Vector3(SCALE, SCALE, SCALE);*/
 		// Ensure screen is sized correctly.
 		this.engine.resize();
 	},
@@ -77,10 +88,6 @@ var Game = {
 			dr: 3, color: '255,255,0'});
 		UI.circles.push({x: x, y: y, radius: 20,
 			dr: 3, color: '255,255,0'});
-		
-		for (var i = Math.random() * 5 + 3; i >= 0; --i) {
-			UI.addRandomParticle(x, y);
-		}
 		
 		document.onselectstart = function() { return false; } // disable drag-select
 		document.onmousedown = function() { return false; } // disable drag-select
@@ -102,24 +109,47 @@ var Game = {
 		}
 		
 		// check if we are under a mesh
-		var pickInfo = Game.scene.pick(x, y, function (mesh) { return mesh !== Flower.pot; });
+		var pickInfo = Game.scene.pick(x, y, function (mesh) { return true; });
 		if (pickInfo.hit && !Camera.cameraLockedToMesh) {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
 				if (Tutorial.tutorialPause(mesh)) {
-				} else {					
-					Camera.panToMesh(mesh, 0.75);
-					Camera.cameraLockedToMesh = true;
-					setTimeout(function() {Game.enableGestures = true;}, 750);
+				} else {		
+					if (Game.waterCan) {
+						WaterCan.onPointerDown(x, y);
+					} else if (Game.tendSoil) {
+					} else {
+						Camera.panToMesh(mesh, 0.75);
+						Camera.cameraLockedToMesh = true;
+						setTimeout(function() {
+							Game.enableGestures = true;
+							UI.toggleRevokeConsent(true);
+						}, 750);
+					}
+				}
+			} else if (mesh === Flower.pot) {
+				if (Game.tendSoil) {
+					Game.soilClick = true;
+					for (var i = Math.ceil(Math.random() * 5) + 3; i >= 0; --i) {
+						UI.addDirtParticle(x, y);
+					}
 				}
 			}
 		}
+		
+		if (!Game.soilClick) {			
+			for (var i = Math.random() * 5 + 3; i >= 0; --i) {
+				UI.addRandomParticle(x, y);
+			}
+		}
+		
+		UI.closeMenu();
 	},
 
 	onPointerMove: function (evt) {
 		var x = Game.scene.pointerX;
 		var y = Game.scene.pointerY;
-		if (UI.isPointerDown) {
+		if (UI.isPointerDown && !Game.soilClick) {
 			for (var i = Math.random() * 2 + 1; i >= 0; --i) {
 				UI.addRandomParticle(x, y);
 			}
@@ -139,5 +169,6 @@ var Game = {
 				UI.gctx.drawImage(UI.bufferCanv, 0, 0);
 			}
 		}
+		Game.soilClick = false;
 	}
 };

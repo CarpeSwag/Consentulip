@@ -144,6 +144,7 @@ var Camera = {
 		this.rotateCameraTo(Constants.CAMERA_DEFAULT_TARGET, this.camera.alpha,
 			Constants.CAMERA_BETA_DEFAULT, 40, 0.75, false);
 		this.cameraLockedToMesh = false;
+		UI.toggleRevokeConsent(false);
 	},
 	
 	onFrame: function() {

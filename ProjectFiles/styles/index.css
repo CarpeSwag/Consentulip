@@ -23,96 +23,20 @@ html, body {
 	touch-action: none;
 }
 
-/* Sandwich Button */
-
-.sandwich-button {
-	position: relative;
-	height: 0;
-	width: 100%;
-	padding-bottom: 100%;
-	z-index: 0;
-}
-
-.sandwich-button div, .sandwich-button div::before, .sandwich-button div::after {
-	content: '';
+#overlay::after {
 	position: absolute;
-	display: block;
-	width: 100%;
-	height: 12.5%;
-	margin-top: 17.5%;
-	background-color: #DDDDDD;
-	border-radius: 999999px;
-}
-
-.sandwich-button div::before {
-	margin-top: 25%;
+	content: ' ';
+	left: -3.0rem;
+	width: calc(100% + 6.0rem);
 	height: 100%;
+	background: #000000;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.25s ease-in-out;
 }
 
-.sandwich-button div::after {
-	margin-top: 50%;
-	height: 100%;
-}
-
-.gear-button {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  border: 5px solid #DDDDDD;
-  z-index: 10;
-}
-
-.gear-button div {
-  position: absolute;
-  top: -100%;
-  left: 25%;
-  width: 50%;
-  height: 100%;
-  background:#DDDDDD;
-  z-index: 0;
-}
-
-.gear-button div:nth-child(2){
-  transform: rotate(45deg);
-  left: 96%;
-  top: -71%;
-}
-
-.gear-button div:nth-child(3){
-  left: 125%;
-  top: 0%;
-  transform: rotate(90deg);
-}
-
-.gear-button div:nth-child(4){
-  left: 96%;
-  top: 71%;
-  transform: rotate(135deg);
-}
-
-.gear-button div:nth-child(5){
-  left: 25%;
-  top: 100%;
-  transform: rotate(180deg);
-}
-
-.gear-button div:nth-child(6){
-  left: -46%;
-  top: 71%;
-  transform: rotate(225deg);
-}
-
-.gear-button div:nth-child(7){
-  left: -75%;
-  top: 0%;
-  transform: rotate(270deg);
-}
-
-.gear-button div:nth-child(8){
-  left: -46%;
-  top: -71%;
-  transform: rotate(315deg);
+#overlay.menuActive::after{
+	opacity: 0.75;
 }
 
 /* Gesture Menu */
@@ -135,30 +59,24 @@ html, body {
 	height: 50px;
 }
 
-#menu-btn {
+#revoke-btn {
 	position: absolute;
 	margin-left: 15px;
 	margin-top: -10px;
 	padding: 5px;
 	border-radius: 10px;
 	pointer-events: auto;
-}
-
-#menu-btn div.sandwich-button {
+	display: none;
+	user-select: none;
+	cursor: pointer;
 	width: 40px;
-	padding-bottom: 40px;
+	height: 40px;	
+	background-image: url('../art/textures/no.png');
+    background-size: 50px 50px;
 }
 
-#menu-btn::before {
-	position: absolute;
-	content: '';
-	margin-left: -15px;
-	margin-top: 12px;
-	width: 0;
-	height: 0;
-	border-top: 7.5px solid transparent;
-	border-bottom: 7.5px solid transparent;
-	border-right: 7.5px solid #DDDDDD;
+#revoke-btn.active {
+	display: block;
 }
 
 #flower-name {
@@ -171,26 +89,235 @@ html, body {
 	font-weight: normal;
 }
 
-#settings-btn {
-	position: absolute;
-	right: 0;
-	width: 30px;
-	height: 30px;
-	padding: 10px;
-	margin-top: -10px;
-	border-radius: 10px;
-	pointer-events: auto;
-}
-
-#settings-btn div.gear-button  {
-	position: relative;
-	width: 14px;
-	height: 14px;
-	border: 8px solid #DDDDDD;
+.button.down {
+	background-color: rgba(207,212,218, 0.75);
 }
 
 .button:hover {
 	background-color: rgba(217,222,228, 0.75);
+}
+
+#sandwich-btn {
+	width: 40px;
+	height: 40px;
+	position: absolute;
+	right: 0;
+	margin-left: 15px;
+	margin-top: -10px;
+	margin-bottom: -10px;
+	padding: 5px;
+	border-radius: 10px;
+	pointer-events: auto;
+	user-select: none;
+	cursor: pointer;
+	background-size: 50px 50px;
+}
+
+#sandwich-btn div.sandwich-button{
+	width: 40px;
+	padding-bottom: 40px;
+}
+
+#sandwich-container {
+	position: absolute;
+	right: 0;
+	margin-left: 15px;
+	margin-top: 10px;
+	padding: 5px;
+	padding-top: 25px;
+	border-radius: 10px;
+	pointer-events: auto;
+	width: 40px;
+	height: 0px;
+	transition: height 0.5s ease-in-out;
+	overflow: hidden;
+}
+
+#sandwich-container.active {
+	height: 180px;
+}
+
+#water-btn, #tender-btn,
+#settings-btn {
+	padding: 5px;
+	border-radius: 10px;
+	margin-left: -5px;
+	margin-top: 17.5px;
+	margin-bottom: -10px;
+	width: 40px;
+	height: 40px;
+	user-select: none;
+	cursor: pointer;
+	background-size: 50px 50px;
+}
+
+#water-btn {
+	background-image: url('../art/textures/water.png');
+}
+
+#tender-btn {
+	background-image: url('../art/textures/tender.png');
+}
+
+#settings-btn {
+	background-image: url('../art/textures/gear.png');
+}
+
+#sandwich-btn {
+	background-image: url('../art/textures/sandwich.png');
+}
+
+#ingame-menu-container {
+	position: absolute;
+	left: calc(50% - 220px);
+	top: calc(50% - 342px);
+	opacity: 0;
+	transition: opacity 0.25s ease-in-out;
+	background-image: url('../art/textures/menu.png');
+	width: 440px;
+	height: 684px;
+	pointer-events: none;
+}
+
+#ingame-menu-container.active {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.menu-ctnr {
+	opacity: 0;
+	transition: opacity 0.25s ease-in-out;
+	pointer-events: none;
+}
+
+.curr-menu {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.menu-ctnr h1, .menu-ctnr p {
+	position: absolute;
+	width: 85%;
+	left: 7.5%;
+	user-select: none;
+	cursor: default;
+	color: #faf69c;
+}
+
+.menu-ctnr h1 {
+	top: 30px;
+	text-align: center;
+	font-size: 50px;
+}
+
+.menu-ctnr p {
+	text-align: center;
+	font-size: 30px;
+}
+
+.menu-btn {
+	position: absolute;
+	left: calc(50% - 150px);
+	background-image: url('../art/textures/btn_up.png');
+    background-size: 300px 100px;
+	width: 300px;
+	height: 100px;
+	cursor: pointer;
+}
+
+.menu-btn h3 {
+	text-align: center;
+	user-select: none;
+	margin-top: 30px;
+	font-size: 32px;
+}
+
+.menu-btn:active {
+	background-image: url('../art/textures/btn_down.png');
+}
+
+.menu-btn:active h3 {
+	margin-top: 32px;
+	margin-left: -5px;
+}
+
+#menu-about-btn {
+	top: 160px;
+}
+
+#menu-settings-btn {
+	top: 260px;
+}
+
+#menu-credits-btn {
+	top: 360px;
+}
+
+#about-tutorial-btn {
+	top: 360px;
+}
+
+#play-tutorial-btn {
+	top: 400px;
+}
+
+#menu-back-btn, #about-back-btn,
+#settings-back-btn, #credits-back-btn,
+#skip-tutorial-btn {
+	top: 500px;
+}
+
+#tutorial-prompt {
+	top: 130px;
+}
+
+/* Watering Can */
+#watering-can {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 155px;
+	height: 155px;
+    animation-duration: 1500ms;
+    animation-timing-function: linear;
+	background-image: url('../art/textures/water.png');
+    background-size: 155px 155px;
+	user-select: none;
+	cursor: none;
+	display: none;
+}
+
+#watering-can.flip {
+	transform: scale(-1, 1);
+}
+
+#watering-can.water {
+	animation-name: water;
+	display: block;
+}
+
+#watering-can.water.flip {
+	animation-name: water-flip;
+}
+
+@keyframes water { 
+	0% { 
+		transform: rotate(0deg); 
+	} 50% { 
+		transform: rotate(45deg); 
+	} 100% {
+		transform: rotate(0deg); 
+	}
+}
+
+@keyframes water-flip {
+	0% { 
+		transform: rotate(0deg) scale(-1, 1); 
+	} 50% { 
+		transform: rotate(-45deg) scale(-1, 1); 
+	} 100% {
+		transform: rotate(0deg) scale(-1, 1); 
+	}
 }
 
 /* Trust Container */

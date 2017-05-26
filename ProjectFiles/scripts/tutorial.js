@@ -2,7 +2,7 @@ var Tutorial = {
 	waitingForInput: false,
 	active: false,
 	gesture: false,
-	counter: 0,
+	counter: 25,
 	
 	onLoad: function() {
 		
@@ -18,7 +18,7 @@ var Tutorial = {
 				Camera.panToMesh(Flower.petals[0], 1.5);
 				setTimeout(function() {
 					// Start the rest of the tutorial
-					Flower.enableGestures = true;
+					Game.enableGestures = true;
 					Tutorial.gesture = true;
 					Tutorial.startGestureSection();
 					Camera.cameraLockedToMesh = true;
@@ -26,7 +26,7 @@ var Tutorial = {
 				return true;
 			}
 		}
-		return this.waitingForInput;
+		return this.active;
 	},
 	
 	start: function() {
@@ -79,13 +79,26 @@ var Tutorial = {
 	},
 	
 	gestureInput: function(gesture) {
-		if (Tutorial.active) {
+		if (this.active) {
 			if (gesture.Name === 'five-point star') {
-				Tutorial.active = false;
+				this.active = false;
+				UI.toggleRevokeConsent(true);
 				return 'Good job!';
 			}
 			return 'Oops! Try again.';
 		}
+	},
+	
+	replayTutorial: function() {
+		// Close the menu
+		UI.closeMenu();
+		
+		// Reset the camera angle (menu should be hiding it).
+		Camera.rotateCameraTo(Constants.CAMERA_DEFAULT_TARGET,
+			0.0, Math.PI / 3, 40, 0.000, true);
+		
+		// Start the tutorial.
+		this.start();
 	},
 	
 	onFrame: function() {

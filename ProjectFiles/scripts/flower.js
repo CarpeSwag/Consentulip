@@ -1,8 +1,9 @@
 var Flower = {
-	petalColor: {r:0, g:0, b:0},
+	petalColor: {r:0, g:0, b:0, btn: 0},
 	leaves: [],
 	petals: [],
 	outerPetals: [],
+	stem: null,
 	pot: null,
 	
 	loadModels: function() {
@@ -21,7 +22,7 @@ var Flower = {
 				var type = 'ignore';
 				var info = {};
 				if (name === 'stem') {
-					stem = mesh[i];
+					Flower.stem = mesh[i];
 					type = 'stem';
 					info = {
 						alpha: 0,
@@ -110,5 +111,8 @@ var Flower = {
 		this.petalColor.r = random.r;
 		this.petalColor.g = random.g;
 		this.petalColor.b = random.b;
+		this.petalColor.btn = random.btn;
+		
+		UI.filterButtonHue(random.btn);
 	}
 };

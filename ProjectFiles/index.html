@@ -9,23 +9,18 @@
 		<div id='overlay'>
 			<canvas id='gestures' oncontextmenu="return false;"></canvas>
 			<div id='top-bar'>
-				<div id='menu-btn' class='button'>
-					<div class='sandwich-button' onclick='Camera.zoomOut();'>
-						<div></div>
-					</div>
+				<div id='revoke-btn' class='button' onclick='Camera.zoomOut();'>
 				</div>
 				<h1 id='flower-name'> I AM A TULIP, HEAR ME ROAR. </h1>
-				<div id='settings-btn' class='button'>
-					<div class='gear-button'>
-						<div></div>
-						<div></div>
-						<div></div>
-						<div></div>
-						<div></div>
-						<div></div>
-						<div></div>
-						<div></div>
+				<div id='sandwich-container'>
+					<div id='settings-btn' class='button' onclick='UI.toggleMenu();'>
 					</div>
+					<div id='water-btn' class='button' onclick='UI.toggleWater();'>
+					</div>
+					<div id='tender-btn' class='button' onclick='UI.toggleTend();'>
+					</div>
+				</div>
+				<div id='sandwich-btn' class='button' onclick='UI.toggleSandwich();'>
 				</div>
 			</div>
 			<div id='trust-container'>
@@ -38,19 +33,80 @@
 				</div>
 			</div>
 		</div>
+		<div id='ingame-menu-container'>
+			<div id='ingame-menu' class='menu-ctnr'>
+				<h1> Consentulip </h1>
+				<div id='menu-about-btn' class='menu-btn' onclick='UI.aboutMenu();'>
+					<h3> About </h3>
+				</div>
+				<div id='menu-settings-btn' class='menu-btn' onclick='UI.settingsMenu();'>
+					<h3> Settings </h3>
+				</div>
+				<div id='menu-credits-btn' class='menu-btn' onclick='UI.creditsMenu();'>
+					<h3> Credits </h3>
+				</div>
+				<div id='menu-back-btn' class='menu-btn' onclick='UI.closeMenu();'>
+					<h3> Back to Game </h3>
+				</div>
+			</div>
+			<div id='about-menu' class='menu-ctnr'>
+				<h1> About </h1>
+				
+				
+				<div id='about-tutorial-btn' class='menu-btn' onclick='Tutorial.replayTutorial();'>
+					<h3> Replay Tutorial </h3>
+				</div>
+				
+				<div id='about-back-btn' class='menu-btn' onclick='UI.returnToMenu();'>
+					<h3> Back to Menu </h3>
+				</div>
+			</div>
+			<div id='settings-menu' class='menu-ctnr'>
+				<h1> Settings </h1>
+				
+				<div id='settings-back-btn' class='menu-btn' onclick='UI.returnToMenu();'>
+					<h3> Back to Menu </h3>
+				</div>
+			</div>
+			<div id='credits-menu' class='menu-ctnr'>
+				<h1> Credits </h1>
+				
+				<div id='credits-back-btn' class='menu-btn' onclick='UI.returnToMenu();'>
+					<h3> Back to Menu </h3>
+				</div>
+			</div>
+			<div id='tutorial-prompt' class='menu-ctnr'>
+				<h1> Welcome! </h1>
+				<p id='tutorial-prompt'>
+					It appears to be your first time playing! 
+					<br /><br />
+					Would you want to try the tutorial?
+				</p>
+				
+				<div id='play-tutorial-btn' class='menu-btn' onclick='Tutorial.replayTutorial();'>
+					<h3> Yes please! </h3>
+				</div>
+				<div id='skip-tutorial-btn' class='menu-btn' onclick='UI.closeMenu();'>
+					<h3> No, skip it! </h3>
+				</div>
+			</div>
+		</div>
+		
+		<div id='watering-can'></div>
 		
 		
 		<!-- Scripts and Styles -->
+		<link href="styles/index.css" type="text/css" rel="stylesheet">
 		<script src="scripts/babylon.js"></script>
 		<script src="scripts/pdollar.js"></script>
 		<script src="scripts/constants.js"></script>
 		<script src="scripts/camera.js"></script>
 		<script src="scripts/flower.js"></script>
+		<script src="scripts/watercan.js"></script>
 		<script src="scripts/game.js"></script>
 		<script src="scripts/gestures.js"></script>
 		<script src="scripts/ui.js"></script>
 		<script src="scripts/tutorial.js"></script>
 		<script src="scripts/main.js"></script>
-		<link href="styles/index.css" type="text/css" rel="stylesheet">
 	</body>
 </html>
