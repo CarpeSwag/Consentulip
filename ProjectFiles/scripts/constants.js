@@ -30,10 +30,10 @@ var Constants = {
 	
 	// Flower colors
 	FLOWER_COLORS: [
-		{r: 1, g: 0, b: 0},
-		{r: 0, g: 0, b: 1},
-		{r: 1, g: 0.25, b: 0},
-		{r: 1, g: 0, b: 1},
-		{r: 0, g: 1, b: 1}
+		{r: 1, g: 0, b: 0, btn: 30},
+		{r: 0, g: 0, b: 1, btn: -60},
+		{r: 1, g: 0.25, b: 0, btn: 0},
+		{r: 1, g: 0, b: 1, btn: -30},
+		{r: 0, g: 1, b: 1, btn: -90}
 	]
 };

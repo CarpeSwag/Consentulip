@@ -49,6 +49,14 @@ var UI = {
 		this.resizeCanvases();
 	},
 	
+	filterButtonHue: function(degrees) {
+		var filter = 'hue-rotate(' + degrees + 'deg)';
+		document.getElementById('sandwich-btn').style.filter
+			= filter;
+		document.getElementById('settings-btn').style.filter
+			= filter;
+	},
+	
 	resizeCanvases: function() {
 		var width = window.innerWidth;
 		var height = window.innerHeight;
