@@ -52,7 +52,6 @@ var WaterCan = {
 					} else {
 						dy += 30 - ((this.counter / 2));
 					}
-					console.log(dy);
 					if (this.dir === 1) {
 						dx = Constants.WATER_CAN_LENGTH * this.dir;
 					}
