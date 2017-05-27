@@ -30,7 +30,6 @@ var Game = {
 			Game.scene.render();
 			Camera.onFrame();
 			UI.onFrame();
-			Tutorial.onFrame();
 			Gestures.onFrame();
 			WaterCan.onFrame();
 		});

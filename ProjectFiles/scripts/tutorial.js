@@ -46,11 +46,18 @@ var Tutorial = {
 		
 		// Wait for response
 		setTimeout(function() {
+			Game.createParticleSystemAt(Flower.outerPetals[1], 
+				Flower.outerPetals[1].blinkOffset);
+			
 			Tutorial.waitingForInput = true;
-		}, 7000);
+		}, 6000);
 	},
 	
 	startGestureSection: function() {
+		// Dispose of the particle system
+		Game.destroyParticleSystem();
+		
+		// Begin second part of the tutorial.
 		UI.setText("Sometimes we can play some pattern games.");
 		
 		// Teach gestures
@@ -99,33 +106,5 @@ var Tutorial = {
 		
 		// Start the tutorial.
 		this.start();
-	},
-	
-	onFrame: function() {
-		if (this.active) {
-			if (this.waitingForInput) {
-				if (this.counter <= 0) {
-					this.counter = 50;
-					var pos = new BABYLON.Vector3(
-						Flower.petals[0].position.x,
-						Flower.petals[0].position.y + 1,
-						Flower.petals[0].position.z
-					)
-					var loc = BABYLON.Vector3.Project(pos, 
-						BABYLON.Matrix.Identity(),
-						Game.scene.getTransformMatrix(),
-						Camera.camera.viewport.toGlobal(
-							Game.engine.getRenderWidth(),
-							Game.engine.getRenderHeight()));
-					
-					UI.circles.push({x: loc.x, y: loc.y,
-						radius: 10, dr: 1, color: '255,255,0'});
-					UI.circles.push({x: loc.x, y: loc.y,
-						radius: 0, dr: 1, color: '255,255,0'});
-				} else {
-					--this.counter;
-				}
-			}
-		}
 	}
 };
