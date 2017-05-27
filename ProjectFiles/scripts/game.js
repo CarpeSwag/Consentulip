@@ -81,7 +81,10 @@ var Game = {
 		this.engine.resize();
 	},
 	
-	createParticleSystemAt(mesh, offset) {
+	createParticleSystemAt: function(mesh, offset) {
+		// Clean particle
+		this.destroyParticleSystem();
+		
 		// Create a particle system
 		this.particleSystem = new BABYLON.ParticleSystem("particles", 2000, this.scene);
 		var ps = this.particleSystem;
@@ -137,6 +140,15 @@ var Game = {
 
 		// Start the particle system
 		ps.start();
+	},
+	
+	destroyParticleSystem: function() {
+		if (this.particleSystem == null) return;
+		
+		// Destroy particle
+		this.particleSystem.disposeOnStop = true;
+		this.particleSystem.stop();
+		this.particleSystem = null;
 	},
 	
 	// Mouse events

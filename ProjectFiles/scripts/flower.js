@@ -11,6 +11,8 @@ var Flower = {
 		BABYLON.SceneLoader.ImportMesh('', 'art/models/',
 			'tulip.babylon', Game.scene, function (mesh) {
 			var SCALE = 5.0;
+			var FLOWER_HEAD_SIZE = 1.5;
+			var COMBINED_SCALE = 7.5;
 			for (var i = 0; i < mesh.length; ++i) {
 				mesh[i].scaling.x *= SCALE;
 				mesh[i].scaling.y *= SCALE;
@@ -45,20 +47,41 @@ var Flower = {
 					Flower.petals.push(mesh[i]);
 					type = 'petal';
 					var alpha = 0;
+					var offset = null;
 					if (+(name.substring(8)) > 3)
 						Flower.outerPetals.push(mesh[i]);
 					switch(+(name.substring(8))) {
 						case 4:
 							alpha = Math.PI / 4;
+							offset = new BABYLON.Vector3(
+								1.00 * COMBINED_SCALE,
+								0.1 * COMBINED_SCALE,
+								0
+							);
 							break;
 						case 5:
-							alpha = 5 * Math.PI / 4; 
+							alpha = 5 * Math.PI / 4;
+							offset = new BABYLON.Vector3(
+								-1.00 * COMBINED_SCALE,
+								0.1 * COMBINED_SCALE,
+								0
+							);
 							break;
 						case 6:
 							alpha = 7 * Math.PI / 4;
+							offset = new BABYLON.Vector3(
+								0,
+								0.1 * COMBINED_SCALE,
+								-1.00 * COMBINED_SCALE
+							);
 							break;
 						case 7:
 							alpha = 3 * Math.PI / 4;
+							offset = new BABYLON.Vector3(
+								0,
+								0.1 * COMBINED_SCALE,
+								1.00 * COMBINED_SCALE
+							);
 							break;
 						default:
 							type = 'ignore';
@@ -71,7 +94,6 @@ var Flower = {
 					}
 					
 					// Change flower scaling
-					var FLOWER_HEAD_SIZE = 1.5;
 					mesh[i].scaling.x *= FLOWER_HEAD_SIZE;
 					mesh[i].scaling.y *= FLOWER_HEAD_SIZE;
 					mesh[i].scaling.z *= FLOWER_HEAD_SIZE;
@@ -82,6 +104,8 @@ var Flower = {
 					mesh[i].renderOverlay = true;
 					mesh[i].overlayAlpha = 0.25;
 					mesh[i].overlayColor = Flower.petalColor;
+					
+					mesh[i].blinkOffset = offset;
 				}
 				mesh[i].flowerPart = type;
 				mesh[i].cameraInfo = info;
