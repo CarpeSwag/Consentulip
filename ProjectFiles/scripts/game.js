@@ -14,6 +14,9 @@ var Game = {
 	tendSoil: false,
 	soilClick: false,
 	
+	// Particle system
+	particleSystem: null,
+	
 	onLoad: function() {
 		this.canvas = document.getElementById('renderCanvas');
 		this.engine = new BABYLON.Engine(this.canvas, true);
@@ -27,7 +30,6 @@ var Game = {
 			Game.scene.render();
 			Camera.onFrame();
 			UI.onFrame();
-			Tutorial.onFrame();
 			Gestures.onFrame();
 			WaterCan.onFrame();
 		});
@@ -67,13 +69,85 @@ var Game = {
 		Flower.loadModels();
 		
 		// Create the "God Rays" effect (volumetric light scattering)
-		/*var godrays = new BABYLON.VolumetricLightScatteringPostProcess('godrays', 1.0, Camera.camera, null, 100, BABYLON.Texture.BILINEAR_SAMPLINGMODE, this.engine, false);
+		/*var godrays = new BABYLON.VolumetricLightScatteringPostProcess('godrays',
+		1.0, Camera.camera, null, 100, BABYLON.Texture.BILINEAR_SAMPLINGMODE, this.engine, false);
 
 		var SCALE = 50;
 		godrays.mesh.position = new BABYLON.Vector3(-100, 100, -300);
 		godrays.mesh.scaling = new BABYLON.Vector3(SCALE, SCALE, SCALE);*/
+		
 		// Ensure screen is sized correctly.
 		this.engine.resize();
+	},
+	
+	createParticleSystemAt: function(mesh, offset) {
+		// Clean particle
+		this.destroyParticleSystem();
+		
+		// Create a particle system
+		this.particleSystem = new BABYLON.ParticleSystem("particles", 2000, this.scene);
+		var ps = this.particleSystem;
+
+		// Apply offset
+		ps.emitter = mesh;
+		ps.minEmitBox = offset;
+		ps.maxEmitBox = offset;
+
+		// Texture and colors of all particles
+		ps.particleTexture = new BABYLON.Texture("art/textures/particle.png", this.scene);
+		ps.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
+		ps.color1 = new BABYLON.Color4(0.75, 0.75, 0, 0.25);
+		ps.color2 = new BABYLON.Color4(0.75, 0.75, 0, 0.25);
+		ps.colorDead = new BABYLON.Color4(0, 0, 0, 0.1);
+
+		// Size of each particle
+		ps.minSize = 0;
+		ps.maxSize = 0;
+
+		// Life time of each particle
+		ps.minLifeTime = 0.5;
+		ps.maxLifeTime = 0.5;
+
+		// Emission rate
+
+		// Update Speed
+		ps.emitRate = 1;
+		ps.minEmitPower = 1;
+		ps.maxEmitPower = 1;
+		ps.updateSpeed = 0.01;
+
+		// Update Function
+		ps.updateFunction = function(particles) {
+			for (var index = 0; index < particles.length; index++) {
+			   var particle = particles[index];
+			   particle.age += this._scaledUpdateSpeed;
+			   particle.size += 0.05;
+			   if (particle.age >= particle.lifeTime) { // Recycle
+					particles.splice(index, 1);
+					this._stockParticles.push(particle);
+					index--;
+					continue;
+			   } else {
+					particle.colorStep.scaleToRef(this._scaledUpdateSpeed, this._scaledColorStep);
+					particle.color.addInPlace(this._scaledColorStep);
+
+					if (particle.color.a < 0)
+						particle.color.a = 0;
+				}
+			}
+		};
+
+		// Start the particle system
+		ps.start();
+	},
+	
+	destroyParticleSystem: function() {
+		if (this.particleSystem == null) return;
+		
+		// Destroy particle
+		this.particleSystem.disposeOnStop = true;
+		this.particleSystem.stop();
+		this.particleSystem = null;
 	},
 	
 	// Mouse events
