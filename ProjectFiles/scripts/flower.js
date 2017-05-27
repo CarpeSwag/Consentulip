@@ -23,6 +23,8 @@ var Flower = {
 				var name = mesh[i].name;
 				var type = 'ignore';
 				var info = {};
+				var offset = null;
+				
 				if (name === 'stem') {
 					Flower.stem = mesh[i];
 					type = 'stem';
@@ -47,46 +49,33 @@ var Flower = {
 					Flower.petals.push(mesh[i]);
 					type = 'petal';
 					var alpha = 0;
-					var offset = null;
-					if (+(name.substring(8)) > 3)
+					if (+(name.substring(8)) > 3) {
 						Flower.outerPetals.push(mesh[i]);
+						offset = new BABYLON.Vector3(
+							0,
+							0.1 * COMBINED_SCALE,
+							-0.66 * COMBINED_SCALE
+						);
+					}
 					switch(+(name.substring(8))) {
 						case 4:
 							alpha = Math.PI / 4;
-							offset = new BABYLON.Vector3(
-								1.00 * COMBINED_SCALE,
-								0.1 * COMBINED_SCALE,
-								0
-							);
 							break;
 						case 5:
 							alpha = 5 * Math.PI / 4;
-							offset = new BABYLON.Vector3(
-								-1.00 * COMBINED_SCALE,
-								0.1 * COMBINED_SCALE,
-								0
-							);
 							break;
 						case 6:
 							alpha = 7 * Math.PI / 4;
-							offset = new BABYLON.Vector3(
-								0,
-								0.1 * COMBINED_SCALE,
-								-1.00 * COMBINED_SCALE
-							);
 							break;
 						case 7:
 							alpha = 3 * Math.PI / 4;
-							offset = new BABYLON.Vector3(
-								0,
-								0.1 * COMBINED_SCALE,
-								1.00 * COMBINED_SCALE
-							);
 							break;
 						default:
 							type = 'ignore';
 							break;
 					}
+					if (+(name.substring(8)) > 3)
+					console.log(+(name.substring(8)) + ' ' + mesh[i].position + ' ' + offset);
 					info = {
 						alpha: alpha,
 						radius: 7.5,
@@ -104,11 +93,12 @@ var Flower = {
 					mesh[i].renderOverlay = true;
 					mesh[i].overlayAlpha = 0.25;
 					mesh[i].overlayColor = Flower.petalColor;
-					
-					mesh[i].blinkOffset = offset;
 				}
 				mesh[i].flowerPart = type;
 				mesh[i].cameraInfo = info;
+				if(offset !== null) {
+					mesh[i].blinkOffset = offset;
+				}
 			}
 		});
 		
