@@ -74,8 +74,6 @@ var Flower = {
 							type = 'ignore';
 							break;
 					}
-					if (+(name.substring(8)) > 3)
-					console.log(+(name.substring(8)) + ' ' + mesh[i].position + ' ' + offset);
 					info = {
 						alpha: alpha,
 						radius: 7.5,
