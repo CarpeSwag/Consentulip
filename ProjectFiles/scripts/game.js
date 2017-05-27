@@ -60,7 +60,7 @@ var Game = {
 		// Skybox
 		BABYLON.SceneLoader.ImportMesh('', 'art/models/',
 			'skybox.babylon', Game.scene, function (mesh) {
-			var SCALE = 50.0;
+			var SCALE = 75.0;
 			Game.skybox = mesh;
 			for (var i = 0; i < mesh.length; ++i) {
 				mesh[i].scaling.x *= SCALE;
