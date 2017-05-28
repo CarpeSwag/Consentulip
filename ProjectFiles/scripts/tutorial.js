@@ -46,8 +46,8 @@ var Tutorial = {
 		
 		// Wait for response
 		setTimeout(function() {
-			Game.createParticleSystemAt(Flower.outerPetals[1], 
-				Flower.outerPetals[1].blinkOffset);
+			Game.createParticleSystemAt(Flower.outerPetals[0], 
+				Flower.outerPetals[0].blinkOffset);
 			
 			Tutorial.waitingForInput = true;
 		}, 6000);

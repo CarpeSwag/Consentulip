@@ -4,6 +4,9 @@ var Game = {
 	engine: null,
 	scene: null,
 	
+	// Environment
+	skybox: [],
+	
 	// Lights
 	light: null,
 	light2: null,
@@ -55,15 +58,25 @@ var Game = {
 		this.canvas.addEventListener("pointermove", this.onPointerMove, false);
 		
 		// Skybox
-		var skybox = BABYLON.Mesh.CreateBox("skyBox", 2000.0, this.scene);
-		var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", this.scene);
-		skyboxMaterial.backFaceCulling = false;
-		skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("art/textures/TropicalSunnyDay", this.scene);
-		skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
-		skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
-		skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-		skyboxMaterial.disableLighting = true;
-		skybox.material = skyboxMaterial;
+		BABYLON.SceneLoader.ImportMesh('', 'art/models/',
+			'skybox.babylon', Game.scene, function (mesh) {
+			var SCALE = 75.0;
+			Game.skybox = mesh;
+			for (var i = 0; i < mesh.length; ++i) {
+				mesh[i].scaling.x *= SCALE;
+				mesh[i].scaling.y *= SCALE;
+				mesh[i].scaling.z *= SCALE;
+				mesh[i].position.x *= SCALE;
+				mesh[i].position.y *= SCALE;
+				mesh[i].position.z *= SCALE;
+				mesh[i].position.y += -5.0 * SCALE;
+			}
+		});
+		
+		// Fog
+		this.scene.fogMode = BABYLON.Scene.FOGMODE_EXP2;
+		this.scene.fogColor = new BABYLON.Color3(1, 1, 1);
+		this.scene.fogDensity = 0;
 		
 		// Load models
 		Flower.loadModels();
