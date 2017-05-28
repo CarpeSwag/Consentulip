@@ -152,6 +152,7 @@ var Game = {
 		
 		// Push it to the array
 		var id = this.psCounter++;
+		this.psCounter = this.psCounter % 100;
 		this.particleSystem.push({
 			id: id,
 			part: [ps]
