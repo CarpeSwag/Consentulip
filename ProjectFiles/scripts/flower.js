@@ -32,7 +32,22 @@ var Flower = {
 						alpha: 0,
 						radius: 10,
 						yOffset: 0
-					}
+					};
+					offset.push(new BABYLON.Vector3(
+						0,
+						-0.1 * COMBINED_SCALE,
+						0
+					));
+					offset.push(new BABYLON.Vector3(
+						0,
+						-0.01 * COMBINED_SCALE,
+						0
+					));
+					offset.push(new BABYLON.Vector3(
+						0,
+						0.08 * COMBINED_SCALE,
+						0
+					));
 				} else if (name.substring(0,4) === 'leaf') {
 					Flower.leaves.push(mesh[i]);
 					type = 'leaf';
@@ -40,7 +55,18 @@ var Flower = {
 						alpha: 0,
 						radius: 12,
 						yOffset: 0
-					}
+					};
+					offset.push(new BABYLON.Vector3(
+						0,
+						0,
+						-0.66 * COMBINED_SCALE
+					));
+					offset.push(new BABYLON.Vector3(
+						0,
+						0,
+						0.66 * COMBINED_SCALE
+					));
+					
 					mesh[i].position.y += 0.4 * SCALE;
 					if (Flower.leaves.length == 1) {
 						mesh[i].position.y += 0.4 * SCALE;
@@ -78,7 +104,7 @@ var Flower = {
 						alpha: alpha,
 						radius: 7.5,
 						yOffset: 1.33
-					}
+					};
 					
 					// Change flower scaling
 					mesh[i].scaling.x *= FLOWER_HEAD_SIZE;
