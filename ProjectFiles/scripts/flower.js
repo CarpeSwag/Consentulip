@@ -23,7 +23,7 @@ var Flower = {
 				var name = mesh[i].name;
 				var type = 'ignore';
 				var info = {};
-				var offset = null;
+				var offset = [];
 				
 				if (name === 'stem') {
 					Flower.stem = mesh[i];
@@ -51,11 +51,11 @@ var Flower = {
 					var alpha = 0;
 					if (+(name.substring(8)) > 3) {
 						Flower.outerPetals.push(mesh[i]);
-						offset = new BABYLON.Vector3(
+						offset.push(new BABYLON.Vector3(
 							0,
 							0.1 * COMBINED_SCALE,
 							-0.66 * COMBINED_SCALE
-						);
+						));
 					}
 					switch(+(name.substring(8))) {
 						case 4:
@@ -94,9 +94,7 @@ var Flower = {
 				}
 				mesh[i].flowerPart = type;
 				mesh[i].cameraInfo = info;
-				if(offset !== null) {
-					mesh[i].blinkOffset = offset;
-				}
+				mesh[i].blinkOffset = offset;
 			}
 		});
 		

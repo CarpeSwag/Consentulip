@@ -95,67 +95,74 @@ var Game = {
 	},
 	
 	createParticleSystemAt: function(mesh, offset) {
-		// Create a particle system
-		var ps = new BABYLON.ParticleSystem("particles", 2000, this.scene);
+		var part = [];
+		for (var i = 0; i < offset.length; ++i) {
+			// Create a particle system
+			var ps = new BABYLON.ParticleSystem("particles", 2000, this.scene);
 
-		// Apply offset
-		ps.emitter = mesh;
-		ps.minEmitBox = offset;
-		ps.maxEmitBox = offset;
+			// Apply offset
+			ps.emitter = mesh;
+			ps.minEmitBox = offset[i];
+			ps.maxEmitBox = offset[i];
 
-		// Texture and colors of all particles
-		ps.particleTexture = new BABYLON.Texture("art/textures/particle.png", this.scene);
-		ps.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
-		ps.color1 = new BABYLON.Color4(0.75, 0.75, 0, 0.25);
-		ps.color2 = new BABYLON.Color4(0.75, 0.75, 0, 0.25);
-		ps.colorDead = new BABYLON.Color4(0, 0, 0, 0.1);
+			// Texture and colors of all particles
+			ps.particleTexture = new BABYLON.Texture(
+				"art/textures/particle.png", this.scene);
+			ps.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
+			ps.color1 = new BABYLON.Color4(0.75, 0.75, 0, 0.25);
+			ps.color2 = new BABYLON.Color4(0.75, 0.75, 0, 0.25);
+			ps.colorDead = new BABYLON.Color4(0, 0, 0, 0.1);
 
-		// Size of each particle
-		ps.minSize = 0;
-		ps.maxSize = 0;
+			// Size of each particle
+			ps.minSize = 0;
+			ps.maxSize = 0;
 
-		// Life time of each particle
-		ps.minLifeTime = 0.5;
-		ps.maxLifeTime = 0.5;
+			// Life time of each particle
+			ps.minLifeTime = 0.5;
+			ps.maxLifeTime = 0.5;
 
-		// Emission rate
+			// Emission rate
 
-		// Update Speed
-		ps.emitRate = 1;
-		ps.minEmitPower = 1;
-		ps.maxEmitPower = 1;
-		ps.updateSpeed = 0.01;
+			// Update Speed
+			ps.emitRate = 1;
+			ps.minEmitPower = 1;
+			ps.maxEmitPower = 1;
+			ps.updateSpeed = 0.01;
 
-		// Update Function
-		ps.updateFunction = function(particles) {
-			for (var index = 0; index < particles.length; index++) {
-			   var particle = particles[index];
-			   particle.age += this._scaledUpdateSpeed;
-			   particle.size += 0.05;
-			   if (particle.age >= particle.lifeTime) { // Recycle
-					particles.splice(index, 1);
-					this._stockParticles.push(particle);
-					index--;
-					continue;
-			   } else {
-					particle.colorStep.scaleToRef(this._scaledUpdateSpeed, this._scaledColorStep);
-					particle.color.addInPlace(this._scaledColorStep);
+			// Update Function
+			ps.updateFunction = function(particles) {
+				for (var index = 0; index < particles.length; index++) {
+				   var particle = particles[index];
+				   particle.age += this._scaledUpdateSpeed;
+				   particle.size += 0.05;
+				   if (particle.age >= particle.lifeTime) { // Recycle
+						particles.splice(index, 1);
+						this._stockParticles.push(particle);
+						index--;
+						continue;
+				   } else {
+						particle.colorStep.scaleToRef(
+							this._scaledUpdateSpeed, this._scaledColorStep);
+						particle.color.addInPlace(this._scaledColorStep);
 
-					if (particle.color.a < 0)
-						particle.color.a = 0;
+						if (particle.color.a < 0)
+							particle.color.a = 0;
+					}
 				}
-			}
-		};
+			};
 
-		// Start the particle system
-		ps.start();
+			// Start the particle system
+			ps.start();
+			
+			part.push(ps);
+		}
 		
 		// Push it to the array
 		var id = this.psCounter++;
 		this.psCounter = this.psCounter % 100;
 		this.particleSystem.push({
 			id: id,
-			part: [ps]
+			part: part
 		});
 		return id;
 	},
