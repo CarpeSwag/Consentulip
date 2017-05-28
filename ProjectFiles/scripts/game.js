@@ -22,6 +22,8 @@ var Game = {
 	psCounter: 0,
 	
 	// Flower urge
+	desired: [],
+	notDesired: [],
 	desireCounter: Constants.DESIRE_TIMER_RESET,
 	
 	
@@ -181,7 +183,7 @@ var Game = {
 	
 	destroyParticleSystem: function(id) {
 		var index = this.getParticleSystemById(id);
-		if (index === -1) return;
+		if (index === -1) return false;
 		var ps = this.particleSystem[index];
 		
 		// Destroy particle
@@ -194,13 +196,14 @@ var Game = {
 		ps.part = null;
 		ps.id = null;
 		this.particleSystem.splice(index, 1);
+		return true;
 	},
 	
 	createNewDesire: function() {
-		var rand = Math.floor(Math.random() * Flower.interactable.length);
+		var rand = Math.floor(Math.random() * Game.notDesired.length);
 		var id = this.createParticleSystemAt(
-			Flower.interactable[rand],
-			Flower.interactable[rand].blinkOffset
+			Game.notDesired[rand],
+			Game.notDesired[rand].blinkOffset
 		);
 		
 		this.desireCounter = Constants.DESIRE_TIMER_RESET + 
@@ -211,6 +214,16 @@ var Game = {
 		}, Constants.DESIRE_TIMER_REMOVE + Math.ceil(Math.random()
 			* Constants.DESIRE_TIMER_REMOVE_RAND));
 0	},
+	
+	popDesire: function(index) {
+		Game.desired.push(Game.notDesired[index]);
+		Game.notDesired.splice(index, 1);
+	},
+	
+	pushDesire: function(index) {
+		Game.notDesired.push(Game.desired[index]);
+		Game.desired.splice(index, 1);
+	},
 	
 	// Mouse events
 	onPointerDown: function (evt) {
