@@ -1,4 +1,5 @@
 var FPS = 60;
+var MS_TO_SEC = 1000;
 
 var Constants = {
 	// Gesture constants
@@ -42,6 +43,6 @@ var Constants = {
 	// Desire urge counters
 	DESIRE_TIMER_RESET: Math.ceil(120.00 * FPS),
 	DESIRE_TIMER_RAND: Math.ceil(60.00 * FPS),
-	DESIRE_TIMER_REMOVE: Math.ceil(60.00 * 1000),
-	DESIRE_TIMER_REMOVE_RAND: Math.ceil(30.00 * 1000)
+	DESIRE_TIMER_REMOVE: Math.ceil(60.00 * MS_TO_SEC),
+	DESIRE_TIMER_REMOVE_RAND: Math.ceil(30.00 * MS_TO_SEC)
 };
