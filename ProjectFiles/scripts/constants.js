@@ -1,4 +1,5 @@
 var FPS = 60;
+var MS_TO_SEC = 1000;
 
 var Constants = {
 	// Gesture constants
@@ -28,12 +29,20 @@ var Constants = {
 	CAMERA_RADIUS_LOWER: 7.5,
 	CAMERA_RADIUS_UPPER: 150,
 	
-	// Flower colors
+	// Flower constants
+	FLOWER_SCALE: 5.00,
+	FLOWER_HEAD_SCALE: 1.50,
 	FLOWER_COLORS: [
 		{r: 1, g: 0, b: 0, btn: 30},
 		{r: 0, g: 0, b: 1, btn: -60},
 		{r: 1, g: 0.25, b: 0, btn: 0},
 		{r: 1, g: 0, b: 1, btn: -30},
 		{r: 0, g: 1, b: 1, btn: -90}
-	]
+	],
+	
+	// Desire urge counters
+	DESIRE_TIMER_RESET: Math.ceil(120.00 * FPS),
+	DESIRE_TIMER_RAND: Math.ceil(60.00 * FPS),
+	DESIRE_TIMER_REMOVE: Math.ceil(60.00 * MS_TO_SEC),
+	DESIRE_TIMER_REMOVE_RAND: Math.ceil(30.00 * MS_TO_SEC)
 };

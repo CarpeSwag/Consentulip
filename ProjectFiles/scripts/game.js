@@ -18,7 +18,14 @@ var Game = {
 	soilClick: false,
 	
 	// Particle system
-	particleSystem: null,
+	particleSystem: [],
+	psCounter: 0,
+	
+	// Flower urge
+	desired: [],
+	notDesired: [],
+	desireCounter: Constants.DESIRE_TIMER_RESET,
+	
 	
 	onLoad: function() {
 		this.canvas = document.getElementById('renderCanvas');
@@ -31,6 +38,7 @@ var Game = {
 		// Render loop
 		this.engine.runRenderLoop(function() {
 			Game.scene.render();
+			Game.onFrame();
 			Camera.onFrame();
 			UI.onFrame();
 			Gestures.onFrame();
@@ -94,73 +102,150 @@ var Game = {
 	},
 	
 	createParticleSystemAt: function(mesh, offset) {
-		// Clean particle
-		this.destroyParticleSystem();
-		
-		// Create a particle system
-		this.particleSystem = new BABYLON.ParticleSystem("particles", 2000, this.scene);
-		var ps = this.particleSystem;
+		var part = [];
+		for (var i = 0; i < offset.length; ++i) {
+			// Create a particle system
+			var ps = new BABYLON.ParticleSystem("particles", 2000, this.scene);
 
-		// Apply offset
-		ps.emitter = mesh;
-		ps.minEmitBox = offset;
-		ps.maxEmitBox = offset;
+			// Apply offset
+			ps.emitter = mesh;
+			ps.minEmitBox = offset[i];
+			ps.maxEmitBox = offset[i];
 
-		// Texture and colors of all particles
-		ps.particleTexture = new BABYLON.Texture("art/textures/particle.png", this.scene);
-		ps.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
-		ps.color1 = new BABYLON.Color4(0.75, 0.75, 0, 0.25);
-		ps.color2 = new BABYLON.Color4(0.75, 0.75, 0, 0.25);
-		ps.colorDead = new BABYLON.Color4(0, 0, 0, 0.1);
+			// Texture and colors of all particles
+			ps.particleTexture = new BABYLON.Texture(
+				"art/textures/particle.png", this.scene);
+			ps.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
+			ps.color1 = new BABYLON.Color4(0.75, 0.75, 0, 0.25);
+			ps.color2 = new BABYLON.Color4(0.75, 0.75, 0, 0.25);
+			ps.colorDead = new BABYLON.Color4(0, 0, 0, 0.1);
 
-		// Size of each particle
-		ps.minSize = 0;
-		ps.maxSize = 0;
+			// Size of each particle
+			ps.minSize = 0;
+			ps.maxSize = 0;
 
-		// Life time of each particle
-		ps.minLifeTime = 0.5;
-		ps.maxLifeTime = 0.5;
+			// Life time of each particle
+			ps.minLifeTime = 0.5;
+			ps.maxLifeTime = 0.5;
 
-		// Emission rate
+			// Emission rate
 
-		// Update Speed
-		ps.emitRate = 1;
-		ps.minEmitPower = 1;
-		ps.maxEmitPower = 1;
-		ps.updateSpeed = 0.01;
+			// Update Speed
+			ps.emitRate = 1;
+			ps.minEmitPower = 1;
+			ps.maxEmitPower = 1;
+			ps.updateSpeed = 0.01;
 
-		// Update Function
-		ps.updateFunction = function(particles) {
-			for (var index = 0; index < particles.length; index++) {
-			   var particle = particles[index];
-			   particle.age += this._scaledUpdateSpeed;
-			   particle.size += 0.05;
-			   if (particle.age >= particle.lifeTime) { // Recycle
-					particles.splice(index, 1);
-					this._stockParticles.push(particle);
-					index--;
-					continue;
-			   } else {
-					particle.colorStep.scaleToRef(this._scaledUpdateSpeed, this._scaledColorStep);
-					particle.color.addInPlace(this._scaledColorStep);
+			// Update Function
+			ps.updateFunction = function(particles) {
+				for (var index = 0; index < particles.length; index++) {
+				   var particle = particles[index];
+				   particle.age += this._scaledUpdateSpeed;
+				   particle.size += 0.05;
+				   if (particle.age >= particle.lifeTime) { // Recycle
+						particles.splice(index, 1);
+						this._stockParticles.push(particle);
+						index--;
+						continue;
+				   } else {
+						particle.colorStep.scaleToRef(
+							this._scaledUpdateSpeed, this._scaledColorStep);
+						particle.color.addInPlace(this._scaledColorStep);
 
-					if (particle.color.a < 0)
-						particle.color.a = 0;
+						if (particle.color.a < 0)
+							particle.color.a = 0;
+					}
 				}
-			}
-		};
+			};
 
-		// Start the particle system
-		ps.start();
+			// Start the particle system
+			ps.start();
+			
+			part.push(ps);
+		}
+		
+		// Push it to the array
+		var id = this.psCounter++;
+		this.psCounter = this.psCounter % 100;
+		this.particleSystem.push({
+			id: id,
+			part: part
+		});
+		return id;
 	},
 	
-	destroyParticleSystem: function() {
-		if (this.particleSystem == null) return;
+	getParticleSystemById: function(id) {
+		for (var i = 0; i < this.particleSystem.length; ++i)
+			if (this.particleSystem[i].id === id)
+				return i;
+		return -1;
+	},
+	
+	destroyParticleSystem: function(id) {
+		var index = this.getParticleSystemById(id);
+		if (index === -1) return false;
+		var ps = this.particleSystem[index];
 		
 		// Destroy particle
-		this.particleSystem.disposeOnStop = true;
-		this.particleSystem.stop();
-		this.particleSystem = null;
+		for (var i = 0; i < ps.part.length; ++i) {
+			ps.part[i].disposeOnStop = true;
+			ps.part[i].stop();
+		}
+		
+		// Destroy and remove the particles
+		ps.part = null;
+		ps.id = null;
+		this.particleSystem.splice(index, 1);
+		return true;
+	},
+	
+	createDesire: function(index) {
+		var id = this.createParticleSystemAt(
+			Game.notDesired[index],
+			Game.notDesired[index].blinkOffset
+		);
+		
+		var desiredMesh = Game.notDesired[index];
+		desiredMesh.partId = id;
+		this.popDesire(index);
+		this.desireCounter = Constants.DESIRE_TIMER_RESET + 
+			Math.ceil(Math.random() * Constants.DESIRE_TIMER_RAND);
+		
+		setTimeout(function() {
+			Game.destroyDesire(desiredMesh);
+		}, Constants.DESIRE_TIMER_REMOVE + Math.ceil(Math.random()
+			* Constants.DESIRE_TIMER_REMOVE_RAND));
+0	},
+
+	createRandomDesire: function() {
+		var rand = Math.floor(Math.random() * Game.notDesired.length);
+		this.createDesire(rand);
+	},
+
+	findDesiredMesh: function(mesh) {
+		for (var i = 0; i < Game.desired.length; ++i)
+			if (Game.desired[i] === mesh)
+				return i;
+		return -1;
+	},
+	
+	destroyDesire: function(mesh) {
+		if (mesh.partId == null) return false;
+		var succ = this.destroyParticleSystem(mesh.partId);
+		if (succ)
+			this.pushDesire(this.findDesiredMesh(mesh));
+		mesh.partId = null;
+		return true;
+	},
+	
+	popDesire: function(index) {
+		Game.desired.push(Game.notDesired[index]);
+		Game.notDesired.splice(index, 1);
+	},
+	
+	pushDesire: function(index) {
+		Game.notDesired.push(Game.desired[index]);
+		Game.desired.splice(index, 1);
 	},
 	
 	// Mouse events
@@ -208,6 +293,7 @@ var Game = {
 					} else {
 						Camera.panToMesh(mesh, 0.75);
 						Camera.cameraLockedToMesh = true;
+						Game.destroyDesire(mesh);
 						setTimeout(function() {
 							Game.enableGestures = true;
 							UI.toggleRevokeConsent(true);
@@ -257,5 +343,12 @@ var Game = {
 			}
 		}
 		Game.soilClick = false;
+	},
+	
+	onFrame: function() {
+		this.desireCounter--;
+		if (this.desireCounter <= 0) {
+			this.createRandomDesire();
+		}
 	}
 };
