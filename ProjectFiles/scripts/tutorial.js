@@ -3,6 +3,7 @@ var Tutorial = {
 	active: false,
 	gesture: false,
 	counter: 25,
+	particleId: 0,
 	
 	onLoad: function() {
 		
@@ -46,7 +47,8 @@ var Tutorial = {
 		
 		// Wait for response
 		setTimeout(function() {
-			Game.createParticleSystemAt(Flower.outerPetals[0], 
+			this.particleId = Game.createParticleSystemAt( 
+				Flower.outerPetals[0], 
 				Flower.outerPetals[0].blinkOffset);
 			
 			Tutorial.waitingForInput = true;
@@ -55,7 +57,7 @@ var Tutorial = {
 	
 	startGestureSection: function() {
 		// Dispose of the particle system
-		Game.destroyParticleSystem();
+		Game.destroyParticleSystem(this.particleId);
 		
 		// Begin second part of the tutorial.
 		UI.setText("Sometimes we can play some pattern games.");

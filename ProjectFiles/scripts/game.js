@@ -18,7 +18,8 @@ var Game = {
 	soilClick: false,
 	
 	// Particle system
-	particleSystem: null,
+	particleSystem: [],
+	psCounter: 0,
 	
 	onLoad: function() {
 		this.canvas = document.getElementById('renderCanvas');
@@ -94,12 +95,8 @@ var Game = {
 	},
 	
 	createParticleSystemAt: function(mesh, offset) {
-		// Clean particle
-		this.destroyParticleSystem();
-		
 		// Create a particle system
-		this.particleSystem = new BABYLON.ParticleSystem("particles", 2000, this.scene);
-		var ps = this.particleSystem;
+		var ps = new BABYLON.ParticleSystem("particles", 2000, this.scene);
 
 		// Apply offset
 		ps.emitter = mesh;
@@ -152,15 +149,38 @@ var Game = {
 
 		// Start the particle system
 		ps.start();
+		
+		// Push it to the array
+		var id = this.psCounter++;
+		this.particleSystem.push({
+			id: id,
+			part: [ps]
+		});
+		return id;
 	},
 	
-	destroyParticleSystem: function() {
-		if (this.particleSystem == null) return;
+	getParticleSystemById: function(id) {
+		for (var i = 0; i < this.particleSystem.length; ++i)
+			if (this.particleSystem[i].id === id)
+				return i;
+		return -1;
+	},
+	
+	destroyParticleSystem: function(id) {
+		var index = this.getParticleSystemById(id);
+		if (index === -1) return;
+		var ps = this.particleSystem[index];
 		
 		// Destroy particle
-		this.particleSystem.disposeOnStop = true;
-		this.particleSystem.stop();
-		this.particleSystem = null;
+		for (var i = 0; i < ps.part.length; ++i) {
+			ps.part[i].disposeOnStop = true;
+			ps.part[i].stop();
+		}
+		
+		// Destroy and remove the particles
+		ps.part = null;
+		ps.id = null;
+		this.particleSystem.splice(index, 1);
 	},
 	
 	// Mouse events
