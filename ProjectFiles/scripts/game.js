@@ -199,16 +199,15 @@ var Game = {
 		return true;
 	},
 	
-	createDesire: function() {
-		var rand = Math.floor(Math.random() * Game.notDesired.length);
+	createDesire: function(index) {
 		var id = this.createParticleSystemAt(
-			Game.notDesired[rand],
-			Game.notDesired[rand].blinkOffset
+			Game.notDesired[index],
+			Game.notDesired[index].blinkOffset
 		);
 		
-		var desiredMesh = Game.notDesired[rand];
+		var desiredMesh = Game.notDesired[index];
 		desiredMesh.partId = id;
-		this.popDesire(rand);
+		this.popDesire(index);
 		this.desireCounter = Constants.DESIRE_TIMER_RESET + 
 			Math.ceil(Math.random() * Constants.DESIRE_TIMER_RAND);
 		
@@ -217,6 +216,11 @@ var Game = {
 		}, Constants.DESIRE_TIMER_REMOVE + Math.ceil(Math.random()
 			* Constants.DESIRE_TIMER_REMOVE_RAND));
 0	},
+
+	createRandomDesire: function() {
+		var rand = Math.floor(Math.random() * Game.notDesired.length);
+		this.createDesire(rand);
+	},
 
 	findDesiredMesh: function(mesh) {
 		for (var i = 0; i < Game.desired.length; ++i)
@@ -344,7 +348,7 @@ var Game = {
 	onFrame: function() {
 		this.desireCounter--;
 		if (this.desireCounter <= 0) {
-			this.createDesire();
+			this.createRandomDesire();
 		}
 	}
 };
