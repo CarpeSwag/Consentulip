@@ -10,16 +10,15 @@ var Flower = {
 		// Load in the model
 		BABYLON.SceneLoader.ImportMesh('', 'art/models/',
 			'tulip.babylon', Game.scene, function (mesh) {
-			var SCALE = 5.0;
-			var FLOWER_HEAD_SIZE = 1.5;
-			var COMBINED_SCALE = 7.5;
+			var COMBINED_SCALE = 
+				Constants.FLOWER_SCALE * Constants.FLOWER_HEAD_SCALE;
 			for (var i = 0; i < mesh.length; ++i) {
-				mesh[i].scaling.x *= SCALE;
-				mesh[i].scaling.y *= SCALE;
-				mesh[i].scaling.z *= SCALE;
-				mesh[i].position.x *= SCALE;
-				mesh[i].position.y *= SCALE;
-				mesh[i].position.z *= SCALE;
+				mesh[i].scaling.x *= Constants.FLOWER_SCALE;
+				mesh[i].scaling.y *= Constants.FLOWER_SCALE;
+				mesh[i].scaling.z *= Constants.FLOWER_SCALE;
+				mesh[i].position.x *= Constants.FLOWER_SCALE;
+				mesh[i].position.y *= Constants.FLOWER_SCALE;
+				mesh[i].position.z *= Constants.FLOWER_SCALE;
 				var name = mesh[i].name;
 				var type = 'ignore';
 				var info = {};
@@ -67,9 +66,9 @@ var Flower = {
 						0.66 * COMBINED_SCALE
 					));
 					
-					mesh[i].position.y += 0.4 * SCALE;
+					mesh[i].position.y += 0.4 * Constants.FLOWER_SCALE;;
 					if (Flower.leaves.length == 1) {
-						mesh[i].position.y += 0.4 * SCALE;
+						mesh[i].position.y += 0.4 * Constants.FLOWER_SCALE;;
 					}
 				} else if (name.substring(0,5) === 'petal') {
 					Flower.petals.push(mesh[i]);
@@ -107,11 +106,11 @@ var Flower = {
 					};
 					
 					// Change flower scaling
-					mesh[i].scaling.x *= FLOWER_HEAD_SIZE;
-					mesh[i].scaling.y *= FLOWER_HEAD_SIZE;
-					mesh[i].scaling.z *= FLOWER_HEAD_SIZE;
-					mesh[i].position.x *= FLOWER_HEAD_SIZE;
-					mesh[i].position.z *= FLOWER_HEAD_SIZE;
+					mesh[i].scaling.x *= Constants.FLOWER_HEAD_SCALE;
+					mesh[i].scaling.y *= Constants.FLOWER_HEAD_SCALE;
+					mesh[i].scaling.z *= Constants.FLOWER_HEAD_SCALE;
+					mesh[i].position.x *= Constants.FLOWER_HEAD_SCALE;
+					mesh[i].position.z *= Constants.FLOWER_HEAD_SCALE;
 					
 					// Adjust color
 					mesh[i].renderOverlay = true;

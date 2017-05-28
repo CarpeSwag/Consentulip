@@ -28,7 +28,9 @@ var Constants = {
 	CAMERA_RADIUS_LOWER: 7.5,
 	CAMERA_RADIUS_UPPER: 150,
 	
-	// Flower colors
+	// Flower constants
+	FLOWER_SCALE: 5.00,
+	FLOWER_HEAD_SCALE: 1.50,
 	FLOWER_COLORS: [
 		{r: 1, g: 0, b: 0, btn: 30},
 		{r: 0, g: 0, b: 1, btn: -60},
