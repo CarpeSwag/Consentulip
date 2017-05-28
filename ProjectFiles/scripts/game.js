@@ -199,7 +199,7 @@ var Game = {
 		return true;
 	},
 	
-	createNewDesire: function() {
+	createDesire: function() {
 		var rand = Math.floor(Math.random() * Game.notDesired.length);
 		var id = this.createParticleSystemAt(
 			Game.notDesired[rand],
@@ -207,19 +207,31 @@ var Game = {
 		);
 		
 		var desiredMesh = Game.notDesired[rand];
+		desiredMesh.partId = id;
 		this.popDesire(rand);
 		this.desireCounter = Constants.DESIRE_TIMER_RESET + 
 			Math.ceil(Math.random() * Constants.DESIRE_TIMER_RAND);
 		
 		setTimeout(function() {
-			var succ = Game.destroyParticleSystem(id);
-			if (succ)
-				for (var i = 0; i < Game.desired.length; ++i)
-					if (Game.desired[i] === desiredMesh)
-						return Game.pushDesire(i);
+			Game.destroyDesire(desiredMesh);
 		}, Constants.DESIRE_TIMER_REMOVE + Math.ceil(Math.random()
 			* Constants.DESIRE_TIMER_REMOVE_RAND));
 0	},
+
+	findDesiredMesh: function(mesh) {
+		for (var i = 0; i < Game.desired.length; ++i)
+			if (Game.desired[i] === desiredMesh)
+				return i;
+		return -1;
+	},
+	
+	destroyDesire: function(mesh) {
+		if (mesh.partId == null) return false;
+		var succ = this.destroyParticleSystem(mesh.partId);
+		if (succ)
+			this.pushDesire(this.findDesiredMesh(mesh));
+		mesh.partId = null;
+	},
 	
 	popDesire: function(index) {
 		Game.desired.push(Game.notDesired[index]);
@@ -330,7 +342,7 @@ var Game = {
 	onFrame: function() {
 		this.desireCounter--;
 		if (this.desireCounter <= 0) {
-			this.createNewDesire();
+			this.createDesire();
 		}
 	}
 };
