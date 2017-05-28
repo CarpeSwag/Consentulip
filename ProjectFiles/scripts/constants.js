@@ -37,5 +37,11 @@ var Constants = {
 		{r: 1, g: 0.25, b: 0, btn: 0},
 		{r: 1, g: 0, b: 1, btn: -30},
 		{r: 0, g: 1, b: 1, btn: -90}
-	]
+	],
+	
+	// Desire urge counters
+	DESIRE_TIMER_RESET: Math.ceil(120.00 * FPS),
+	DESIRE_TIMER_RAND: Math.ceil(60.00 * FPS),
+	DESIRE_TIMER_REMOVE: Math.ceil(60.00 * FPS),
+	DESIRE_TIMER_REMOVE_RAND: Math.ceil(30.00 * FPS)
 };

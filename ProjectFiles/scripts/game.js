@@ -22,7 +22,7 @@ var Game = {
 	psCounter: 0,
 	
 	// Flower urge
-	desireCounter: 500,
+	desireCounter: Constants.DESIRE_TIMER_RESET,
 	
 	
 	onLoad: function() {
@@ -198,16 +198,18 @@ var Game = {
 	
 	createNewDesire: function() {
 		var rand = Math.floor(Math.random() * Flower.interactable.length);
-		console.log(rand + ' ' + Flower.interactable[rand]);
 		var id = this.createParticleSystemAt(
 			Flower.interactable[rand],
 			Flower.interactable[rand].blinkOffset
 		);
-		this.desireCounter = 500;
+		
+		this.desireCounter = Constants.DESIRE_TIMER_RESET + 
+			Math.ceil(Math.random() * Constants.DESIRE_TIMER_RAND);
 		
 		setTimeout(function() {
 			Game.destroyParticleSystem(id);
-		}, Math.random() * 100000 + 30000);
+		}, Constants.DESIRE_TIMER_REMOVE + Math.ceil(Math.random()
+			* Constants.DESIRE_TIMER_REMOVE_RAND));
 0	},
 	
 	// Mouse events
