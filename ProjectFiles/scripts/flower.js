@@ -3,6 +3,7 @@ var Flower = {
 	leaves: [],
 	petals: [],
 	outerPetals: [],
+	interactable: [],
 	stem: null,
 	pot: null,
 	
@@ -26,6 +27,7 @@ var Flower = {
 				
 				if (name === 'stem') {
 					Flower.stem = mesh[i];
+					Flower.interactable.push(mesh[i]);
 					type = 'stem';
 					info = {
 						alpha: 0,
@@ -49,6 +51,7 @@ var Flower = {
 					));
 				} else if (name.substring(0,4) === 'leaf') {
 					Flower.leaves.push(mesh[i]);
+					Flower.interactable.push(mesh[i]);
 					type = 'leaf';
 					info = {
 						alpha: 0,
@@ -76,6 +79,7 @@ var Flower = {
 					var alpha = 0;
 					if (+(name.substring(8)) > 3) {
 						Flower.outerPetals.push(mesh[i]);
+						Flower.interactable.push(mesh[i]);
 						offset.push(new BABYLON.Vector3(
 							0,
 							0.1 * COMBINED_SCALE,

@@ -21,6 +21,10 @@ var Game = {
 	particleSystem: [],
 	psCounter: 0,
 	
+	// Flower urge
+	desireCounter: 500,
+	
+	
 	onLoad: function() {
 		this.canvas = document.getElementById('renderCanvas');
 		this.engine = new BABYLON.Engine(this.canvas, true);
@@ -32,6 +36,7 @@ var Game = {
 		// Render loop
 		this.engine.runRenderLoop(function() {
 			Game.scene.render();
+			Game.onFrame();
 			Camera.onFrame();
 			UI.onFrame();
 			Gestures.onFrame();
@@ -191,6 +196,20 @@ var Game = {
 		this.particleSystem.splice(index, 1);
 	},
 	
+	createNewDesire: function() {
+		var rand = Math.floor(Math.random() * Flower.interactable.length);
+		console.log(rand + ' ' + Flower.interactable[rand]);
+		var id = this.createParticleSystemAt(
+			Flower.interactable[rand],
+			Flower.interactable[rand].blinkOffset
+		);
+		this.desireCounter = 500;
+		
+		setTimeout(function() {
+			Game.destroyParticleSystem(id);
+		}, Math.random() * 100000 + 30000);
+0	},
+	
 	// Mouse events
 	onPointerDown: function (evt) {
 		if (evt.button !== 0) {
@@ -285,5 +304,12 @@ var Game = {
 			}
 		}
 		Game.soilClick = false;
+	},
+	
+	onFrame: function() {
+		this.desireCounter--;
+		if (this.desireCounter <= 0) {
+			this.createNewDesire();
+		}
 	}
 };
