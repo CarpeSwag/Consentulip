@@ -220,7 +220,7 @@ var Game = {
 
 	findDesiredMesh: function(mesh) {
 		for (var i = 0; i < Game.desired.length; ++i)
-			if (Game.desired[i] === desiredMesh)
+			if (Game.desired[i] === mesh)
 				return i;
 		return -1;
 	},
@@ -231,6 +231,7 @@ var Game = {
 		if (succ)
 			this.pushDesire(this.findDesiredMesh(mesh));
 		mesh.partId = null;
+		return true;
 	},
 	
 	popDesire: function(index) {
@@ -288,6 +289,7 @@ var Game = {
 					} else {
 						Camera.panToMesh(mesh, 0.75);
 						Camera.cameraLockedToMesh = true;
+						Game.destroyDesire(mesh);
 						setTimeout(function() {
 							Game.enableGestures = true;
 							UI.toggleRevokeConsent(true);
