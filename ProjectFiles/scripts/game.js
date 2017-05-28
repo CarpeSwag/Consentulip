@@ -206,11 +206,17 @@ var Game = {
 			Game.notDesired[rand].blinkOffset
 		);
 		
+		var desiredMesh = Game.notDesired[rand];
+		this.popDesire(rand);
 		this.desireCounter = Constants.DESIRE_TIMER_RESET + 
 			Math.ceil(Math.random() * Constants.DESIRE_TIMER_RAND);
 		
 		setTimeout(function() {
-			Game.destroyParticleSystem(id);
+			var succ = Game.destroyParticleSystem(id);
+			if (succ)
+				for (var i = 0; i < Game.desired.length; ++i)
+					if (Game.desired[i] === desiredMesh)
+						return Game.pushDesire(i);
 		}, Constants.DESIRE_TIMER_REMOVE + Math.ceil(Math.random()
 			* Constants.DESIRE_TIMER_REMOVE_RAND));
 0	},
