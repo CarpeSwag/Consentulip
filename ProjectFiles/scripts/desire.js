@@ -19,6 +19,7 @@ var Desire = {
 			
 		Talk.queueMessage('I feel like being touched on my ' + 
 			desiredMesh.flowerPart + '...', 1000, 0, 6000);
+		this.flags = 0;
 		
 		setTimeout(function() {
 			Desire.destroyDesire(desiredMesh);
@@ -53,7 +54,7 @@ var Desire = {
 	},
 	
 	pushDesire: function(index) {
-		Desire.notDesired.push(Game.desired[index]);
+		Desire.notDesired.push(Desire.desired[index]);
 		Desire.desired.splice(index, 1);
 	},
 	
