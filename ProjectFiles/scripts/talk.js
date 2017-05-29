@@ -13,7 +13,7 @@ var Talk = {
 	keep: false,
 	
 	onLoad: function() {
-		this.text = document.getElementById('flower-name');
+		this.text = document.getElementById('flower-message');
 	},
 	
 	setText: function(txt) {
