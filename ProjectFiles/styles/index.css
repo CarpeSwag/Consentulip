@@ -80,13 +80,21 @@ html, body {
 }
 
 #flower-message {
+	display: flex;
 	position: absolute;
-	left: 55px;
-	width: calc(100% - 110px);
+	top: -30px;
+	left: calc(50% - 225px);
+	width: 420px;
+	height: 57px;
+	padding: 3px 20px;
+	padding-bottom: 32px;
+	align-items: center;
+	justify-content: center;
 	text-align: center;
-	margin: 0;
 	font-size: 20px;
 	font-weight: normal;
+	background-image: url('../art/images/textbox.png');
+    background-size: 100% 100%;
 }
 
 .button.down {
