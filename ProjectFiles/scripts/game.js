@@ -40,7 +40,7 @@ var Game = {
 			Game.scene.render();
 			Game.onFrame();
 			Camera.onFrame();
-			UI.onFrame();
+			Draw.onFrame();
 			Gestures.onFrame();
 			WaterCan.onFrame();
 		});
@@ -256,9 +256,9 @@ var Game = {
 		
 		var x = Game.scene.pointerX;
 		var y = Game.scene.pointerY;
-		UI.circles.push({x: x, y: y, radius: 10,
+		Draw.circles.push({x: x, y: y, radius: 10,
 			dr: 3, color: '255,255,0'});
-		UI.circles.push({x: x, y: y, radius: 20,
+		Draw.circles.push({x: x, y: y, radius: 20,
 			dr: 3, color: '255,255,0'});
 		
 		document.onselectstart = function() { return false; } // disable drag-select
@@ -271,12 +271,12 @@ var Game = {
 		if (Game.enableGestures && !Tutorial.gesture) {
 			if (evt.button <= 1) {
 				Gestures.onPointerDown(x, y);
-				UI.bctx.lineWidth = 3;
-				UI.bctx.moveTo(x, y);
-				UI.bctx.strokeStyle = '#ffffff';
-				UI.bctx.shadowBlur = 10;
-				UI.bctx.shadowColor = 'rgba(255,200,50,.25)';
-				UI.bctx.beginPath();
+				Draw.bctx.lineWidth = 3;
+				Draw.bctx.moveTo(x, y);
+				Draw.bctx.strokeStyle = '#ffffff';
+				Draw.bctx.shadowBlur = 10;
+				Draw.bctx.shadowColor = 'rgba(255,200,50,.25)';
+				Draw.bctx.beginPath();
 			}
 		}
 		
@@ -304,7 +304,7 @@ var Game = {
 				if (Game.tendSoil) {
 					Game.soilClick = true;
 					for (var i = Math.ceil(Math.random() * 5) + 3; i >= 0; --i) {
-						UI.addDirtParticle(x, y);
+						Draw.addDirtParticle(x, y);
 					}
 				}
 			}
@@ -312,7 +312,7 @@ var Game = {
 		
 		if (!Game.soilClick) {			
 			for (var i = Math.random() * 5 + 3; i >= 0; --i) {
-				UI.addRandomParticle(x, y);
+				Draw.addRandomParticle(x, y);
 			}
 		}
 		
@@ -324,7 +324,7 @@ var Game = {
 		var y = Game.scene.pointerY;
 		if (UI.isPointerDown && !Game.soilClick) {
 			for (var i = Math.random() * 2 + 1; i >= 0; --i) {
-				UI.addRandomParticle(x, y);
+				Draw.addRandomParticle(x, y);
 			}
 			Gestures.onPointerMove(x, y);
 		}
@@ -339,7 +339,7 @@ var Game = {
 			if (UI.isPointerDown) {
 				UI.isPointerDown = false;
 				Gestures.onPointerUp(x, y);
-				UI.gctx.drawImage(UI.bufferCanv, 0, 0);
+				Draw.gctx.drawImage(Draw.bufferCanv, 0, 0);
 			}
 		}
 		Game.soilClick = false;

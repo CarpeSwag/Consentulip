@@ -57,7 +57,7 @@ var WaterCan = {
 					}
 					var x = this.x + dx;
 					var y = this.y + dy;
-					UI.addWaterParticle(x, y, this.dir);
+					Draw.addWaterParticle(x, y, this.dir);
 				}
 			}
 		}

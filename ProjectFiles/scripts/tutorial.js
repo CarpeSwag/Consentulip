@@ -74,11 +74,11 @@ var Tutorial = {
 			{x: centerX                 , y: centerY + radius * -0.75},
 			{x: centerX + radius *  0.50, y: centerY + radius *  0.50}
 		];
-		UI.drawLineTimed(starPoints[0], starPoints[1], 0.5, 1.0, 4.00);
-		UI.drawLineTimed(starPoints[1], starPoints[2], 0.5, 1.5, 4.00);
-		UI.drawLineTimed(starPoints[2], starPoints[3], 0.5, 2.0, 4.00);
-		UI.drawLineTimed(starPoints[3], starPoints[4], 0.5, 2.5, 4.00);
-		UI.drawLineTimed(starPoints[4], starPoints[0], 0.5, 3.0, 4.00);
+		Draw.drawLineTimed(starPoints[0], starPoints[1], 0.5, 1.0, 4.00);
+		Draw.drawLineTimed(starPoints[1], starPoints[2], 0.5, 1.5, 4.00);
+		Draw.drawLineTimed(starPoints[2], starPoints[3], 0.5, 2.0, 4.00);
+		Draw.drawLineTimed(starPoints[3], starPoints[4], 0.5, 2.5, 4.00);
+		Draw.drawLineTimed(starPoints[4], starPoints[0], 0.5, 3.0, 4.00);
 		
 		// Change the message after star is drawn.
 		setTimeout(function() {
