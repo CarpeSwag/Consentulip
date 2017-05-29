@@ -80,7 +80,7 @@ html, body {
 }
 
 #flower-message {
-	display: none;
+	display: flex;
 	position: absolute;
 	top: -30px;
 	left: calc(50% - 225px);
@@ -96,10 +96,12 @@ html, body {
 	background-image: url('../art/images/textbox.png');
     background-size: 100% 100%;
 	user-select: none;
+	opacity: 0;
+	transition: opacity 0.25s ease-in-out;
 }
 
 #flower-message.active {
-	display: flex;
+	opacity: 1;
 }
 
 .button.down {
