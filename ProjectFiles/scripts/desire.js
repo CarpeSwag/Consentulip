@@ -28,6 +28,12 @@ var Desire = {
 0	},
 
 	createRandomDesire: function() {
+		if (this.notDesired.length == 0) {
+			// THE WHOLE FLOWER IS BEING IGNORED HOW'D YOU DO THIS
+			this.counter = Constants.DESIRE_TIMER_RESET + 
+				Math.ceil(Math.random() * Constants.DESIRE_TIMER_RAND);
+			return;
+		}
 		var rand = Math.floor(Math.random() * Desire.notDesired.length);
 		this.createDesire(rand);
 	},
@@ -61,7 +67,8 @@ var Desire = {
 	reduceDesireTimer: function(flag) {
 		// Check if flag's been set
 		if ((this.flags & flag) !== flag) {
-			this.counter = Math.ceil(this.counter / 4);
+			var factor = (this.flags === 0)? 2: 4;
+			this.counter = Math.ceil(this.counter / factor);
 			this.flags = this.flags | flag;
 		}
 	},
