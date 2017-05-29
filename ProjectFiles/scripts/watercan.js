@@ -16,6 +16,7 @@ var WaterCan = {
 		// Make sure the animation isn't already playing
 		if (this.active) {return;}
 		this.active = true;
+		Desire.reduceDesireTimer(Constants.WATER_FLOWER_FLAG);
 		
 		// Set point to center
 		this.x = x;

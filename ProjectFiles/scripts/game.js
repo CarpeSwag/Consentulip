@@ -240,6 +240,7 @@ var Game = {
 				}
 			} else if (mesh === Flower.pot) {
 				if (Game.tendSoil) {
+					Desire.reduceDesireTimer(Constants.TEND_SOIL_FLAG);
 					Game.soilClick = true;
 					for (var i = Math.ceil(Math.random() * 5) + 3; i >= 0; --i) {
 						Draw.addDirtParticle(x, y);

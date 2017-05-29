@@ -57,6 +57,14 @@ var Desire = {
 		Desire.desired.splice(index, 1);
 	},
 	
+	reduceDesireTimer: function(flag) {
+		// Check if flag's been set
+		if ((this.flags & flag) !== flag) {
+			this.counter = Math.ceil(this.counter / 4);
+			this.flags = this.flags | flag;
+		}
+	},
+	
 	onFrame: function() {
 		this.counter--;
 		if (this.counter <= 0) {
