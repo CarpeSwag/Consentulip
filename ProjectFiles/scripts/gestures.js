@@ -25,7 +25,7 @@ var Gestures = {
 		}
 		
 		// Set text to response
-		Talk.queueMessage(respText, 1000, 0, true);
+		Talk.queueMessage(respText, 1000, 0, 2000);
 		
 		// Clear canvases and strokes
 		Draw.clearCanvases();

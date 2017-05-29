@@ -62,7 +62,7 @@ var Tutorial = {
 		// Begin second part of the tutorial.
 		Talk.queueMessage("Sometimes we can play some"
 			+ " pattern games.", 4000);
-		Talk.queueMessage("Here, try it yourself!", 1000, 0, true);
+		Talk.queueMessage("Here, try it yourself!", 1000, 0, -1);
 		
 		// Teach gestures
 		var centerX = window.innerWidth / 2;
