@@ -25,7 +25,7 @@ var Talk = {
 	queueMessage: function(msg, timer, delay, keepMsg) {
 		// Set optional value
 		delay = delay || 0;
-		keepMsg = keepMsg === true;
+		keepMsg = keepMsg || 0;
 		
 		if (this.active) {
 			var len = this.queue.length;
@@ -47,7 +47,7 @@ var Talk = {
 					this.queue.push({
 						message: '',
 						time: delay,
-						keep: false,
+						keep: 0,
 					});
 				}
 				this.queue.push({
@@ -79,9 +79,15 @@ var Talk = {
 		} else if (Talk.queue.length > 0) {
 			// Rotate the message
 			Talk.displayNext();
+		} else if (Talk.keep > 0) {
+			// Keep the message up optionally for longer
+			// But treat it as if the queue is empty
+			setTimeout(Talk.clearMessageSafe, Talk.keep);
+			Talk.keep = 0;
+			Talk.active = false;
 		} else {
 			// Clear the messages
-			if (!Talk.keep)
+			if (Talk.keep == 0)
 				Talk.clearMessage();
 			Talk.active = false;
 		}
@@ -99,5 +105,10 @@ var Talk = {
 	clearMessage: function() {
 		Talk.message = '';
 		Talk.setText('');
+	},
+	
+	clearMessageSafe: function() {
+		if (!Talk.active)
+			Talk.clearMessage();
 	}
 };
