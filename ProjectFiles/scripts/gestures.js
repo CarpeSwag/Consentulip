@@ -25,7 +25,7 @@ var Gestures = {
 		}
 		
 		// Set text to response
-		UI.setText(respText);
+		Talk.setText(respText);
 		
 		// Clear canvases and strokes
 		Draw.clearCanvases();

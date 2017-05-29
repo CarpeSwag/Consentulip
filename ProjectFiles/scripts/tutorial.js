@@ -32,10 +32,10 @@ var Tutorial = {
 	
 	start: function() {
 		// Messages played during the introduction
-		UI.setText("Hey Bud! I'm Tulip.");
-		UI.setDelayedText("You can take care of me by watering me"
+		Talk.setText("Hey Bud! I'm Tulip.");
+		Talk.setDelayedText("You can take care of me by watering me"
 			+ " or tending to my soil.", 2000);
-		UI.setDelayedText("You can also control the camera by"
+		Talk.setDelayedText("You can also control the camera by"
 			+ " clicking me.", 6000);
 		
 		Camera.modCameraAlpha();
@@ -60,7 +60,7 @@ var Tutorial = {
 		Game.destroyParticleSystem(this.particleId);
 		
 		// Begin second part of the tutorial.
-		UI.setText("Sometimes we can play some pattern games.");
+		Talk.setText("Sometimes we can play some pattern games.");
 		
 		// Teach gestures
 		var centerX = window.innerWidth / 2;
@@ -82,7 +82,7 @@ var Tutorial = {
 		
 		// Change the message after star is drawn.
 		setTimeout(function() {
-			UI.setText("Here, try it yourself!");
+			Talk.setText("Here, try it yourself!");
 			Tutorial.gesture = false;
 		}, 4000);
 	},

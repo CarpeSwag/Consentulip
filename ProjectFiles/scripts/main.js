@@ -1,7 +1,7 @@
 window.addEventListener('DOMContentLoaded', function() {
 	Game.onLoad();
-	UI.onLoad();
 	Draw.onLoad();
+	Text.onLoad();
 	Tutorial.onLoad();
 	WaterCan.onLoad();
 	
