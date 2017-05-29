@@ -10,6 +10,7 @@ var Talk = {
 	extraTime: 0,
 	active: false,
 	message: '',
+	keep: false,
 	
 	onLoad: function() {
 		this.text = document.getElementById('flower-name');
@@ -54,16 +55,17 @@ var Talk = {
 				});
 			}
 		} else {
-			// No message is currently displayed so start
+			// No message is currently displayed so start	
 			this.active = true;
 			setTimeout(function() {
-				Talk.startMessageQueue(msg, timer);
+				Talk.startMessageQueue(msg, timer, keepMsg);
 			}, delay);
 		}
 	},
 	
-	startMessageQueue: function(msg, timer) {
+	startMessageQueue: function(msg, timer, keep) {
 		Talk.setText(msg);
+		Talk.keep = keep;
 		setTimeout(Talk.rotateMessage, timer);
 	},
 	
@@ -77,7 +79,8 @@ var Talk = {
 			Talk.displayNext();
 		} else {
 			// Clear the messages
-			Talk.clearMessage();
+			if (!Talk.keep)
+				Talk.clearMessage();
 			Talk.active = false;
 		}
 	},
@@ -86,6 +89,7 @@ var Talk = {
 		// Pop next item off queue and display that.
 		var next = Talk.queue.shift();
 		Talk.message = next.message;
+		Talk.keep = next.keep;
 		Talk.setText(next.message);
 		setTimeout(Talk.rotateMessage, next.time);
 	},
