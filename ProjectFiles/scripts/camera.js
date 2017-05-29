@@ -131,12 +131,12 @@ var Camera = {
 		
 		this.rotateCameraTo(target, alpha, beta, radius, seconds, true);
 		
-		UI.clearCanvases();
+		Draw.clearCanvases();
 	},
 	
 	zoomOut: function() {
 		// Clear canvas
-		UI.clearCanvases();
+		Draw.clearCanvases();
 		Game.enableGestures = false;
 		
 		// Rotate camera

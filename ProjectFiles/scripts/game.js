@@ -21,12 +21,6 @@ var Game = {
 	particleSystem: [],
 	psCounter: 0,
 	
-	// Flower urge
-	desired: [],
-	notDesired: [],
-	desireCounter: Constants.DESIRE_TIMER_RESET,
-	
-	
 	onLoad: function() {
 		this.canvas = document.getElementById('renderCanvas');
 		this.engine = new BABYLON.Engine(this.canvas, true);
@@ -36,14 +30,7 @@ var Game = {
 		Flower.randomizeColor();
 		
 		// Render loop
-		this.engine.runRenderLoop(function() {
-			Game.scene.render();
-			Game.onFrame();
-			Camera.onFrame();
-			UI.onFrame();
-			Gestures.onFrame();
-			WaterCan.onFrame();
-		});
+		this.engine.runRenderLoop(renderLoop);
 		
 		// Start camera
 		Camera.onLoad();
@@ -199,55 +186,6 @@ var Game = {
 		return true;
 	},
 	
-	createDesire: function(index) {
-		var id = this.createParticleSystemAt(
-			Game.notDesired[index],
-			Game.notDesired[index].blinkOffset
-		);
-		
-		var desiredMesh = Game.notDesired[index];
-		desiredMesh.partId = id;
-		this.popDesire(index);
-		this.desireCounter = Constants.DESIRE_TIMER_RESET + 
-			Math.ceil(Math.random() * Constants.DESIRE_TIMER_RAND);
-		
-		setTimeout(function() {
-			Game.destroyDesire(desiredMesh);
-		}, Constants.DESIRE_TIMER_REMOVE + Math.ceil(Math.random()
-			* Constants.DESIRE_TIMER_REMOVE_RAND));
-0	},
-
-	createRandomDesire: function() {
-		var rand = Math.floor(Math.random() * Game.notDesired.length);
-		this.createDesire(rand);
-	},
-
-	findDesiredMesh: function(mesh) {
-		for (var i = 0; i < Game.desired.length; ++i)
-			if (Game.desired[i] === mesh)
-				return i;
-		return -1;
-	},
-	
-	destroyDesire: function(mesh) {
-		if (mesh.partId == null) return false;
-		var succ = this.destroyParticleSystem(mesh.partId);
-		if (succ)
-			this.pushDesire(this.findDesiredMesh(mesh));
-		mesh.partId = null;
-		return true;
-	},
-	
-	popDesire: function(index) {
-		Game.desired.push(Game.notDesired[index]);
-		Game.notDesired.splice(index, 1);
-	},
-	
-	pushDesire: function(index) {
-		Game.notDesired.push(Game.desired[index]);
-		Game.desired.splice(index, 1);
-	},
-	
 	// Mouse events
 	onPointerDown: function (evt) {
 		if (evt.button !== 0) {
@@ -256,9 +194,9 @@ var Game = {
 		
 		var x = Game.scene.pointerX;
 		var y = Game.scene.pointerY;
-		UI.circles.push({x: x, y: y, radius: 10,
+		Draw.circles.push({x: x, y: y, radius: 10,
 			dr: 3, color: '255,255,0'});
-		UI.circles.push({x: x, y: y, radius: 20,
+		Draw.circles.push({x: x, y: y, radius: 20,
 			dr: 3, color: '255,255,0'});
 		
 		document.onselectstart = function() { return false; } // disable drag-select
@@ -271,12 +209,12 @@ var Game = {
 		if (Game.enableGestures && !Tutorial.gesture) {
 			if (evt.button <= 1) {
 				Gestures.onPointerDown(x, y);
-				UI.bctx.lineWidth = 3;
-				UI.bctx.moveTo(x, y);
-				UI.bctx.strokeStyle = '#ffffff';
-				UI.bctx.shadowBlur = 10;
-				UI.bctx.shadowColor = 'rgba(255,200,50,.25)';
-				UI.bctx.beginPath();
+				Draw.bctx.lineWidth = 3;
+				Draw.bctx.moveTo(x, y);
+				Draw.bctx.strokeStyle = '#ffffff';
+				Draw.bctx.shadowBlur = 10;
+				Draw.bctx.shadowColor = 'rgba(255,200,50,.25)';
+				Draw.bctx.beginPath();
 			}
 		}
 		
@@ -293,7 +231,7 @@ var Game = {
 					} else {
 						Camera.panToMesh(mesh, 0.75);
 						Camera.cameraLockedToMesh = true;
-						Game.destroyDesire(mesh);
+						Desire.destroyDesire(mesh);
 						setTimeout(function() {
 							Game.enableGestures = true;
 							UI.toggleRevokeConsent(true);
@@ -302,17 +240,18 @@ var Game = {
 				}
 			} else if (mesh === Flower.pot) {
 				if (Game.tendSoil) {
+					Desire.reduceDesireTimer(Constants.TEND_SOIL_FLAG);
 					Game.soilClick = true;
 					for (var i = Math.ceil(Math.random() * 5) + 3; i >= 0; --i) {
-						UI.addDirtParticle(x, y);
+						Draw.addDirtParticle(x, y);
 					}
 				}
 			}
 		}
 		
-		if (!Game.soilClick) {			
+		if (!Game.soilClick) {
 			for (var i = Math.random() * 5 + 3; i >= 0; --i) {
-				UI.addRandomParticle(x, y);
+				Draw.addRandomParticle(x, y);
 			}
 		}
 		
@@ -324,7 +263,7 @@ var Game = {
 		var y = Game.scene.pointerY;
 		if (UI.isPointerDown && !Game.soilClick) {
 			for (var i = Math.random() * 2 + 1; i >= 0; --i) {
-				UI.addRandomParticle(x, y);
+				Draw.addRandomParticle(x, y);
 			}
 			Gestures.onPointerMove(x, y);
 		}
@@ -339,16 +278,9 @@ var Game = {
 			if (UI.isPointerDown) {
 				UI.isPointerDown = false;
 				Gestures.onPointerUp(x, y);
-				UI.gctx.drawImage(UI.bufferCanv, 0, 0);
+				Draw.gctx.drawImage(Draw.bufferCanv, 0, 0);
 			}
 		}
 		Game.soilClick = false;
-	},
-	
-	onFrame: function() {
-		this.desireCounter--;
-		if (this.desireCounter <= 0) {
-			this.createRandomDesire();
-		}
 	}
 };

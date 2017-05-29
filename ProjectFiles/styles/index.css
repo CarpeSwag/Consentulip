@@ -71,7 +71,7 @@ html, body {
 	cursor: pointer;
 	width: 40px;
 	height: 40px;	
-	background-image: url('../art/textures/no.png');
+	background-image: url('../art/images/no.png');
     background-size: 50px 50px;
 }
 
@@ -79,14 +79,29 @@ html, body {
 	display: block;
 }
 
-#flower-name {
+#flower-message {
+	display: flex;
 	position: absolute;
-	left: 55px;
-	width: calc(100% - 110px);
+	top: -30px;
+	left: calc(50% - 225px);
+	width: 420px;
+	height: 57px;
+	padding: 3px 20px;
+	padding-bottom: 32px;
+	align-items: center;
+	justify-content: center;
 	text-align: center;
-	margin: 0;
 	font-size: 20px;
 	font-weight: normal;
+	background-image: url('../art/images/textbox.png');
+    background-size: 100% 100%;
+	user-select: none;
+	opacity: 0;
+	transition: opacity 0.25s ease-in-out;
+}
+
+#flower-message.active {
+	opacity: 1;
 }
 
 .button.down {
@@ -152,19 +167,19 @@ html, body {
 }
 
 #water-btn {
-	background-image: url('../art/textures/water.png');
+	background-image: url('../art/images/water.png');
 }
 
 #tender-btn {
-	background-image: url('../art/textures/tender.png');
+	background-image: url('../art/images/tender.png');
 }
 
 #settings-btn {
-	background-image: url('../art/textures/gear.png');
+	background-image: url('../art/images/gear.png');
 }
 
 #sandwich-btn {
-	background-image: url('../art/textures/sandwich.png');
+	background-image: url('../art/images/sandwich.png');
 }
 
 #ingame-menu-container {
@@ -173,7 +188,7 @@ html, body {
 	top: calc(50% - 342px);
 	opacity: 0;
 	transition: opacity 0.25s ease-in-out;
-	background-image: url('../art/textures/menu.png');
+	background-image: url('../art/images/menu.png');
 	width: 440px;
 	height: 684px;
 	pointer-events: none;
@@ -218,7 +233,7 @@ html, body {
 .menu-btn {
 	position: absolute;
 	left: calc(50% - 150px);
-	background-image: url('../art/textures/btn_up.png');
+	background-image: url('../art/images/btn_up.png');
     background-size: 300px 100px;
 	width: 300px;
 	height: 100px;
@@ -233,7 +248,7 @@ html, body {
 }
 
 .menu-btn:active {
-	background-image: url('../art/textures/btn_down.png');
+	background-image: url('../art/images/btn_down.png');
 }
 
 .menu-btn:active h3 {
@@ -280,7 +295,7 @@ html, body {
 	height: 155px;
     animation-duration: 1500ms;
     animation-timing-function: linear;
-	background-image: url('../art/textures/water.png');
+	background-image: url('../art/images/water.png');
     background-size: 155px 155px;
 	user-select: none;
 	cursor: none;

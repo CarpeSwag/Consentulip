@@ -32,11 +32,11 @@ var Tutorial = {
 	
 	start: function() {
 		// Messages played during the introduction
-		UI.setText("Hey Bud! I'm Tulip.");
-		UI.setDelayedText("You can take care of me by watering me"
-			+ " or tending to my soil.", 2000);
-		UI.setDelayedText("You can also control the camera by"
-			+ " clicking me.", 6000);
+		Talk.queueMessage("Hey Bud! I'm Tulip.", 2000);
+		Talk.queueMessage("You can take care of me by watering me"
+			+ " or tending to my soil.", 4000);
+		Talk.queueMessage("You can also control the camera by"
+			+ " clicking me.", 1000, 0, true);
 		
 		Camera.modCameraAlpha();
 		this.active = true;
@@ -60,7 +60,9 @@ var Tutorial = {
 		Game.destroyParticleSystem(this.particleId);
 		
 		// Begin second part of the tutorial.
-		UI.setText("Sometimes we can play some pattern games.");
+		Talk.queueMessage("Sometimes we can play some"
+			+ " pattern games.", 4000);
+		Talk.queueMessage("Here, try it yourself!", 1000, 0, -1);
 		
 		// Teach gestures
 		var centerX = window.innerWidth / 2;
@@ -74,15 +76,14 @@ var Tutorial = {
 			{x: centerX                 , y: centerY + radius * -0.75},
 			{x: centerX + radius *  0.50, y: centerY + radius *  0.50}
 		];
-		UI.drawLineTimed(starPoints[0], starPoints[1], 0.5, 1.0, 4.00);
-		UI.drawLineTimed(starPoints[1], starPoints[2], 0.5, 1.5, 4.00);
-		UI.drawLineTimed(starPoints[2], starPoints[3], 0.5, 2.0, 4.00);
-		UI.drawLineTimed(starPoints[3], starPoints[4], 0.5, 2.5, 4.00);
-		UI.drawLineTimed(starPoints[4], starPoints[0], 0.5, 3.0, 4.00);
+		Draw.drawLineTimed(starPoints[0], starPoints[1], 0.5, 1.0, 4.00);
+		Draw.drawLineTimed(starPoints[1], starPoints[2], 0.5, 1.5, 4.00);
+		Draw.drawLineTimed(starPoints[2], starPoints[3], 0.5, 2.0, 4.00);
+		Draw.drawLineTimed(starPoints[3], starPoints[4], 0.5, 2.5, 4.00);
+		Draw.drawLineTimed(starPoints[4], starPoints[0], 0.5, 3.0, 4.00);
 		
-		// Change the message after star is drawn.
+		// Allow gestures after the star is drawn.
 		setTimeout(function() {
-			UI.setText("Here, try it yourself!");
 			Tutorial.gesture = false;
 		}, 4000);
 	},

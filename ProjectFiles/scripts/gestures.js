@@ -25,10 +25,10 @@ var Gestures = {
 		}
 		
 		// Set text to response
-		UI.setText(respText);
+		Talk.queueMessage(respText, 1000, 0, 2000);
 		
 		// Clear canvases and strokes
-		UI.clearCanvases();
+		Draw.clearCanvases();
 	},
 	
 	onPointerDown: function(x, y) {
@@ -43,7 +43,7 @@ var Gestures = {
 			// Track the point
 			var point = new Point(x, y, this.strokeID);
 			this.points[this.points.length] = point;
-			UI.drawLine(this.points[this.points.length-2], point);
+			Draw.drawLine(this.points[this.points.length-2], point);
 			
 			// Reset counter
 			this.counter = Constants.REFRESH_GESTURE_COUNTER;
@@ -54,7 +54,7 @@ var Gestures = {
 		if (this.gesturesEnabled) {
 			var point = new Point(x, y, this.strokeID);
 			this.points[this.points.length] = point;
-			UI.drawLine(this.points[this.points.length-2], point);
+			Draw.drawLine(this.points[this.points.length-2], point);
 		}
 		this.gesturesEnabled = false;
 		this.counter == Constants.REFRESH_GESTURE_COUNTER;
