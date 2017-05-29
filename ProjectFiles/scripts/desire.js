@@ -32,6 +32,7 @@ var Desire = {
 			// THE WHOLE FLOWER IS BEING IGNORED HOW'D YOU DO THIS
 			this.counter = Constants.DESIRE_TIMER_RESET + 
 				Math.ceil(Math.random() * Constants.DESIRE_TIMER_RAND);
+			this.flags = 0;
 			return;
 		}
 		var rand = Math.floor(Math.random() * Desire.notDesired.length);
