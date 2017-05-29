@@ -210,6 +210,9 @@ var Game = {
 		this.popDesire(index);
 		this.desireCounter = Constants.DESIRE_TIMER_RESET + 
 			Math.ceil(Math.random() * Constants.DESIRE_TIMER_RAND);
+			
+		Talk.queueMessage('I feel like being touched on my ' + 
+			desiredMesh.flowerPart + '...', 1000, 0, 6000);
 		
 		setTimeout(function() {
 			Game.destroyDesire(desiredMesh);
