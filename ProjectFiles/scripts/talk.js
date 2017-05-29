@@ -39,6 +39,13 @@ var Talk = {
 				}
 			} else {
 				// Add to tail of the queue
+				if (delay !== 0) {
+					this.queue.push({
+						message: '',
+						time: delay,
+						keep: false,
+					});
+				}
 				this.queue.push({
 					message: msg,
 					time: timer,
