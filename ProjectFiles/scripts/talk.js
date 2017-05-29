@@ -29,9 +29,10 @@ var Talk = {
 			var tail = (len == 0)? this.message:
 				this.queue[len - 1].message;
 			
+			
 			// Check if this is this is sending the same message
 			// as the tail request
-			if (tail === message) {
+			if (tail === msg) {
 				if (len == 0) {
 					this.extraTime += timer;
 				} else {
@@ -62,35 +63,35 @@ var Talk = {
 	},
 	
 	startMessageQueue: function(msg, timer) {
-		this.setText(msg);
-		setTimeout(this.rotateMessage, timer);
+		Talk.setText(msg);
+		setTimeout(Talk.rotateMessage, timer);
 	},
 	
 	rotateMessage: function() {
-		if (this.extraTime != 0) {
+		if (Talk.extraTime != 0) {
 			// This message gets another cycle
-			setTimeout(this.rotateMessage, this.extraTime);
-			this.extraTime = 0;
-		} else if (this.queue.length > 0) {
+			setTimeout(Talk.rotateMessage, Talk.extraTime);
+			Talk.extraTime = 0;
+		} else if (Talk.queue.length > 0) {
 			// Rotate the message
-			this.displayNext();
+			Talk.displayNext();
 		} else {
 			// Clear the messages
-			this.clearMessage();
-			active = false;
+			Talk.clearMessage();
+			Talk.active = false;
 		}
 	},
 	
 	displayNext: function() {
 		// Pop next item off queue and display that.
-		var next = this.queue.shift();
-		this.message = next.message;
-		this.setText(next.message);
-		setTimeout(this.rotateMessage, next.time);
+		var next = Talk.queue.shift();
+		Talk.message = next.message;
+		Talk.setText(next.message);
+		setTimeout(Talk.rotateMessage, next.time);
 	},
 	
 	clearMessage: function() {
-		this.message = '';
-		this.setText('');
+		Talk.message = '';
+		Talk.setText('');
 	}
 };
