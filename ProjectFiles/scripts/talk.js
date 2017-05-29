@@ -18,6 +18,8 @@ var Talk = {
 	
 	setText: function(txt) {
 		this.text.innerHTML = txt;
+		this.text.className = (txt === '')?
+			'': 'active';
 	},
 	
 	queueMessage: function(msg, timer, delay, keepMsg) {
