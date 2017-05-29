@@ -6,6 +6,7 @@ var Game = {
 	
 	// Environment
 	skybox: [],
+	clouds: [],
 	
 	// Lights
 	light: null,
@@ -65,6 +66,11 @@ var Game = {
 				mesh[i].position.y *= SCALE;
 				mesh[i].position.z *= SCALE;
 				mesh[i].position.y += -5.0 * SCALE;
+
+				if (mesh[i].material.id === 'skybox.clouds') {
+					Game.clouds.push(mesh[i]);
+					mesh[i].position.y += -1.0 * SCALE;
+				}	
 			}
 		});
 		
@@ -282,5 +288,15 @@ var Game = {
 			}
 		}
 		Game.soilClick = false;
+	},
+	
+	onFrame: function() {
+		for (var i = 0; i < Game.clouds.length; ++i) {
+			var x = Game.clouds[i].position.x;
+			var z = Game.clouds[i].position.z;
+			var newXZ = Draw.rotateAroundPoint(0, 0, x, z, Math.PI / 10000);
+			Game.clouds[i].position.x = newXZ[0];
+			Game.clouds[i].position.z = newXZ[1];
+		}
 	}
 };

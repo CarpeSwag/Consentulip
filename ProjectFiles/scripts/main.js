@@ -1,5 +1,6 @@
 var renderLoop = function() {
 	Game.scene.render();
+	Game.onFrame();
 	Camera.onFrame();
 	Draw.onFrame();
 	Gestures.onFrame();
