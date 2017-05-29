@@ -231,7 +231,7 @@ var Game = {
 					} else {
 						Camera.panToMesh(mesh, 0.75);
 						Camera.cameraLockedToMesh = true;
-						Game.destroyDesire(mesh);
+						Desire.destroyDesire(mesh);
 						setTimeout(function() {
 							Game.enableGestures = true;
 							UI.toggleRevokeConsent(true);
@@ -248,7 +248,7 @@ var Game = {
 			}
 		}
 		
-		if (!Game.soilClick) {			
+		if (!Game.soilClick) {
 			for (var i = Math.random() * 5 + 3; i >= 0; --i) {
 				Draw.addRandomParticle(x, y);
 			}

@@ -2,11 +2,11 @@ var Desire = {
 	// Flower urge
 	desired: [],
 	notDesired: [],
-	desireCounter: Constants.DESIRE_TIMER_RESET,
-	desireFlags: 0,
+	counter: Constants.DESIRE_TIMER_RESET,
+	flags: 0,
 	
 	createDesire: function(index) {
-		var id = this.createParticleSystemAt(
+		var id = Game.createParticleSystemAt(
 			Desire.notDesired[index],
 			Desire.notDesired[index].blinkOffset
 		);
@@ -14,7 +14,7 @@ var Desire = {
 		var desiredMesh = Desire.notDesired[index];
 		desiredMesh.partId = id;
 		this.popDesire(index);
-		this.desireCounter = Constants.DESIRE_TIMER_RESET + 
+		this.counter = Constants.DESIRE_TIMER_RESET + 
 			Math.ceil(Math.random() * Constants.DESIRE_TIMER_RAND);
 			
 		Talk.queueMessage('I feel like being touched on my ' + 
@@ -58,8 +58,8 @@ var Desire = {
 	},
 	
 	onFrame: function() {
-		this.desireCounter--;
-		if (this.desireCounter <= 0) {
+		this.counter--;
+		if (this.counter <= 0) {
 			this.createRandomDesire();
 		}
 	}
