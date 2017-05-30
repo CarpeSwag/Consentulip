@@ -10,6 +10,14 @@ var Camera = {
 		z: 0,
 		lockCamera: false
 	},
+	animationTarget: {
+		alpha: 0,
+		beta: 0,
+		radius: 0,
+		x: 0,
+		y: 0,
+		z: 0
+	},
 	counter: 0,
 	animate: false,
 	
@@ -55,7 +63,15 @@ var Camera = {
 		
 		this.modCameraAlpha();
 		
-		// Set the info for the camera animation
+		// Set the info for the camera animation target
+		this.animationTarget.alpha = alpha;
+		this.animationTarget.beta = beta;
+		this.animationTarget.radius = radius;
+		this.animationTarget.x = target.x;
+		this.animationTarget.y = target.y;
+		this.animationTarget.z = target.z;
+		
+		// Set the info for the camera animation deltas
 		this.animationDelta.alpha =
 			(alpha - this.camera.alpha) / frameCount;
 		this.animationDelta.beta =
@@ -97,16 +113,41 @@ var Camera = {
 			this.camera.target.x + this.animationDelta.x,
 			this.camera.target.y + this.animationDelta.y,
 			this.camera.target.z + this.animationDelta.z
-		)
+		);
 		
 		// Decrement frame counter or end
 		if (--this.counter < 0) {
+			this.setCameraToTargetFromPan();
 			this.modCameraAlpha();
 			if (!this.animationDelta.lockCamera) {
 				this.setCameraToDefault();
 			}
 			this.animate = false;
 		}
+	},
+	
+	setCameraToTargetFromPan: function() {
+		// Alpha
+		this.camera.alpha = this.animationTarget.alpha;
+		this.camera.lowerAlphaLimit = this.camera.alpha;
+		this.camera.upperAlphaLimit = this.camera.alpha;
+		
+		// Beta
+		this.camera.beta = this.animationTarget.beta;
+		this.camera.lowerBetaLimit = this.camera.beta;
+		this.camera.upperBetaLimit = this.camera.beta;
+		
+		// Radius
+		this.camera.radius = this.animationTarget.radius;
+		this.camera.lowerRadiusLimit = this.camera.radius;
+		this.camera.upperRadiusLimit = this.camera.radius;
+		
+		// Target
+		this.camera.target = new BABYLON.Vector3(
+			this.animationTarget.x,
+			this.animationTarget.y,
+			this.animationTarget.z
+		);
 	},
 	
 	panToMesh: function(mesh, seconds, rotateClockwise) {
