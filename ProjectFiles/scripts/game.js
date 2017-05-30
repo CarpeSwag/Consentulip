@@ -70,6 +70,8 @@ var Game = {
 
 				if (mesh[i].material.id === 'skybox.clouds') {
 					Game.clouds.push(mesh[i]);
+					mesh[i].position.y *= mesh[i].position.y;
+					mesh[i].position.y *= 1/100;
 					mesh[i].position.y += -1.0 * SCALE;
 				}	
 			}
