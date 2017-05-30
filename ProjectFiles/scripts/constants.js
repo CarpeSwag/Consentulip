@@ -40,11 +40,14 @@ var Constants = {
 		{r: 0, g: 1, b: 1, btn: -90}
 	],
 	
-	// Desire urge counters
+	// Desire urge constants
 	DESIRE_TIMER_RESET: Math.ceil(120.00 * FPS),
 	DESIRE_TIMER_RAND: Math.ceil(60.00 * FPS),
 	DESIRE_TIMER_REMOVE: Math.ceil(60.00 * MS_TO_SEC),
 	DESIRE_TIMER_REMOVE_RAND: Math.ceil(30.00 * MS_TO_SEC),
 	WATER_FLOWER_FLAG: 1,
-	TEND_SOIL_FLAG: 2
+	TEND_SOIL_FLAG: 2,
+	
+	// Environment constants
+	CLOUD_ANG_VEL: Math.PI / 5000
 };

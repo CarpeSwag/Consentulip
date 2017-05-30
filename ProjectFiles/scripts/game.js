@@ -7,6 +7,7 @@ var Game = {
 	// Environment
 	skybox: [],
 	clouds: [],
+	cloudCounter: 0,
 	
 	// Lights
 	light: null,
@@ -291,12 +292,17 @@ var Game = {
 	},
 	
 	onFrame: function() {
-		for (var i = 0; i < Game.clouds.length; ++i) {
-			var x = Game.clouds[i].position.x;
-			var z = Game.clouds[i].position.z;
-			var newXZ = Draw.rotateAroundPoint(0, 0, x, z, Math.PI / 10000);
-			Game.clouds[i].position.x = newXZ[0];
-			Game.clouds[i].position.z = newXZ[1];
+		++this.cloudCounter;
+		if (this.cloudCounter == 2) {
+			this.cloudCounter = 0;
+			for (var i = 0; i < Game.clouds.length; ++i) {
+				var x = Game.clouds[i].position.x;
+				var z = Game.clouds[i].position.z;
+				var newXZ = Draw.rotateAroundPoint(0, 0, x, z, 
+					Constants.CLOUD_ANG_VEL);
+				Game.clouds[i].position.x = newXZ[0];
+				Game.clouds[i].position.z = newXZ[1];
+			}
 		}
 	}
 };
