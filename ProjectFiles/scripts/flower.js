@@ -86,32 +86,38 @@ var Flower = {
 					Flower.petals.push(mesh[i]);
 					type = 'petal';
 					var alpha = 0;
-					if (+(name.substring(8)) > 3) {
-						Flower.outerPetals.push(mesh[i]);
-						Desire.notDesired.push(mesh[i]);
-						offset.push(new BABYLON.Vector3(
-							0,
-							0.1 * SCALE,
-							-0.66 * SCALE
-						));
-						interactable = true;
-					}
+					var xDir = 1;
+					var zDir = 1;
 					switch(+(name.substring(8))) {
 						case 4:
 							alpha = Math.PI / 4;
 							break;
 						case 5:
 							alpha = 5 * Math.PI / 4;
+							xDir = -1;
+							zDir = -1;
 							break;
 						case 6:
 							alpha = 7 * Math.PI / 4;
+							zDir = -1;
 							break;
 						case 7:
 							alpha = 3 * Math.PI / 4;
+							xDir = -1;
 							break;
 						default:
 							type = 'ignore';
 							break;
+					}
+					if (+(name.substring(8)) > 3) {
+						Flower.outerPetals.push(mesh[i]);
+						Desire.notDesired.push(mesh[i]);
+						offset.push(new BABYLON.Vector3(
+							0.0625 * SCALE * xDir,
+							0.60 * SCALE,
+							0.0625 * SCALE * zDir
+						));
+						interactable = true;
 					}
 					info = {
 						alpha: alpha,
