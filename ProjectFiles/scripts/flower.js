@@ -24,6 +24,7 @@ var Flower = {
 				var type = 'ignore';
 				var info = {};
 				var offset = [];
+				var interactable = false;
 				
 				if (name === 'stem') {
 					Flower.stem = mesh[i];
@@ -49,6 +50,7 @@ var Flower = {
 						0.08 * COMBINED_SCALE,
 						0
 					));
+					interactable = true;
 				} else if (name.substring(0,4) === 'leaf') {
 					Flower.leaves.push(mesh[i]);
 					Desire.notDesired.push(mesh[i]);
@@ -73,6 +75,7 @@ var Flower = {
 					if (Flower.leaves.length == 1) {
 						mesh[i].position.y += 0.4 * Constants.FLOWER_SCALE;;
 					}
+					interactable = true;
 				} else if (name.substring(0,5) === 'petal') {
 					Flower.petals.push(mesh[i]);
 					type = 'petal';
@@ -85,6 +88,7 @@ var Flower = {
 							0.1 * COMBINED_SCALE,
 							-0.66 * COMBINED_SCALE
 						));
+						interactable = true;
 					}
 					switch(+(name.substring(8))) {
 						case 4:
@@ -131,6 +135,9 @@ var Flower = {
 					g: 255,
 					b: 0
 				};
+				
+				if (interactable)
+					Flower.interactable.push(mesh[i]);
 			}
 		});
 		

@@ -38,12 +38,13 @@ var UI = {
 			return;
 		}
 		
-		Game.waterCan = !Game.waterCan;
-		Game.tendSoil = false;
+		if (Game.waterCan) {
+			this.disableWater();
+		} else {
+			this.enableWater();
+		}
 		
-		document.getElementById('water-btn').className = 'button' +
-			((Game.waterCan)? ' down': '');
-		document.getElementById('tender-btn').className = '';
+		this.disableTend();
 	},
 	
 	toggleTend: function() {
@@ -52,20 +53,60 @@ var UI = {
 			return;
 		}
 		
-		Game.tendSoil = !Game.tendSoil;
-		Game.waterCan = false;
+		if (Game.tendSoil) {
+			this.disableTend();
+		} else {
+			this.enableTend();
+		}
 		
-		document.getElementById('tender-btn').className = 'button' +
-			((Game.tendSoil)? ' down': '');
-		document.getElementById('water-btn').className = '';
+		this.disableWater();
+	},
+	
+	enableWater: function() {
+		// Add a mesh outline
+		if (!Game.waterCan) {
+			for (var i = 0; i < Flower.interactable.length; ++i) {
+				Game.addOutlineMesh(Flower.interactable[i]);
+			}
+		}
+		
+		Game.waterCan = true;
+		document.getElementById('water-btn').className = 'button down';
+	},
+	
+	disableWater: function() {
+		// Remove the mesh outline
+		if (Game.waterCan) {
+			for (var i = 0; i < Flower.interactable.length; ++i) {
+				Game.removeOutlineMesh(Flower.interactable[i]);
+			}
+		}
+		
+		Game.waterCan = false;
+		document.getElementById('water-btn').className = 'button';
+	},
+	
+	enableTend: function() {
+		// Add a mesh outline
+		if(!Game.tendSoil)
+			Game.addOutlineMesh(Flower.pot);
+		
+		Game.tendSoil = true;
+		document.getElementById('tender-btn').className = 'button down';
+	},
+	
+	disableTend: function() {
+		// Remove the mesh outline
+		if (Game.tendSoil)
+			Game.removeOutlineMesh(Flower.pot);
+		
+		Game.tendSoil = false;
+		document.getElementById('tender-btn').className = 'button';
 	},
 	
 	disableWaterTend: function() {
-		Game.waterCan = false;
-		Game.tendSoil = false;
-		
-		document.getElementById('water-btn').className = '';
-		document.getElementById('tender-btn').className = '';
+		this.disableWater();
+		this.disableTend();
 	},
 	
 	toggleMenu: function() {
