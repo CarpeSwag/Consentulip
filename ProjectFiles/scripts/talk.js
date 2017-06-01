@@ -106,7 +106,7 @@ var Talk = {
 	
 	clearMessage: function() {
 		Talk.message = '';
-		Talk.setText('');
+		Talk.textBox.className = '';
 	},
 	
 	clearMessageSafe: function() {
