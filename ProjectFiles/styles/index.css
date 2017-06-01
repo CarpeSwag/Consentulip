@@ -373,7 +373,7 @@ html, body {
 	width: calc(100% - 10px);
 	height: 14px;
 	border: 3px solid #CCD4E1;
-	border-radius: 12px;
+	border-radius: 8px;
 	background-color: #555555;
 	padding: 0px;
 	overflow: hidden;
@@ -382,7 +382,7 @@ html, body {
 #trust-bar-inner {
 	width: 50%;
 	height: 14px;
-	border-radius: 7px;
+	border-radius: 4px;
 	
 	-webkit-transition: width 0.5s ease-in-out;
 	-moz-transition: width 0.5s ease-in-out;
@@ -399,8 +399,9 @@ html, body {
 	position: relative;
 	content: ' ';
 	height: 14px;
-	border-radius: 7px;
+	border-radius: 4px;
 	width: 100%;
-	background: rgba(0,255,0, 0.25);
+	background: rgba(200,200,0, 0.5);
+	transition: background 0.5s ease-in-out;
 }
 

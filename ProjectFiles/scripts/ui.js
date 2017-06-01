@@ -180,5 +180,40 @@ var UI = {
 	
 	creditsMenu: function() {
 		this.switchMenu('credits-menu');
+	},
+	
+	// Trust bar
+	adjustTrustBar: function(change) {
+		Game.trust += change;
+		Game.trust = (Game.trust < 0)? 0: ((Game.trust > 100)?
+			100: Game.trust);
+		document.getElementById('trust-bar-inner').style.width =
+			Game.trust + '%';
+		
+		this.adjustTrustBarColor();
+			
+		/*Flower.adjustStandPose();
+		Flower.decideOnPlayingAnimation();*/
+	},
+	
+	adjustTrustBarColor: function() {
+		var percent = Game.trust;
+		var a = [200,0,0];
+		var b = [200,200,0];
+		var c = [0,0,0];
+		if (percent > 50) {
+			percent -= 50;
+			a[1] = 200;
+			b[0] = 0;
+		}
+		
+		// Put it on a scale from 0-1
+		percent = (percent * 2) / 100;
+		for (var i = 0; i < 3; ++i) {
+			c[i] = Math.round(a[i] - ((a[i] - b[i]) * percent));
+		}
+		var rgb = c[0] + ',' + c[1] + ',' + c[2];
+		var ele = document.getElementById('trust-bar-inner-color');
+		ele.style.background = 'rgba(' + rgb + ',0.5)';
 	}
 };

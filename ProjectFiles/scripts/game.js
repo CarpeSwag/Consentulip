@@ -15,6 +15,9 @@ var Game = {
 	light: null,
 	light2: null,
 	
+	// Trust
+	trust: 50,
+	
 	// Flags
 	enableGestures: false,
 	waterCan: false,
