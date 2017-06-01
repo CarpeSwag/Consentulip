@@ -11,6 +11,7 @@ var Gestures = {
 		var respText = '';
 		if (this.points.length >= 10) {
 			this.gesture = this.recognizer.Recognize(this.points);
+			this.logGesture();
 			console.log("Result: " + this.gesture.Name + " (" +
 				(Math.round(this.gesture.Score * 100) / 100) + ").");
 			console.log(this.gesture);
@@ -29,6 +30,21 @@ var Gestures = {
 		
 		// Clear canvases and strokes
 		Draw.clearCanvases();
+	},
+	
+	logGesture: function() {
+		// For debugging
+		var out = 'new Array(\n\t';
+		var comma = '';
+		for (var i = 0; i < this.points.length; ++i) {
+			var point = this.points[i];
+			out += comma;
+			out += 'new Point(' + point.X + ','	+ point.Y
+				+ ',' + point.ID + ')';
+			comma = ',';
+		}
+		out += '\n));';
+		console.log(out);
 	},
 	
 	onPointerDown: function(x, y) {
