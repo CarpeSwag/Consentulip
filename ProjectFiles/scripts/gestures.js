@@ -47,6 +47,27 @@ var Gestures = {
 		console.log(out);
 	},
 	
+	convertGestureToDrawing: function() {
+		var out = [];
+		var temp = [];
+		var last = 1;
+		for (var i = 0; i < this.points.length; ++i) {
+			var point = this.points[i];
+			if (point.ID !== last) {
+				last = point.ID;
+				out.push(temp);
+				console.log(temp);
+				temp = [];
+			}
+			temp.push({
+				x: point.X,
+				y: point.Y
+			})
+		}
+		
+		return out;
+	},
+	
 	onPointerDown: function(x, y) {
 		this.gesturesEnabled = true;
 		this.counter = Constants.REFRESH_GESTURE_COUNTER;
