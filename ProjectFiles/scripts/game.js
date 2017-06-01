@@ -300,7 +300,9 @@ var Game = {
 	
 	addOutlineMesh: function(mesh) {
 		mesh.renderOutline = true;
-		this.outlineMeshes.push(mesh);
+		if (mesh.outlineCounter == 0)
+			this.outlineMeshes.push(mesh);
+		mesh.outlineCounter++;
 	},
 	
 	findOutlineMesh: function(mesh) {
@@ -313,8 +315,11 @@ var Game = {
 	removeOutlineMesh: function(mesh) {
 		var index = this.findOutlineMesh(mesh);
 		if (index === -1) return;
-		mesh.renderOutline = false;
-		this.outlineMeshes.splice(index, 1);
+		mesh.outlineCounter--;
+		if (mesh.outlineCounter == 0) {
+			mesh.renderOutline = false;
+			this.outlineMeshes.splice(index, 1);
+		}
 	},
 	
 	onFrame: function() {

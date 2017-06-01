@@ -125,6 +125,7 @@ var Flower = {
 				mesh[i].cameraInfo = info;
 				mesh[i].blinkOffset = offset;
 				
+				mesh[i].outlineCounter = 0;
 				mesh[i].outlineColor = {
 					r: 255,
 					g: 255,
@@ -146,6 +147,13 @@ var Flower = {
 				mesh[i].position.y *= SCALE;
 				mesh[i].position.z *= SCALE;
 				mesh[i].position.y += -0.80 * SCALE;
+				
+				mesh[i].outlineCounter = 0;
+				mesh[i].outlineColor = {
+					r: 255,
+					g: 255,
+					b: 0
+				};
 			}
 		});
 	},
