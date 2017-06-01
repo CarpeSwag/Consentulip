@@ -81,9 +81,13 @@ var Game = {
 					mesh[i].position.y *= 1/100;
 					mesh[i].position.y += -1.0 * SCALE;
 					var factor = Math.sqrt(mesh[i].position.y + 200) / 12.5;
-					console.log(factor);
 					mesh[i].position.x /= factor;
 					mesh[i].position.z /= factor;
+					if(mesh[i].position.y > 600) {
+						mesh[i].position.x /= factor;
+						mesh[i].position.z /= factor;
+						mesh[i].position.y -= 200;
+					}
 				}	
 			}
 		});
