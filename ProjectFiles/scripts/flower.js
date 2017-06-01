@@ -115,9 +115,9 @@ var Flower = {
 					}
 					info = {
 						alpha: alpha,
-						radius: 7.5,
+						radius: 8,
 						xOffset: 0,
-						yOffset: 0.266 * SCALE,
+						yOffset: 3.05 * SCALE,
 						zOffset: 0
 					};
 					
