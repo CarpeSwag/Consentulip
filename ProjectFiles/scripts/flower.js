@@ -39,17 +39,17 @@ var Flower = {
 					};
 					offset.push(new BABYLON.Vector3(
 						0,
-						-0.01 * SCALE,
+						0.45 * SCALE,
 						0
 					));
 					offset.push(new BABYLON.Vector3(
 						0,
-						-0.1 * SCALE,
+						0.3 * SCALE,
 						0
 					));
 					offset.push(new BABYLON.Vector3(
 						0,
-						0.08 * SCALE,
+						0.15 * SCALE,
 						0
 					));
 					interactable = true;
