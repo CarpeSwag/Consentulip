@@ -35,7 +35,7 @@ var Constants = {
 	
 	// Flower constants
 	FLOWER_SCALE: FLOWER_SCALE,
-	FLOWER_HEAD_SCALE: 1.50,
+	FLOWER_HEAD_SCALE: 1.00,
 	FLOWER_COLORS: [
 		{r: 1, g: 0, b: 0, btn: 30},
 		{r: 0, g: 0, b: 1, btn: -60},
