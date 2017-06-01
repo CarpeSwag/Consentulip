@@ -27,7 +27,7 @@ var Game = {
 	
 	// Outline system
 	outlineMeshes: [],
-	outlineWidth: 0.1,
+	outlineWidth: 0.025,
 	outlineDelta: Constants.OUTLINE_DELTA,
 	
 	onLoad: function() {

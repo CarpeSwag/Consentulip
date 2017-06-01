@@ -12,15 +12,14 @@ var Flower = {
 		// Load in the model
 		BABYLON.SceneLoader.ImportMesh('', 'art/models/',
 			'tulip.babylon', Game.scene, function (mesh) {
-			var COMBINED_SCALE = 
-				Constants.FLOWER_SCALE * Constants.FLOWER_HEAD_SCALE;
+			var SCALE = Constants.FLOWER_SCALE;
 			for (var i = 0; i < mesh.length; ++i) {
-				mesh[i].scaling.x *= Constants.FLOWER_SCALE;
-				mesh[i].scaling.y *= Constants.FLOWER_SCALE;
-				mesh[i].scaling.z *= Constants.FLOWER_SCALE;
-				mesh[i].position.x *= Constants.FLOWER_SCALE;
-				mesh[i].position.y *= Constants.FLOWER_SCALE;
-				mesh[i].position.z *= Constants.FLOWER_SCALE;
+				mesh[i].scaling.x *= SCALE;
+				mesh[i].scaling.y *= SCALE;
+				mesh[i].scaling.z *= SCALE;
+				mesh[i].position.x *= SCALE;
+				mesh[i].position.y *= SCALE;
+				mesh[i].position.z *= SCALE;
 				var name = mesh[i].name;
 				var type = 'ignore';
 				var info = {};
@@ -38,21 +37,26 @@ var Flower = {
 					};
 					offset.push(new BABYLON.Vector3(
 						0,
-						-0.1 * COMBINED_SCALE,
+						-0.01 * SCALE,
 						0
 					));
 					offset.push(new BABYLON.Vector3(
 						0,
-						-0.01 * COMBINED_SCALE,
+						-0.1 * SCALE,
 						0
 					));
 					offset.push(new BABYLON.Vector3(
 						0,
-						0.08 * COMBINED_SCALE,
+						0.08 * SCALE,
 						0
 					));
 					interactable = true;
 				} else if (name.substring(0,4) === 'leaf') {
+					var dir = -1;
+					if (Flower.leaves.length == 1) {
+						mesh[i].position.y += 0.4 * SCALE;
+						dir = 1;
+					}
 					Flower.leaves.push(mesh[i]);
 					Desire.notDesired.push(mesh[i]);
 					type = 'leaf';
@@ -62,20 +66,17 @@ var Flower = {
 						yOffset: 0
 					};
 					offset.push(new BABYLON.Vector3(
-						0,
-						0,
-						-0.66 * COMBINED_SCALE
+						0.085 * SCALE * dir,
+						0.165 * SCALE,
+						-0.02 * SCALE
 					));
 					offset.push(new BABYLON.Vector3(
-						0,
-						0,
-						0.66 * COMBINED_SCALE
+						0.085 * SCALE * dir,
+						0.165 * SCALE,
+						 0.02 * SCALE
 					));
 					
 					mesh[i].position.y += 0.4 * Constants.FLOWER_SCALE;;
-					if (Flower.leaves.length == 1) {
-						mesh[i].position.y += 0.4 * Constants.FLOWER_SCALE;;
-					}
 					interactable = true;
 				} else if (name.substring(0,5) === 'petal') {
 					Flower.petals.push(mesh[i]);
@@ -86,8 +87,8 @@ var Flower = {
 						Desire.notDesired.push(mesh[i]);
 						offset.push(new BABYLON.Vector3(
 							0,
-							0.1 * COMBINED_SCALE,
-							-0.66 * COMBINED_SCALE
+							0.1 * SCALE,
+							-0.66 * SCALE
 						));
 						interactable = true;
 					}
@@ -113,13 +114,6 @@ var Flower = {
 						radius: 7.5,
 						yOffset: 1.33
 					};
-					
-					// Change flower scaling
-					mesh[i].scaling.x *= Constants.FLOWER_HEAD_SCALE;
-					mesh[i].scaling.y *= Constants.FLOWER_HEAD_SCALE;
-					mesh[i].scaling.z *= Constants.FLOWER_HEAD_SCALE;
-					mesh[i].position.x *= Constants.FLOWER_HEAD_SCALE;
-					mesh[i].position.z *= Constants.FLOWER_HEAD_SCALE;
 					
 					// Adjust color
 					mesh[i].renderOverlay = true;
