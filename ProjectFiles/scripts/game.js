@@ -23,6 +23,11 @@ var Game = {
 	particleSystem: [],
 	psCounter: 0,
 	
+	// Outline system
+	outlineMeshes: [],
+	outlineWidth: 0.1,
+	outlineDelta: Constants.OUTLINE_DELTA,
+	
 	onLoad: function() {
 		this.canvas = document.getElementById('renderCanvas');
 		this.engine = new BABYLON.Engine(this.canvas, true);
@@ -293,6 +298,25 @@ var Game = {
 		Game.soilClick = false;
 	},
 	
+	addOutlineMesh: function(mesh) {
+		mesh.renderOutline = true;
+		this.outlineMeshes.push(mesh);
+	},
+	
+	findOutlineMesh: function(mesh) {
+		for (var i = 0; i < this.outlineMeshes.length; ++i)
+			if (this.outlineMeshes[i] === mesh)
+				return i;
+		return -1;
+	},
+	
+	removeOutlineMesh: function(mesh) {
+		var index = this.findOutlineMesh(mesh);
+		if (index === -1) return;
+		mesh.renderOutline = false;
+		this.outlineMeshes.splice(index, 1);
+	},
+	
 	onFrame: function() {
 		++this.cloudCounter;
 		if (this.cloudCounter == 2) {
@@ -306,5 +330,15 @@ var Game = {
 				Game.clouds[i].position.z = newXZ[1];
 			}
 		}
-	}
+		if (this.outlineMeshes.length > 0) {
+			this.outlineWidth += this.outlineDelta;
+			if (this.outlineWidth < Constants.OUTLINE_LOWER
+				|| this.outlineWidth > Constants.OUTLINE_UPPER) {
+				this.outlineDelta *= -1;
+			}
+			for (var i = 0; i < this.outlineMeshes.length; ++i) {
+				this.outlineMeshes[i].outlineWidth = this.outlineWidth;
+			}
+		}
+	},
 };

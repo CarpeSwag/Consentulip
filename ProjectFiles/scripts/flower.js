@@ -124,6 +124,12 @@ var Flower = {
 				mesh[i].flowerPart = type;
 				mesh[i].cameraInfo = info;
 				mesh[i].blinkOffset = offset;
+				
+				mesh[i].outlineColor = {
+					r: 255,
+					g: 255,
+					b: 0
+				};
 			}
 		});
 		

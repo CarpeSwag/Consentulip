@@ -16,6 +16,7 @@ var Desire = {
 		this.popDesire(index);
 		this.counter = Constants.DESIRE_TIMER_RESET + 
 			Math.ceil(Math.random() * Constants.DESIRE_TIMER_RAND);
+		Game.addOutlineMesh(desiredMesh);
 			
 		Talk.queueMessage('I feel like being touched on my ' + 
 			desiredMesh.flowerPart + '...', 1000, 0, 6000);
@@ -52,6 +53,7 @@ var Desire = {
 		if (succ)
 			this.pushDesire(this.findDesiredMesh(mesh));
 		mesh.partId = null;
+		Game.removeOutlineMesh(mesh);
 		return true;
 	},
 	
