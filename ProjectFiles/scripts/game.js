@@ -83,10 +83,15 @@ var Game = {
 					var factor = Math.sqrt(mesh[i].position.y + 200) / 12.5;
 					mesh[i].position.x /= factor;
 					mesh[i].position.z /= factor;
-					if(mesh[i].position.y > 600) {
+					if (mesh[i].position.y > 600) {
 						mesh[i].position.x /= factor;
 						mesh[i].position.z /= factor;
 						mesh[i].position.y -= 200;
+						console.log(mesh[i].position.y);
+					} else if (mesh[i].position.y > 500) {
+						mesh[i].position.x /= -2;
+						mesh[i].position.z /= -2;
+						mesh[i].position.y -= 150;
 					}
 				}	
 			}
