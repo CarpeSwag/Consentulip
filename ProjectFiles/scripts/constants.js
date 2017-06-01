@@ -1,5 +1,6 @@
 var FPS = 60;
 var MS_TO_SEC = 1000;
+var FLOWER_SCALE = 5.00;
 
 var Constants = {
 	// Gesture constants
@@ -33,7 +34,7 @@ var Constants = {
 	CAMERA_RADIUS_UPPER: 1250,
 	
 	// Flower constants
-	FLOWER_SCALE: 5.00,
+	FLOWER_SCALE: FLOWER_SCALE,
 	FLOWER_HEAD_SCALE: 1.50,
 	FLOWER_COLORS: [
 		{r: 1, g: 0, b: 0, btn: 30},

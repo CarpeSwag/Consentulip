@@ -91,8 +91,11 @@ var UI = {
 		if (Game.enableGestures) return;
 		
 		// Add a mesh outline
-		if(!Game.tendSoil)
-			Game.addOutlineMesh(Flower.pot);
+		if(!Game.tendSoil) {
+			for (var i = 0; i < Flower.pot.length; ++i) {
+				Game.addOutlineMesh(Flower.pot[i]);
+			}
+		}
 		
 		Game.tendSoil = true;
 		document.getElementById('tender-btn').className = 'button down';
@@ -100,8 +103,11 @@ var UI = {
 	
 	disableTend: function() {
 		// Remove the mesh outline
-		if (Game.tendSoil)
-			Game.removeOutlineMesh(Flower.pot);
+		if (Game.tendSoil) {
+			for (var i = 0; i < Flower.pot.length; ++i) {
+				Game.removeOutlineMesh(Flower.pot[i]);
+			}
+		}
 		
 		Game.tendSoil = false;
 		document.getElementById('tender-btn').className = 'button';

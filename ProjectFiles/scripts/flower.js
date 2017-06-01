@@ -5,7 +5,8 @@ var Flower = {
 	outerPetals: [],
 	interactable: [],
 	stem: null,
-	pot: null,
+	pot: [],
+	rocks: [],
 	
 	loadModels: function() {
 		// Load in the model
@@ -144,16 +145,23 @@ var Flower = {
 		// Load in the pot
 		BABYLON.SceneLoader.ImportMesh('', 'art/models/',
 			'pot.babylon', Game.scene, function (mesh) {
-			var SCALE = 4.5;
 			for (var i = 0; i < mesh.length; ++i) {
-				Flower.pot = mesh[i];
-				mesh[i].scaling.x *= SCALE;
-				mesh[i].scaling.y *= SCALE;
-				mesh[i].scaling.z *= SCALE;
-				mesh[i].position.x *= SCALE;
-				mesh[i].position.y *= SCALE;
-				mesh[i].position.z *= SCALE;
-				mesh[i].position.y += -0.80 * SCALE;
+				Flower.pot.push(mesh[i]);
+				mesh[i].scaling.x *= Constants.FLOWER_SCALE;
+				mesh[i].scaling.y *= Constants.FLOWER_SCALE;
+				mesh[i].scaling.z *= Constants.FLOWER_SCALE;
+				mesh[i].position.x *= Constants.FLOWER_SCALE;
+				mesh[i].position.y *= Constants.FLOWER_SCALE;
+				mesh[i].position.z *= Constants.FLOWER_SCALE;
+				mesh[i].position.y += -0.80 * Constants.FLOWER_SCALE;
+				
+				if (mesh[i].name === 'TopSoil') {
+					mesh[i].scaling.x += 0.015 * Constants.FLOWER_SCALE;
+					mesh[i].scaling.z += 0.015 * Constants.FLOWER_SCALE;
+					mesh[i].position.y -= 0.015 * Constants.FLOWER_SCALE;
+				} else if (mesh[i].name.substring(0,4) === 'Cube'){
+					Flower.rocks.push(mesh[i]);
+				}
 				
 				mesh[i].outlineCounter = 0;
 				mesh[i].outlineColor = {
