@@ -33,7 +33,7 @@ var UI = {
 	},
 	
 	toggleWater: function() {
-		if(this.menuOpen) {
+		if(this.menuOpen || Game.enableGestures) {
 			this.disableWaterTend();
 			return;
 		}
@@ -48,7 +48,7 @@ var UI = {
 	},
 	
 	toggleTend: function() {
-		if(this.menuOpen) {
+		if(this.menuOpen || Game.enableGestures) {
 			this.disableWaterTend();
 			return;
 		}
@@ -63,6 +63,7 @@ var UI = {
 	},
 	
 	enableWater: function() {
+		if (Game.enableGestures) return;
 		// Add a mesh outline
 		if (!Game.waterCan) {
 			for (var i = 0; i < Flower.interactable.length; ++i) {
@@ -87,6 +88,8 @@ var UI = {
 	},
 	
 	enableTend: function() {
+		if (Game.enableGestures) return;
+		
 		// Add a mesh outline
 		if(!Game.tendSoil)
 			Game.addOutlineMesh(Flower.pot);
