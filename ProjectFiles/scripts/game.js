@@ -241,6 +241,7 @@ var Game = {
 				} else {		
 					if (Game.waterCan) {
 						WaterCan.onPointerDown(x, y);
+						UI.disableWater();
 					} else if (Game.tendSoil) {
 					} else {
 						Camera.panToMesh(mesh, 0.75);
@@ -256,6 +257,7 @@ var Game = {
 				if (Game.tendSoil) {
 					Desire.reduceDesireTimer(Constants.TEND_SOIL_FLAG);
 					Game.soilClick = true;
+					UI.disableTend();
 					for (var i = Math.ceil(Math.random() * 5) + 3; i >= 0; --i) {
 						Draw.addDirtParticle(x, y);
 					}
