@@ -58,6 +58,8 @@ var Flower = {
 					if (Flower.leaves.length == 1) {
 						mesh[i].position.y += 0.4 * SCALE;
 						dir = 1;
+					} else {
+						mesh[i].position.x += 0.01 * SCALE;
 					}
 					Flower.leaves.push(mesh[i]);
 					Desire.notDesired.push(mesh[i]);

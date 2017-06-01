@@ -87,7 +87,6 @@ var Game = {
 						mesh[i].position.x /= factor;
 						mesh[i].position.z /= factor;
 						mesh[i].position.y -= 200;
-						console.log(mesh[i].position.y);
 					} else if (mesh[i].position.y > 500) {
 						mesh[i].position.x /= -2;
 						mesh[i].position.z /= -2;
