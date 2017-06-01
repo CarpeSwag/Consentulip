@@ -1,6 +1,7 @@
 var Talk = {
 	// HTML and Canvas elements
 	text: null,
+	textBox: null,
 	
 	// Pointer related
 	isPointerDown: false,
@@ -14,11 +15,12 @@ var Talk = {
 	
 	onLoad: function() {
 		this.text = document.getElementById('flower-message');
+		this.textBox = document.getElementById('text-box');
 	},
 	
 	setText: function(txt) {
 		this.text.innerHTML = txt;
-		this.text.className = (txt === '')?
+		this.textBox.className = (txt === '')?
 			'': 'active';
 	},
 	
