@@ -33,7 +33,9 @@ var Flower = {
 					info = {
 						alpha: 0,
 						radius: 10,
-						yOffset: 0
+						xOffset: 0,
+						yOffset: 1 * SCALE,
+						zOffset: 0
 					};
 					offset.push(new BABYLON.Vector3(
 						0,
@@ -63,7 +65,9 @@ var Flower = {
 					info = {
 						alpha: 0,
 						radius: 12,
-						yOffset: 0
+						xOffset: 0.5 * SCALE * dir,
+						yOffset: 0.75 * SCALE,
+						zOffset: 0,
 					};
 					offset.push(new BABYLON.Vector3(
 						0.085 * SCALE * dir,
@@ -112,7 +116,9 @@ var Flower = {
 					info = {
 						alpha: alpha,
 						radius: 7.5,
-						yOffset: 1.33
+						xOffset: 0,
+						yOffset: 0.266 * SCALE,
+						zOffset: 0
 					};
 					
 					// Adjust color
