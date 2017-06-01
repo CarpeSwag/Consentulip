@@ -7,7 +7,9 @@ var Game = {
 	// Environment
 	skybox: [],
 	clouds: [],
-	cloudCounter: 0,
+	rotateCounter: 0,
+	rockHeight: Constants.ROCK_Y_MAX,
+	rockVel: -Constants.ROCK_Y_VEL,
 	
 	// Lights
 	light: null,
@@ -325,9 +327,9 @@ var Game = {
 	},
 	
 	onFrame: function() {
-		++this.cloudCounter;
-		if (this.cloudCounter == 2) {
-			this.cloudCounter = 0;
+		++this.rotateCounter;
+		if (this.rotateCounter == 2) {
+			this.rotateCounter = 0;
 			for (var i = 0; i < Game.clouds.length; ++i) {
 				var x = Game.clouds[i].position.x;
 				var z = Game.clouds[i].position.z;
@@ -336,6 +338,22 @@ var Game = {
 				Game.clouds[i].position.x = newXZ[0];
 				Game.clouds[i].position.z = newXZ[1];
 			}
+			
+			for (var i = 0; i < Flower.rocks.length; ++i) {
+				var x = Flower.rocks[i].position.x;
+				var z = Flower.rocks[i].position.z;
+				var newXZ = Draw.rotateAroundPoint(0, 0, x, z, 
+					Constants.ROCK_ANG_VEL);
+				Flower.rocks[i].position.x = newXZ[0];
+				Flower.rocks[i].position.z = newXZ[1];
+				Flower.rocks[i].position.y += this.rockVel
+					* Flower.rocks[i].dir;
+			}
+			this.rockHeight += this.rockVel;
+			if (this.rockHeight < Constants.ROCK_Y_MIN
+				|| this.rockHeight > Constants.ROCK_Y_MAX)
+				this.rockVel *= -1;
+			
 		}
 		if (this.outlineMeshes.length > 0) {
 			this.outlineWidth += this.outlineDelta;

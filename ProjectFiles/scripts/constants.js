@@ -53,5 +53,9 @@ var Constants = {
 	TEND_SOIL_FLAG: 2,
 	
 	// Environment constants
-	CLOUD_ANG_VEL: Math.PI / 5000
+	CLOUD_ANG_VEL: Math.PI / 5000,
+	ROCK_ANG_VEL: -Math.PI / 500,
+	ROCK_Y_VEL: 0.0005 * FLOWER_SCALE,
+	ROCK_Y_MAX: 0.1 * FLOWER_SCALE,
+	ROCK_Y_MIN: -0.1 * FLOWER_SCALE
 };

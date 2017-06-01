@@ -161,6 +161,12 @@ var Flower = {
 					mesh[i].position.y -= 0.015 * Constants.FLOWER_SCALE;
 				} else if (mesh[i].name.substring(0,4) === 'Cube'){
 					Flower.rocks.push(mesh[i]);
+					mesh[i].dir = 1;
+					if (i % 2 == 0) {
+						mesh[i].dir = -1;
+						mesh[i].position.y -= (Constants.ROCK_Y_MAX
+							- Constants.ROCK_Y_MIN);
+					}
 				}
 				
 				mesh[i].outlineCounter = 0;
