@@ -146,6 +146,7 @@ var Flower = {
 		BABYLON.SceneLoader.ImportMesh('', 'art/models/',
 			'pot.babylon', Game.scene, function (mesh) {
 			for (var i = 0; i < mesh.length; ++i) {
+				mesh[i].isSoil = true;
 				Flower.pot.push(mesh[i]);
 				mesh[i].scaling.x *= Constants.FLOWER_SCALE;
 				mesh[i].scaling.y *= Constants.FLOWER_SCALE;

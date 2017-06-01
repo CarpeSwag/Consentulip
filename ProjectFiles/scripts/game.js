@@ -255,7 +255,7 @@ var Game = {
 						}, 750);
 					}
 				}
-			} else if (mesh === Flower.pot) {
+			} else if (mesh.isSoil) {
 				if (Game.tendSoil) {
 					Desire.reduceDesireTimer(Constants.TEND_SOIL_FLAG);
 					Game.soilClick = true;
