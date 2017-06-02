@@ -34,6 +34,11 @@ var Game = {
 	outlineWidth: 0.025,
 	outlineDelta: Constants.OUTLINE_DELTA,
 	
+	// Music
+	musicNeutral: null,
+	musicHappy: null,
+	musicSad: null,
+	
 	onLoad: function() {
 		this.canvas = document.getElementById('renderCanvas');
 		this.engine = new BABYLON.Engine(this.canvas, true);
@@ -115,6 +120,27 @@ var Game = {
 		var SCALE = 50;
 		godrays.mesh.position = new BABYLON.Vector3(-100, 100, -300);
 		godrays.mesh.scaling = new BABYLON.Vector3(SCALE, SCALE, SCALE);*/
+		
+		
+		var soundsReady = 0;
+		var soundReady = function() {
+			++soundsReady;
+			if (soundsReady === 3) {
+				Game.musicNeutral.play();
+				Game.musicHappy.play();
+				Game.musicSad.play();
+			}
+		}
+		
+		this.musicNeutral = new BABYLON.Sound("Neutral music", "audio/music/neutral.mp3",
+			this.scene, soundReady, { loop: true });
+		this.musicHappy = new BABYLON.Sound("Happy music", "audio/music/happy.mp3",
+			this.scene, soundReady, { loop: true });
+		this.musicSad = new BABYLON.Sound("Sad music", "audio/music/sad.mp3",
+			this.scene, soundReady, { loop: true });
+			
+		this.musicHappy.setVolume(0);
+		this.musicSad.setVolume(0);
 		
 		// Ensure screen is sized correctly.
 		this.engine.resize();
