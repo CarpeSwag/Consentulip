@@ -15,7 +15,8 @@ var Flower = {
 	lastAnimation: [0,0],
 	animating: false,
 	animationPause: 0.0,
-	
+	wantToAnimate: false,
+	reverseAnim: false,
 	
 	loadModels: function() {
 		// Load in the model
@@ -223,11 +224,18 @@ var Flower = {
 		}
 	},
 	
+	idleAnimation: function() {
+		var anim = this.lastAnimation;
+		var reverse = (this.reverseAnim)? this.reverseAnimation:
+			function() {};
+		this.animateFlower(anim[0], anim[1], false, reverse);
+	},
+	
 	adjustAnimation: function() {
 		var ANIMATIONS = Constants.ANIMATION;
 		var trust = Game.trust;
 		var anim = [0,0];
-		var reverse = null;
+		var reverse = function() {};
 		var pause = 0.0;
 		for (var i = 0; i < ANIMATIONS.length; ++i) {
 			if (ANIMATIONS[i].TRUST >= trust) {
@@ -236,13 +244,18 @@ var Flower = {
 				pause = ANIMATIONS[i].PAUSE;
 				if (ANIMATIONS[i].REVERSE)
 					reverse = this.reverseAnimation;
+				this.reverseAnim = ANIMATIONS[i].REVERSE;
 				break;
 			}
 		}
 		
 		// Adjust pose
-		if (this.lastAnimation[0] !== anim[0]
-			|| this.lastAnimation[1] !== anim[1]) {
+		if ((this.lastAnimation[0] !== anim[0]
+			|| this.lastAnimation[1] !== anim[1]) ||
+			Flower.wantToAnimate) {
+			Game.playingAnimation = true;
+			Flower.wantToAnimate = false;
+			Desire.resetAnimateCounter();
 			this.lastAnimation = anim;
 			this.animationPause = pause * 1000;
 			this.animateFlower(anim[0], anim[1], false, reverse);
@@ -257,6 +270,8 @@ var Flower = {
 			var end = 151 + (150 - Flower.lastAnimation[0]);
 			Flower.animateFlower(start, end, false, function() {
 				Flower.animating = false;
+				Game.playingAnimation = false;
+				Desire.resetAnimateCounter();
 			});
 		}, Flower.animationPause);
 	},

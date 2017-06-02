@@ -3,6 +3,8 @@ var Desire = {
 	desired: [],
 	notDesired: [],
 	counter: Constants.DESIRE_TIMER_RESET,
+	animateCounter: Constants.DANCE_TIME_RANGE
+		+ Constants.DANCE_TIME_LOWER,
 	flags: 0,
 	
 	createDesire: function(index) {
@@ -26,7 +28,7 @@ var Desire = {
 			Desire.destroyDesire(desiredMesh);
 		}, Constants.DESIRE_TIMER_REMOVE + Math.ceil(Math.random()
 			* Constants.DESIRE_TIMER_REMOVE_RAND));
-0	},
+	},
 
 	createRandomDesire: function() {
 		if (this.notDesired.length == 0) {
@@ -76,10 +78,25 @@ var Desire = {
 		}
 	},
 	
+	resetAnimateCounter: function() {
+		this.animateCounter = Constants.DANCE_TIME_LOWER + 
+			Math.round(Math.random() * Constants.DANCE_TIME_RANGE);
+	},
+	
 	onFrame: function() {
 		this.counter--;
 		if (this.counter <= 0) {
 			this.createRandomDesire();
+		}
+		
+		this.animateCounter--;
+		if (this.counter <= 0) {
+			if (Game.gesturesEnabled) {
+				Flower.wantToAnimate = true;
+			} else {
+				Flower.idleAnimation();
+			}
+			Desire.resetAnimateCounter();
 		}
 	}
 };
