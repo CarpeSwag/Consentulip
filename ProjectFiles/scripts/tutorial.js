@@ -90,7 +90,7 @@ var Tutorial = {
 	
 	gestureInput: function(gesture) {
 		if (this.active) {
-			if (gesture.Name === 'five-point star') {
+			if (gesture.Score > 0.33) {
 				this.active = false;
 				UI.toggleRevokeConsent(true);
 				return 'Good job!';

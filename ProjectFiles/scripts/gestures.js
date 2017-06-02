@@ -10,8 +10,10 @@ var Gestures = {
 	recognizeGesture: function() {
 		var respText = '';
 		if (this.points.length >= 10) {
-			this.gesture = this.recognizer.Recognize(this.points);
-			this.logGesture();
+			if (Tutorial.active) {
+				this.gesture = this.recognizer.Recognize(this.points, true, false, false);
+			}
+			
 			console.log("Result: " + this.gesture.Name + " (" +
 				(Math.round(this.gesture.Score * 100) / 100) + ").");
 			console.log(this.gesture);
