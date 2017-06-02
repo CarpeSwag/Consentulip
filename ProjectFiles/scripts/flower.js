@@ -1,9 +1,12 @@
 var Flower = {
 	petalColor: {r:0, g:0, b:0, btn: 0},
+	
+	// Flower parts
+	flower: [],
+	interactable: [],
 	leaves: [],
 	petals: [],
 	outerPetals: [],
-	interactable: [],
 	stem: null,
 	pot: [],
 	rocks: [],
@@ -13,6 +16,8 @@ var Flower = {
 		BABYLON.SceneLoader.ImportMesh('', 'art/models/',
 			'tulip.babylon', Game.scene, function (mesh) {
 			var SCALE = Constants.FLOWER_SCALE;
+			Flower.flower = mesh;
+			
 			for (var i = 0; i < mesh.length; ++i) {
 				mesh[i].scaling.x *= SCALE;
 				mesh[i].scaling.y *= SCALE;
@@ -148,6 +153,9 @@ var Flower = {
 				if (interactable)
 					Flower.interactable.push(mesh[i]);
 			}
+		
+			// Add the reversed animation keys
+			Flower.addReversedAnimationKeys(mesh[0].skeleton);
 		});
 		
 		// Load in the pot
@@ -197,5 +205,23 @@ var Flower = {
 		this.petalColor.btn = random.btn;
 		
 		UI.filterButtonHue(random.btn);
+	},
+	
+	addReversedAnimationKeys: function(skeleton) {
+		for (var i = 0; i < skeleton.bones.length; ++i) {
+			var bone = skeleton.bones[i];
+			var animation = bone.animations[0];
+			var keyCount = animation._keys.length;
+			
+			console.log(animation._keys.length);
+			for (var j = keyCount - 1; j >= 0; --j) {
+				var newFrame = 150 + (150 - animation._keys[j].frame);
+				animation._keys.push({
+					'frame': newFrame, 
+					'value': animation._keys[j].value 
+				});
+			}
+			console.log(animation._keys.length);
+		}
 	}
 };
