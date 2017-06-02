@@ -17,6 +17,8 @@ var Game = {
 	
 	// Trust
 	trust: 50,
+	zoomedInMesh: null,
+	wasDesired: false,
 	
 	// Flags
 	playingAnimation: false,
@@ -289,9 +291,10 @@ var Game = {
 						UI.disableWater();
 					} else if (Game.tendSoil) {
 					} else {
+						Game.zoomedInMesh = mesh;
 						Camera.panToMesh(mesh, 0.75);
 						Camera.cameraLockedToMesh = true;
-						Desire.destroyDesire(mesh);
+						Game.wasDesired = Desire.destroyDesire(mesh);
 						setTimeout(function() {
 							Game.enableGestures = true;
 							UI.toggleRevokeConsent(true);

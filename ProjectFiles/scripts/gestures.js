@@ -12,18 +12,21 @@ var Gestures = {
 		if (this.points.length >= 10) {
 			if (Tutorial.active) {
 				this.gesture = this.recognizer.Recognize(this.points, true, false, false);
+			} else {
+				this.gesture = this.recognizer.Recognize(this.points, false, true, true);
 			}
-			
-			console.log("Result: " + this.gesture.Name + " (" +
-				(Math.round(this.gesture.Score * 100) / 100) + ").");
-			console.log(this.gesture);
 		}
 		
 		if (this.gesture) {
 			if (Tutorial.active) {
 				respText = Tutorial.gestureInput(this.gesture);
 			} else {
-				//respText = Game.processGesture(this.gesture);
+				respText = '';
+				var change = -2.5;
+				if(this.gesture.Score > 0.33 && Game.wasDesired) {
+					change = 2.5;
+				}
+				UI.adjustTrustBar(change);
 			}
 		}
 		
@@ -66,6 +69,7 @@ var Gestures = {
 				y: point.Y
 			})
 		}
+		out.push(temp);
 		
 		return out;
 	},
