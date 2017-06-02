@@ -103,7 +103,7 @@ var Game = {
 		// Fog
 		this.scene.fogMode = BABYLON.Scene.FOGMODE_EXP2;
 		this.scene.fogColor = new BABYLON.Color3(1, 1, 1);
-		this.scene.fogDensity = 0;
+		this.scene.fogDensity = 0.001;
 		
 		// Load models
 		Flower.loadModels();
