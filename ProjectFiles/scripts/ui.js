@@ -192,8 +192,7 @@ var UI = {
 		
 		this.adjustTrustBarColor();
 			
-		/*Flower.adjustStandPose();
-		Flower.decideOnPlayingAnimation();*/
+		Flower.adjustAnimation();
 	},
 	
 	adjustTrustBarColor: function() {

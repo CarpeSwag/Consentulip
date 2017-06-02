@@ -44,6 +44,17 @@ var Constants = {
 		{r: 0, g: 1, b: 1, btn: -90}
 	],
 	
+	// Flower Animations
+	ANIMATION: [
+		{TRUST:   0, ANIM: [100,150], PAUSE: 0, REVERSE: false},
+		{TRUST:  10, ANIM: [100,118], PAUSE: 1.0, REVERSE: true},
+		{TRUST:  25, ANIM: [100,114], PAUSE: 1.0, REVERSE: true},
+		{TRUST:  40, ANIM: [100,110], PAUSE: 1.0, REVERSE: true},
+		{TRUST:  70, ANIM: [0,27], PAUSE: 0.5, REVERSE: true},
+		{TRUST:  87, ANIM: [0,46], PAUSE: 0.25, REVERSE: true},
+		{TRUST: 100, ANIM: [50,100], PAUSE: 0.0, REVERSE: false},
+	],
+	
 	// Desire urge constants
 	DESIRE_TIMER_RESET: Math.ceil(120.00 * FPS),
 	DESIRE_TIMER_RAND: Math.ceil(60.00 * FPS),

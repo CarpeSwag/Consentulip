@@ -11,6 +11,12 @@ var Flower = {
 	pot: [],
 	rocks: [],
 	
+	// Pose
+	lastAnimation: [0,0],
+	animating: false,
+	animationPause: 0.0,
+	
+	
 	loadModels: function() {
 		// Load in the model
 		BABYLON.SceneLoader.ImportMesh('', 'art/models/',
@@ -207,13 +213,60 @@ var Flower = {
 		UI.filterButtonHue(random.btn);
 	},
 	
+	// Animation and Poses
+	animateFlower: function(start, end, loop, onEnd) {
+		loop = loop === true;
+		onEnd = onEnd || function(){};
+		for (var i = 0; i < Flower.flower.length; ++i) {
+			Game.scene.beginAnimation(
+				Flower.flower[i], start, end, loop, 1.0, onEnd);
+		}
+	},
+	
+	adjustAnimation: function() {
+		var ANIMATIONS = Constants.ANIMATION;
+		var trust = Game.trust;
+		var anim = [0,0];
+		var reverse = null;
+		var pause = 0.0;
+		for (var i = 0; i < ANIMATIONS.length; ++i) {
+			if (ANIMATIONS[i].TRUST >= trust) {
+				anim[0] = ANIMATIONS[i].ANIM[0];
+				anim[1] = ANIMATIONS[i].ANIM[1];
+				pause = ANIMATIONS[i].PAUSE;
+				if (ANIMATIONS[i].REVERSE)
+					reverse = this.reverseAnimation;
+				break;
+			}
+		}
+		
+		// Adjust pose
+		if (this.lastAnimation[0] !== anim[0]
+			|| this.lastAnimation[1] !== anim[1]) {
+			this.lastAnimation = anim;
+			this.animationPause = pause * 1000;
+			this.animateFlower(anim[0], anim[1], false, reverse);
+		}
+	},
+	
+	reverseAnimation: function() {
+		if (Flower.animating) return;
+		Flower.animating = true;
+		setTimeout(function() {
+			var start = 151 + (150 - Flower.lastAnimation[1]);
+			var end = 151 + (150 - Flower.lastAnimation[0]);
+			Flower.animateFlower(start, end, false, function() {
+				Flower.animating = false;
+			});
+		}, Flower.animationPause);
+	},
+	
 	addReversedAnimationKeys: function(skeleton) {
 		for (var i = 0; i < skeleton.bones.length; ++i) {
 			var bone = skeleton.bones[i];
 			var animation = bone.animations[0];
 			var keyCount = animation._keys.length;
 			
-			console.log(animation._keys.length);
 			for (var j = keyCount - 1; j >= 0; --j) {
 				var newFrame = 150 + (150 - animation._keys[j].frame);
 				animation._keys.push({
@@ -221,7 +274,6 @@ var Flower = {
 					'value': animation._keys[j].value 
 				});
 			}
-			console.log(animation._keys.length);
 		}
 	}
 };

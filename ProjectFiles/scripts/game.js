@@ -19,6 +19,7 @@ var Game = {
 	trust: 50,
 	
 	// Flags
+	playingAnimation: false,
 	enableGestures: false,
 	waterCan: false,
 	tendSoil: false,
@@ -250,8 +251,8 @@ var Game = {
 		}
 		
 		// check if we are under a mesh
-		var pickInfo = Game.scene.pick(x, y, function (mesh) { return true; });
-		if (pickInfo.hit && !Camera.cameraLockedToMesh) {
+		var pickInfo = Game.scene.pick(x, y);
+		if (pickInfo.hit && !Camera.cameraLockedToMesh && !Game.playingAnimation) {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
 				if (Tutorial.tutorialPause(mesh)) {
