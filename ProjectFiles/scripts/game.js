@@ -35,9 +35,10 @@ var Game = {
 	outlineDelta: Constants.OUTLINE_DELTA,
 	
 	// Music
-	musicNeutral: null,
 	musicHappy: null,
+	musicNeutral: null,
 	musicSad: null,
+	volumeTargets: [0,1,0],
 	
 	onLoad: function() {
 		this.canvas = document.getElementById('renderCanvas');
@@ -396,6 +397,29 @@ var Game = {
 				|| this.rockHeight > Constants.ROCK_Y_MAX)
 				this.rockVel *= -1;
 			
+			// Volume
+			
+			if (this.musicSad._volume != this.volumeTargets[0]) {
+				var dv = (this.musicSad._volume > this.volumeTargets[0])?
+					-0.01: 0.01;
+				this.musicSad.setVolume(this.musicSad._volume + dv);
+				if (Math.abs(this.musicSad._volume - this.volumeTargets[0]) < 0.05)
+					this.musicSad.setVolume(this.volumeTargets[0]);
+			}
+			if (this.musicNeutral._volume != this.volumeTargets[1]) {
+				var dv = (this.musicNeutral._volume > this.volumeTargets[1])?
+					-0.01: 0.01;
+				this.musicNeutral.setVolume(this.musicNeutral._volume + dv);
+				if (Math.abs(this.musicNeutral._volume - this.volumeTargets[1]) < 0.05)
+					this.musicNeutral.setVolume(this.volumeTargets[1]);
+			}
+			if (this.musicHappy._volume != this.volumeTargets[2]) {
+				var dv = (this.musicHappy._volume > this.volumeTargets[2])?
+					-0.01: 0.01;
+				this.musicHappy.setVolume(this.musicHappy._volume + dv);
+				if (Math.abs(this.musicHappy._volume - this.volumeTargets[2]) < 0.05)
+					this.musicHappy.setVolume(this.volumeTargets[2]);
+			}
 		}
 		if (this.outlineMeshes.length > 0) {
 			this.outlineWidth += this.outlineDelta;

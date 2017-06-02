@@ -191,7 +191,9 @@ var UI = {
 			Game.trust + '%';
 		
 		this.adjustTrustBarColor();
-			
+		
+		this.adjustMusic();
+		
 		Flower.adjustAnimation();
 	},
 	
@@ -214,5 +216,19 @@ var UI = {
 		var rgb = c[0] + ',' + c[1] + ',' + c[2];
 		var ele = document.getElementById('trust-bar-inner-color');
 		ele.style.background = 'rgba(' + rgb + ',0.5)';
+	},
+	
+	adjustMusic: function(old) {
+		var sad = 0;
+		var neu = 0;
+		var hap = 0;
+		if (Game.trust < 40) {
+			sad = 1;
+		} else if (Game.trust < 70) {
+			neu = 1;
+		} else {
+			hap = 1;
+		}
+		Game.volumeTargets = [sad, neu, hap];
 	}
 };
