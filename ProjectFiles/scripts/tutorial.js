@@ -11,12 +11,12 @@ var Tutorial = {
 	
 	tutorialPause: function(mesh) {
 		if (this.waitingForInput) {
-			if (mesh == Flower.petals[0]) {
+			if (mesh == Flower.outerPetals[3]) {
 				this.waitingForInput = false;
 				
 				// Pan camera to the petal
 				Camera.modCameraAlpha();
-				Camera.panToMesh(Flower.petals[0], 1.5);
+				Camera.panToMesh(Flower.petals[3], 1.5);
 				setTimeout(function() {
 					// Start the rest of the tutorial
 					Game.enableGestures = true;
@@ -47,9 +47,9 @@ var Tutorial = {
 		
 		// Wait for response
 		setTimeout(function() {
-			this.particleId = Game.createParticleSystemAt( 
-				Flower.outerPetals[0], 
-				Flower.outerPetals[0].blinkOffset);
+			Tutorial.particleId = Game.createParticleSystemAt( 
+				Flower.outerPetals[3], 
+				Flower.outerPetals[3].blinkOffset);
 			
 			Tutorial.waitingForInput = true;
 		}, 6000);
