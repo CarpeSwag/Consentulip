@@ -7,13 +7,21 @@ var Game = {
 	// Environment
 	skybox: [],
 	clouds: [],
-	cloudCounter: 0,
+	rotateCounter: 0,
+	rockHeight: Constants.ROCK_Y_MAX,
+	rockVel: -Constants.ROCK_Y_VEL,
 	
 	// Lights
 	light: null,
 	light2: null,
 	
+	// Trust
+	trust: 50,
+	zoomedInMesh: null,
+	wasDesired: false,
+	
 	// Flags
+	playingAnimation: false,
 	enableGestures: false,
 	waterCan: false,
 	tendSoil: false,
@@ -22,6 +30,17 @@ var Game = {
 	// Particle system
 	particleSystem: [],
 	psCounter: 0,
+	
+	// Outline system
+	outlineMeshes: [],
+	outlineWidth: 0.025,
+	outlineDelta: Constants.OUTLINE_DELTA,
+	
+	// Music
+	musicHappy: null,
+	musicNeutral: null,
+	musicSad: null,
+	volumeTargets: [0,1,0],
 	
 	onLoad: function() {
 		this.canvas = document.getElementById('renderCanvas');
@@ -73,6 +92,18 @@ var Game = {
 					mesh[i].position.y *= mesh[i].position.y;
 					mesh[i].position.y *= 1/100;
 					mesh[i].position.y += -1.0 * SCALE;
+					var factor = Math.sqrt(mesh[i].position.y + 200) / 12.5;
+					mesh[i].position.x /= factor;
+					mesh[i].position.z /= factor;
+					if (mesh[i].position.y > 600) {
+						mesh[i].position.x /= factor;
+						mesh[i].position.z /= factor;
+						mesh[i].position.y -= 200;
+					} else if (mesh[i].position.y > 500) {
+						mesh[i].position.x /= -2;
+						mesh[i].position.z /= -2;
+						mesh[i].position.y -= 150;
+					}
 				}	
 			}
 		});
@@ -80,7 +111,7 @@ var Game = {
 		// Fog
 		this.scene.fogMode = BABYLON.Scene.FOGMODE_EXP2;
 		this.scene.fogColor = new BABYLON.Color3(1, 1, 1);
-		this.scene.fogDensity = 0;
+		this.scene.fogDensity = 0.001;
 		
 		// Load models
 		Flower.loadModels();
@@ -92,6 +123,27 @@ var Game = {
 		var SCALE = 50;
 		godrays.mesh.position = new BABYLON.Vector3(-100, 100, -300);
 		godrays.mesh.scaling = new BABYLON.Vector3(SCALE, SCALE, SCALE);*/
+		
+		
+		var soundsReady = 0;
+		var soundReady = function() {
+			++soundsReady;
+			if (soundsReady === 3) {
+				Game.musicNeutral.play();
+				Game.musicHappy.play();
+				Game.musicSad.play();
+			}
+		}
+		
+		this.musicNeutral = new BABYLON.Sound("Neutral music", "audio/music/neutral.mp3",
+			this.scene, soundReady, { loop: true });
+		this.musicHappy = new BABYLON.Sound("Happy music", "audio/music/happy.mp3",
+			this.scene, soundReady, { loop: true });
+		this.musicSad = new BABYLON.Sound("Sad music", "audio/music/sad.mp3",
+			this.scene, soundReady, { loop: true });
+			
+		this.musicHappy.setVolume(0);
+		this.musicSad.setVolume(0);
 		
 		// Ensure screen is sized correctly.
 		this.engine.resize();
@@ -228,29 +280,32 @@ var Game = {
 		}
 		
 		// check if we are under a mesh
-		var pickInfo = Game.scene.pick(x, y, function (mesh) { return true; });
-		if (pickInfo.hit && !Camera.cameraLockedToMesh) {
+		var pickInfo = Game.scene.pick(x, y);
+		if (pickInfo.hit && !Camera.cameraLockedToMesh && !Game.playingAnimation) {
 			var mesh = pickInfo.pickedMesh;
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
 				if (Tutorial.tutorialPause(mesh)) {
 				} else {		
 					if (Game.waterCan) {
 						WaterCan.onPointerDown(x, y);
+						UI.disableWater();
 					} else if (Game.tendSoil) {
 					} else {
+						Game.zoomedInMesh = mesh;
 						Camera.panToMesh(mesh, 0.75);
 						Camera.cameraLockedToMesh = true;
-						Desire.destroyDesire(mesh);
+						Game.wasDesired = Desire.destroyDesire(mesh);
 						setTimeout(function() {
 							Game.enableGestures = true;
 							UI.toggleRevokeConsent(true);
 						}, 750);
 					}
 				}
-			} else if (mesh === Flower.pot) {
+			} else if (mesh.isSoil) {
 				if (Game.tendSoil) {
 					Desire.reduceDesireTimer(Constants.TEND_SOIL_FLAG);
 					Game.soilClick = true;
+					UI.disableTend();
 					for (var i = Math.ceil(Math.random() * 5) + 3; i >= 0; --i) {
 						Draw.addDirtParticle(x, y);
 					}
@@ -293,10 +348,34 @@ var Game = {
 		Game.soilClick = false;
 	},
 	
+	addOutlineMesh: function(mesh) {
+		mesh.renderOutline = true;
+		if (mesh.outlineCounter == 0)
+			this.outlineMeshes.push(mesh);
+		mesh.outlineCounter++;
+	},
+	
+	findOutlineMesh: function(mesh) {
+		for (var i = 0; i < this.outlineMeshes.length; ++i)
+			if (this.outlineMeshes[i] === mesh)
+				return i;
+		return -1;
+	},
+	
+	removeOutlineMesh: function(mesh) {
+		var index = this.findOutlineMesh(mesh);
+		if (index === -1) return;
+		mesh.outlineCounter--;
+		if (mesh.outlineCounter == 0) {
+			mesh.renderOutline = false;
+			this.outlineMeshes.splice(index, 1);
+		}
+	},
+	
 	onFrame: function() {
-		++this.cloudCounter;
-		if (this.cloudCounter == 2) {
-			this.cloudCounter = 0;
+		++this.rotateCounter;
+		if (this.rotateCounter == 2) {
+			this.rotateCounter = 0;
 			for (var i = 0; i < Game.clouds.length; ++i) {
 				var x = Game.clouds[i].position.x;
 				var z = Game.clouds[i].position.z;
@@ -305,6 +384,55 @@ var Game = {
 				Game.clouds[i].position.x = newXZ[0];
 				Game.clouds[i].position.z = newXZ[1];
 			}
+			
+			for (var i = 0; i < Flower.rocks.length; ++i) {
+				var x = Flower.rocks[i].position.x;
+				var z = Flower.rocks[i].position.z;
+				var newXZ = Draw.rotateAroundPoint(0, 0, x, z, 
+					Constants.ROCK_ANG_VEL);
+				Flower.rocks[i].position.x = newXZ[0];
+				Flower.rocks[i].position.z = newXZ[1];
+				Flower.rocks[i].position.y += this.rockVel
+					* Flower.rocks[i].dir;
+			}
+			this.rockHeight += this.rockVel;
+			if (this.rockHeight < Constants.ROCK_Y_MIN
+				|| this.rockHeight > Constants.ROCK_Y_MAX)
+				this.rockVel *= -1;
+			
+			// Volume
+			
+			if (this.musicSad._volume != this.volumeTargets[0]) {
+				var dv = (this.musicSad._volume > this.volumeTargets[0])?
+					-0.01: 0.01;
+				this.musicSad.setVolume(this.musicSad._volume + dv);
+				if (Math.abs(this.musicSad._volume - this.volumeTargets[0]) < 0.05)
+					this.musicSad.setVolume(this.volumeTargets[0]);
+			}
+			if (this.musicNeutral._volume != this.volumeTargets[1]) {
+				var dv = (this.musicNeutral._volume > this.volumeTargets[1])?
+					-0.01: 0.01;
+				this.musicNeutral.setVolume(this.musicNeutral._volume + dv);
+				if (Math.abs(this.musicNeutral._volume - this.volumeTargets[1]) < 0.05)
+					this.musicNeutral.setVolume(this.volumeTargets[1]);
+			}
+			if (this.musicHappy._volume != this.volumeTargets[2]) {
+				var dv = (this.musicHappy._volume > this.volumeTargets[2])?
+					-0.01: 0.01;
+				this.musicHappy.setVolume(this.musicHappy._volume + dv);
+				if (Math.abs(this.musicHappy._volume - this.volumeTargets[2]) < 0.05)
+					this.musicHappy.setVolume(this.volumeTargets[2]);
+			}
 		}
-	}
+		if (this.outlineMeshes.length > 0) {
+			this.outlineWidth += this.outlineDelta;
+			if (this.outlineWidth < Constants.OUTLINE_LOWER
+				|| this.outlineWidth > Constants.OUTLINE_UPPER) {
+				this.outlineDelta *= -1;
+			}
+			for (var i = 0; i < this.outlineMeshes.length; ++i) {
+				this.outlineMeshes[i].outlineWidth = this.outlineWidth;
+			}
+		}
+	},
 };

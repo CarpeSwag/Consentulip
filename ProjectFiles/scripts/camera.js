@@ -154,9 +154,9 @@ var Camera = {
 		rotateClockwise = rotateClockwise || false;
 		var info = mesh.cameraInfo;
 		var target = new BABYLON.Vector3(
-			mesh.position.x,
+			mesh.position.x + info.xOffset,
 			mesh.position.y + info.yOffset,
-			mesh.position.z
+			mesh.position.z + info.zOffset
 		);
 		
 		// Grab camera info for mesh

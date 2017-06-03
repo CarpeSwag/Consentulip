@@ -1,29 +1,42 @@
 var Flower = {
 	petalColor: {r:0, g:0, b:0, btn: 0},
+	
+	// Flower parts
+	flower: [],
+	interactable: [],
 	leaves: [],
 	petals: [],
 	outerPetals: [],
-	interactable: [],
 	stem: null,
-	pot: null,
+	pot: [],
+	rocks: [],
+	
+	// Pose
+	lastAnimation: [0,0],
+	animating: false,
+	animationPause: 0.0,
+	wantToAnimate: false,
+	reverseAnim: false,
 	
 	loadModels: function() {
 		// Load in the model
 		BABYLON.SceneLoader.ImportMesh('', 'art/models/',
 			'tulip.babylon', Game.scene, function (mesh) {
-			var COMBINED_SCALE = 
-				Constants.FLOWER_SCALE * Constants.FLOWER_HEAD_SCALE;
+			var SCALE = Constants.FLOWER_SCALE;
+			Flower.flower = mesh;
+			
 			for (var i = 0; i < mesh.length; ++i) {
-				mesh[i].scaling.x *= Constants.FLOWER_SCALE;
-				mesh[i].scaling.y *= Constants.FLOWER_SCALE;
-				mesh[i].scaling.z *= Constants.FLOWER_SCALE;
-				mesh[i].position.x *= Constants.FLOWER_SCALE;
-				mesh[i].position.y *= Constants.FLOWER_SCALE;
-				mesh[i].position.z *= Constants.FLOWER_SCALE;
+				mesh[i].scaling.x *= SCALE;
+				mesh[i].scaling.y *= SCALE;
+				mesh[i].scaling.z *= SCALE;
+				mesh[i].position.x *= SCALE;
+				mesh[i].position.y *= SCALE;
+				mesh[i].position.z *= SCALE;
 				var name = mesh[i].name;
 				var type = 'ignore';
 				var info = {};
 				var offset = [];
+				var interactable = false;
 				
 				if (name === 'stem') {
 					Flower.stem = mesh[i];
@@ -32,89 +45,101 @@ var Flower = {
 					info = {
 						alpha: 0,
 						radius: 10,
-						yOffset: 0
+						xOffset: 0,
+						yOffset: 1 * SCALE,
+						zOffset: 0
 					};
 					offset.push(new BABYLON.Vector3(
 						0,
-						-0.1 * COMBINED_SCALE,
+						0.45 * SCALE,
 						0
 					));
 					offset.push(new BABYLON.Vector3(
 						0,
-						-0.01 * COMBINED_SCALE,
+						0.3 * SCALE,
 						0
 					));
 					offset.push(new BABYLON.Vector3(
 						0,
-						0.08 * COMBINED_SCALE,
+						0.15 * SCALE,
 						0
 					));
+					interactable = true;
 				} else if (name.substring(0,4) === 'leaf') {
+					var dir = -1;
+					if (Flower.leaves.length == 1) {
+						mesh[i].position.y += 0.4 * SCALE;
+						dir = 1;
+					} else {
+						mesh[i].position.x += 0.01 * SCALE;
+					}
 					Flower.leaves.push(mesh[i]);
 					Desire.notDesired.push(mesh[i]);
 					type = 'leaf';
 					info = {
 						alpha: 0,
 						radius: 12,
-						yOffset: 0
+						xOffset: 0.5 * SCALE * dir,
+						yOffset: 0.75 * SCALE,
+						zOffset: 0,
 					};
 					offset.push(new BABYLON.Vector3(
-						0,
-						0,
-						-0.66 * COMBINED_SCALE
+						0.085 * SCALE * dir,
+						0.165 * SCALE,
+						-0.02 * SCALE
 					));
 					offset.push(new BABYLON.Vector3(
-						0,
-						0,
-						0.66 * COMBINED_SCALE
+						0.085 * SCALE * dir,
+						0.165 * SCALE,
+						 0.02 * SCALE
 					));
 					
 					mesh[i].position.y += 0.4 * Constants.FLOWER_SCALE;;
-					if (Flower.leaves.length == 1) {
-						mesh[i].position.y += 0.4 * Constants.FLOWER_SCALE;;
-					}
+					interactable = true;
 				} else if (name.substring(0,5) === 'petal') {
 					Flower.petals.push(mesh[i]);
 					type = 'petal';
 					var alpha = 0;
-					if (+(name.substring(8)) > 3) {
-						Flower.outerPetals.push(mesh[i]);
-						Desire.notDesired.push(mesh[i]);
-						offset.push(new BABYLON.Vector3(
-							0,
-							0.1 * COMBINED_SCALE,
-							-0.66 * COMBINED_SCALE
-						));
-					}
+					var xDir = 1;
+					var zDir = 1;
 					switch(+(name.substring(8))) {
 						case 4:
 							alpha = Math.PI / 4;
 							break;
 						case 5:
 							alpha = 5 * Math.PI / 4;
+							xDir = -1;
+							zDir = -1;
 							break;
 						case 6:
 							alpha = 7 * Math.PI / 4;
+							zDir = -1;
 							break;
 						case 7:
 							alpha = 3 * Math.PI / 4;
+							xDir = -1;
 							break;
 						default:
 							type = 'ignore';
 							break;
 					}
+					if (+(name.substring(8)) > 3) {
+						Flower.outerPetals.push(mesh[i]);
+						Desire.notDesired.push(mesh[i]);
+						offset.push(new BABYLON.Vector3(
+							0.0625 * SCALE * xDir,
+							0.60 * SCALE,
+							0.0625 * SCALE * zDir
+						));
+						interactable = true;
+					}
 					info = {
 						alpha: alpha,
-						radius: 7.5,
-						yOffset: 1.33
+						radius: 8,
+						xOffset: 0,
+						yOffset: 3.05 * SCALE,
+						zOffset: 0
 					};
-					
-					// Change flower scaling
-					mesh[i].scaling.x *= Constants.FLOWER_HEAD_SCALE;
-					mesh[i].scaling.y *= Constants.FLOWER_HEAD_SCALE;
-					mesh[i].scaling.z *= Constants.FLOWER_HEAD_SCALE;
-					mesh[i].position.x *= Constants.FLOWER_HEAD_SCALE;
-					mesh[i].position.z *= Constants.FLOWER_HEAD_SCALE;
 					
 					// Adjust color
 					mesh[i].renderOverlay = true;
@@ -124,22 +149,56 @@ var Flower = {
 				mesh[i].flowerPart = type;
 				mesh[i].cameraInfo = info;
 				mesh[i].blinkOffset = offset;
+				
+				mesh[i].outlineCounter = 0;
+				mesh[i].outlineColor = {
+					r: 255,
+					g: 255,
+					b: 0
+				};
+				
+				if (interactable)
+					Flower.interactable.push(mesh[i]);
 			}
+		
+			// Add the reversed animation keys
+			Flower.addReversedAnimationKeys(mesh[0].skeleton);
 		});
 		
 		// Load in the pot
 		BABYLON.SceneLoader.ImportMesh('', 'art/models/',
 			'pot.babylon', Game.scene, function (mesh) {
-			var SCALE = 4.5;
 			for (var i = 0; i < mesh.length; ++i) {
-				Flower.pot = mesh[i];
-				mesh[i].scaling.x *= SCALE;
-				mesh[i].scaling.y *= SCALE;
-				mesh[i].scaling.z *= SCALE;
-				mesh[i].position.x *= SCALE;
-				mesh[i].position.y *= SCALE;
-				mesh[i].position.z *= SCALE;
-				mesh[i].position.y += -0.80 * SCALE;
+				mesh[i].isSoil = true;
+				Flower.pot.push(mesh[i]);
+				mesh[i].scaling.x *= Constants.FLOWER_SCALE;
+				mesh[i].scaling.y *= Constants.FLOWER_SCALE;
+				mesh[i].scaling.z *= Constants.FLOWER_SCALE;
+				mesh[i].position.x *= Constants.FLOWER_SCALE;
+				mesh[i].position.y *= Constants.FLOWER_SCALE;
+				mesh[i].position.z *= Constants.FLOWER_SCALE;
+				mesh[i].position.y += -0.80 * Constants.FLOWER_SCALE;
+				
+				if (mesh[i].name === 'TopSoil') {
+					mesh[i].scaling.x += 0.015 * Constants.FLOWER_SCALE;
+					mesh[i].scaling.z += 0.015 * Constants.FLOWER_SCALE;
+					mesh[i].position.y -= 0.015 * Constants.FLOWER_SCALE;
+				} else if (mesh[i].name.substring(0,4) === 'Cube'){
+					Flower.rocks.push(mesh[i]);
+					mesh[i].dir = 1;
+					if (i % 2 == 0) {
+						mesh[i].dir = -1;
+						mesh[i].position.y -= (Constants.ROCK_Y_MAX
+							- Constants.ROCK_Y_MIN);
+					}
+				}
+				
+				mesh[i].outlineCounter = 0;
+				mesh[i].outlineColor = {
+					r: 255,
+					g: 255,
+					b: 0
+				};
 			}
 		});
 	},
@@ -153,5 +212,83 @@ var Flower = {
 		this.petalColor.btn = random.btn;
 		
 		UI.filterButtonHue(random.btn);
+	},
+	
+	// Animation and Poses
+	animateFlower: function(start, end, loop, onEnd) {
+		loop = loop === true;
+		onEnd = onEnd || function(){};
+		for (var i = 0; i < Flower.flower.length; ++i) {
+			Game.scene.beginAnimation(
+				Flower.flower[i], start, end, loop, 1.0, onEnd);
+		}
+	},
+	
+	idleAnimation: function() {
+		var anim = this.lastAnimation;
+		var reverse = (this.reverseAnim)? this.reverseAnimation:
+			function() {};
+		this.animateFlower(anim[0], anim[1], false, reverse);
+	},
+	
+	adjustAnimation: function() {
+		var ANIMATIONS = Constants.ANIMATION;
+		var trust = Game.trust;
+		var anim = [0,0];
+		var reverse = function() {};
+		var pause = 0.0;
+		for (var i = 0; i < ANIMATIONS.length; ++i) {
+			if (ANIMATIONS[i].TRUST >= trust) {
+				anim[0] = ANIMATIONS[i].ANIM[0];
+				anim[1] = ANIMATIONS[i].ANIM[1];
+				pause = ANIMATIONS[i].PAUSE;
+				if (ANIMATIONS[i].REVERSE)
+					reverse = this.reverseAnimation;
+				this.reverseAnim = ANIMATIONS[i].REVERSE;
+				break;
+			}
+		}
+		
+		// Adjust pose
+		if ((this.lastAnimation[0] !== anim[0]
+			|| this.lastAnimation[1] !== anim[1]) ||
+			Flower.wantToAnimate) {
+			Game.playingAnimation = true;
+			Flower.wantToAnimate = false;
+			Desire.resetAnimateCounter();
+			this.lastAnimation = anim;
+			this.animationPause = pause * 1000;
+			this.animateFlower(anim[0], anim[1], false, reverse);
+		}
+	},
+	
+	reverseAnimation: function() {
+		if (Flower.animating) return;
+		Flower.animating = true;
+		setTimeout(function() {
+			var start = 151 + (150 - Flower.lastAnimation[1]);
+			var end = 151 + (150 - Flower.lastAnimation[0]);
+			Flower.animateFlower(start, end, false, function() {
+				Flower.animating = false;
+				Game.playingAnimation = false;
+				Desire.resetAnimateCounter();
+			});
+		}, Flower.animationPause);
+	},
+	
+	addReversedAnimationKeys: function(skeleton) {
+		for (var i = 0; i < skeleton.bones.length; ++i) {
+			var bone = skeleton.bones[i];
+			var animation = bone.animations[0];
+			var keyCount = animation._keys.length;
+			
+			for (var j = keyCount - 1; j >= 0; --j) {
+				var newFrame = 150 + (150 - animation._keys[j].frame);
+				animation._keys.push({
+					'frame': newFrame, 
+					'value': animation._keys[j].value 
+				});
+			}
+		}
 	}
 };

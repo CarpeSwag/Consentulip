@@ -33,39 +33,89 @@ var UI = {
 	},
 	
 	toggleWater: function() {
-		if(this.menuOpen) {
+		if(this.menuOpen || Game.enableGestures) {
 			this.disableWaterTend();
 			return;
 		}
 		
-		Game.waterCan = !Game.waterCan;
-		Game.tendSoil = false;
+		if (Game.waterCan) {
+			this.disableWater();
+		} else {
+			this.enableWater();
+		}
 		
-		document.getElementById('water-btn').className = 'button' +
-			((Game.waterCan)? ' down': '');
-		document.getElementById('tender-btn').className = '';
+		this.disableTend();
 	},
 	
 	toggleTend: function() {
-		if(this.menuOpen) {
+		if(this.menuOpen || Game.enableGestures) {
 			this.disableWaterTend();
 			return;
 		}
 		
-		Game.tendSoil = !Game.tendSoil;
-		Game.waterCan = false;
+		if (Game.tendSoil) {
+			this.disableTend();
+		} else {
+			this.enableTend();
+		}
 		
-		document.getElementById('tender-btn').className = 'button' +
-			((Game.tendSoil)? ' down': '');
-		document.getElementById('water-btn').className = '';
+		this.disableWater();
+	},
+	
+	enableWater: function() {
+		if (Game.enableGestures) return;
+		// Add a mesh outline
+		if (!Game.waterCan) {
+			for (var i = 0; i < Flower.interactable.length; ++i) {
+				Game.addOutlineMesh(Flower.interactable[i]);
+			}
+		}
+		
+		Game.waterCan = true;
+		document.getElementById('water-btn').className = 'button down';
+	},
+	
+	disableWater: function() {
+		// Remove the mesh outline
+		if (Game.waterCan) {
+			for (var i = 0; i < Flower.interactable.length; ++i) {
+				Game.removeOutlineMesh(Flower.interactable[i]);
+			}
+		}
+		
+		Game.waterCan = false;
+		document.getElementById('water-btn').className = 'button';
+	},
+	
+	enableTend: function() {
+		if (Game.enableGestures) return;
+		
+		// Add a mesh outline
+		if(!Game.tendSoil) {
+			for (var i = 0; i < Flower.pot.length; ++i) {
+				Game.addOutlineMesh(Flower.pot[i]);
+			}
+		}
+		
+		Game.tendSoil = true;
+		document.getElementById('tender-btn').className = 'button down';
+	},
+	
+	disableTend: function() {
+		// Remove the mesh outline
+		if (Game.tendSoil) {
+			for (var i = 0; i < Flower.pot.length; ++i) {
+				Game.removeOutlineMesh(Flower.pot[i]);
+			}
+		}
+		
+		Game.tendSoil = false;
+		document.getElementById('tender-btn').className = 'button';
 	},
 	
 	disableWaterTend: function() {
-		Game.waterCan = false;
-		Game.tendSoil = false;
-		
-		document.getElementById('water-btn').className = '';
-		document.getElementById('tender-btn').className = '';
+		this.disableWater();
+		this.disableTend();
 	},
 	
 	toggleMenu: function() {
@@ -130,5 +180,55 @@ var UI = {
 	
 	creditsMenu: function() {
 		this.switchMenu('credits-menu');
+	},
+	
+	// Trust bar
+	adjustTrustBar: function(change) {
+		Game.trust += change;
+		Game.trust = (Game.trust < 0)? 0: ((Game.trust > 100)?
+			100: Game.trust);
+		document.getElementById('trust-bar-inner').style.width =
+			Game.trust + '%';
+		
+		this.adjustTrustBarColor();
+		
+		this.adjustMusic();
+		
+		Flower.adjustAnimation();
+	},
+	
+	adjustTrustBarColor: function() {
+		var percent = Game.trust;
+		var a = [200,0,0];
+		var b = [200,200,0];
+		var c = [0,0,0];
+		if (percent > 50) {
+			percent -= 50;
+			a[1] = 200;
+			b[0] = 0;
+		}
+		
+		// Put it on a scale from 0-1
+		percent = (percent * 2) / 100;
+		for (var i = 0; i < 3; ++i) {
+			c[i] = Math.round(a[i] - ((a[i] - b[i]) * percent));
+		}
+		var rgb = c[0] + ',' + c[1] + ',' + c[2];
+		var ele = document.getElementById('trust-bar-inner-color');
+		ele.style.background = 'rgba(' + rgb + ',0.5)';
+	},
+	
+	adjustMusic: function(old) {
+		var sad = 0;
+		var neu = 0;
+		var hap = 0;
+		if (Game.trust < 40) {
+			sad = 1;
+		} else if (Game.trust < 70) {
+			neu = 1;
+		} else {
+			hap = 1;
+		}
+		Game.volumeTargets = [sad, neu, hap];
 	}
 };

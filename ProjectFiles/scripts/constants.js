@@ -1,5 +1,6 @@
 var FPS = 60;
 var MS_TO_SEC = 1000;
+var FLOWER_SCALE = 5.00;
 
 var Constants = {
 	// Gesture constants
@@ -11,6 +12,9 @@ var Constants = {
 	GLOW_HIGH: 120,
 	GLOW_FACTOR: 10,
 	GLOW_CHANGE: 1,
+	OUTLINE_DELTA: 0.001,
+	OUTLINE_LOWER: 0.01,
+	OUTLINE_UPPER: 0.05,
 	
 	// Shape constants
 	CIRCLE_THRESHOLD: 40,
@@ -30,8 +34,8 @@ var Constants = {
 	CAMERA_RADIUS_UPPER: 1250,
 	
 	// Flower constants
-	FLOWER_SCALE: 5.00,
-	FLOWER_HEAD_SCALE: 1.50,
+	FLOWER_SCALE: FLOWER_SCALE,
+	FLOWER_HEAD_SCALE: 1.00,
 	FLOWER_COLORS: [
 		{r: 1, g: 0, b: 0, btn: 30},
 		{r: 0, g: 0, b: 1, btn: -60},
@@ -39,6 +43,20 @@ var Constants = {
 		{r: 1, g: 0, b: 1, btn: -30},
 		{r: 0, g: 1, b: 1, btn: -90}
 	],
+	
+	// Flower Animations
+	ANIMATION: [
+		{TRUST:   0, ANIM: [100,150], PAUSE: 0.0, REVERSE: false},
+		{TRUST:  10, ANIM: [100,118], PAUSE: 1.0, REVERSE: true},
+		{TRUST:  25, ANIM: [100,114], PAUSE: 1.0, REVERSE: true},
+		{TRUST:  40, ANIM: [100,110], PAUSE: 1.0, REVERSE: true},
+		{TRUST:  70, ANIM: [0,27], PAUSE: 0.25, REVERSE: true},
+		{TRUST:  87, ANIM: [0,46], PAUSE: 0.25, REVERSE: true},
+		{TRUST: 100, ANIM: [50,100], PAUSE: 0.0, REVERSE: false},
+	],
+	DANCE_TIME_LOWER: Math.ceil(15.00 * FPS),
+	DANCE_TIME_RANGE: Math.ceil(30.00 * FPS),
+	
 	
 	// Desire urge constants
 	DESIRE_TIMER_RESET: Math.ceil(120.00 * FPS),
@@ -49,5 +67,9 @@ var Constants = {
 	TEND_SOIL_FLAG: 2,
 	
 	// Environment constants
-	CLOUD_ANG_VEL: Math.PI / 5000
+	CLOUD_ANG_VEL: Math.PI / 5000,
+	ROCK_ANG_VEL: -Math.PI / 2000,
+	ROCK_Y_VEL: 0.001 * FLOWER_SCALE,
+	ROCK_Y_MAX: 0.1 * FLOWER_SCALE,
+	ROCK_Y_MIN: -0.1 * FLOWER_SCALE
 };
