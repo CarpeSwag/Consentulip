@@ -130,12 +130,13 @@ var Talk = {
 		var messages = [
 			'Could you rub my ' + flowerPart + ' please?',
 			'I\'d like it if you touched me' + flowerPart + '.',
+			'I feel like being touched on my ' + flowerPart + '.',
 			'I enjoy it when you touch my ' + flowerPart + '.',
 			'I want you to touch my ' + flowerPart + '. Is that okay with you?',
 			'Do you feel comfortable touching my ' + flowerPart + '?',
 			'How do you feel about touching my ' + flowerPart + '?'
 		];
 		
-		this.sayRandom(messages, 2000, 0, 2000);
+		this.sayRandom(messages, 1000, 0, 6000);
 	},
 };
