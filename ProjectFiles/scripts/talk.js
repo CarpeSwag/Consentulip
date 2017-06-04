@@ -112,5 +112,30 @@ var Talk = {
 	clearMessageSafe: function() {
 		if (!Talk.active)
 			Talk.clearMessage();
-	}
+	},
+	
+	// Specific message randomization
+	sayRandom: function(arr, timer, delay, keepMsg) {
+		// Set optional value
+		delay = delay || 0;
+		keepMsg = keepMsg || 0;
+		
+		// Grad random array
+		var msg = arr[Math.floor(Math.random() * arr.length)];
+		
+		this.queueMessage(msg, timer, delay, keepMsg);
+	},
+	
+	textAsk: function(flowerPart) {
+		var messages = [
+			'Could you rub my ' + flowerPart + ' please?',
+			'I\'d like it if you touched me' + flowerPart + '.',
+			'I enjoy it when you touch my ' + flowerPart + '.',
+			'I want you to touch my ' + flowerPart + '. Is that okay with you?',
+			'Do you feel comfortable touching my ' + flowerPart + '?',
+			'How do you feel about touching my ' + flowerPart + '?'
+		];
+		
+		this.sayRandom(messages, 2000, 0, 2000);
+	},
 };
