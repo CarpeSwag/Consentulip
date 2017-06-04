@@ -20,8 +20,7 @@ var Desire = {
 			Math.ceil(Math.random() * Constants.DESIRE_TIMER_RAND);
 		Game.addOutlineMesh(desiredMesh);
 			
-		Talk.queueMessage('I feel like being touched on my ' + 
-			desiredMesh.flowerPart + '...', 1000, 0, 6000);
+		Talk.textAsk(desiredMesh.flowerPart);
 		this.flags = 0;
 		
 		setTimeout(function() {
