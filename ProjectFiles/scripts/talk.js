@@ -153,5 +153,23 @@ var Talk = {
 		];
 		
 		this.sayRandom(messages, 2000, 0, 3000);
+	},
+	
+	textTrusting: function() {
+		var messages = [
+			'I feel comfortable.',
+			'I feel safe.',
+			'I like the way you touch me.',
+			'I like doing this with you.',
+			'Your touch feels nice.',
+			'Wow!',
+			'I’m having a great time',
+			'I enjoy it when you touch me.',
+			'That feels fantastic!',
+			'I love that you listen to what I need.'
+		];
+		
+		this.sayRandom(messages, 1000, 0, 6000);
+	},
 	}
 };
