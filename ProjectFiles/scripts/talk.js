@@ -171,5 +171,20 @@ var Talk = {
 		
 		this.sayRandom(messages, 1000, 0, 6000);
 	},
+	
+	textLessTrusting: function() {
+		var messages = [
+			'I feel hurt because you didn’t listen to me.',
+			'Why did you touch me like that?',
+			'I don’t know if I can trust you now.',
+			'Did you hear me ask you to stop?',
+			'Why won\'t you listen to me?',
+			'When you don\'t listen to me, I feel like you don\'t respect me.'
+
+		];
+		
+		this.sayRandom(messages, 1000, 0, 6000);
+	},
+	
 	}
 };
