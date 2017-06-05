@@ -139,4 +139,19 @@ var Talk = {
 		
 		this.sayRandom(messages, 1000, 0, 6000);
 	},
+	
+	textRevoke: function(flowerPart) {
+		var messages = [
+			'I\'m tired. Would you mind watering me instead?',
+			'My ' + flowerPart + ' is sore.',
+			'Stop, please.',
+			'That feels weird. Could you stop?',
+			'That\'s making me uncomfortable.',
+			'I don\'t want that right now.',
+			'No thank you, I don\'t want to be touched there right now.',
+			'I don\'t like that, please stop.'
+		];
+		
+		this.sayRandom(messages, 2000, 0, 3000);
+	}
 };
