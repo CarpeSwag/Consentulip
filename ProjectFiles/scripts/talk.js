@@ -186,5 +186,15 @@ var Talk = {
 		this.sayRandom(messages, 1000, 0, 6000);
 	},
 	
+	textRandom: function() {
+		var messages = [
+			'Why am I floating in space?',
+			'What do you get when you plant kisses?',
+			'Why couldn\'t the gardner plant any flowers?',
+			'If April showers bring May flowers, what do May flowers bring?',
+			'Why was the mushroom invited to the party?'
+		];
+		
+		this.sayRandom(messages, 1000, 0, 6000);
 	}
 };
