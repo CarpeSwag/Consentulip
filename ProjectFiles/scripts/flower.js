@@ -227,7 +227,7 @@ var Flower = {
 	idleAnimation: function() {
 		var anim = this.lastAnimation;
 		var reverse = (this.reverseAnim)? this.reverseAnimation:
-			function() {};
+			function() {Game.playingAnimation = false;};
 		this.animateFlower(anim[0], anim[1], false, reverse);
 	},
 	
@@ -235,7 +235,7 @@ var Flower = {
 		var ANIMATIONS = Constants.ANIMATION;
 		var trust = Game.trust;
 		var anim = [0,0];
-		var reverse = function() {};
+		var reverse = function() {Game.playingAnimation = false;};
 		var pause = 0.0;
 		for (var i = 0; i < ANIMATIONS.length; ++i) {
 			if (ANIMATIONS[i].TRUST >= trust) {
