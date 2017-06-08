@@ -18,6 +18,7 @@ var Camera = {
 		y: 0,
 		z: 0
 	},
+	counterStart: 0,
 	counter: 0,
 	animate: false,
 	
@@ -60,6 +61,7 @@ var Camera = {
 		// Determine the frames (60 fps)
 		var frameCount = Math.floor(seconds * 60);
 		this.counter = frameCount;
+		this.counterStart = frameCount;
 		
 		this.modCameraAlpha();
 		
@@ -173,6 +175,14 @@ var Camera = {
 		this.rotateCameraTo(target, alpha, beta, radius, seconds, true);
 		
 		Draw.clearCanvases();
+	},
+	
+	panToLastMesh: function() {
+		this.counter = this.counterStart;
+		Draw.clearCanvases();
+		
+		// Start the animation
+		this.animate = true;
 	},
 	
 	zoomOut: function() {

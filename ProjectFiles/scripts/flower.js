@@ -227,7 +227,7 @@ var Flower = {
 	idleAnimation: function() {
 		var anim = this.lastAnimation;
 		var reverse = (this.reverseAnim)? this.reverseAnimation:
-			function() {Game.playingAnimation = false;};
+			this.noReverseAnimation;
 		this.animateFlower(anim[0], anim[1], false, reverse);
 	},
 	
@@ -235,7 +235,7 @@ var Flower = {
 		var ANIMATIONS = Constants.ANIMATION;
 		var trust = Game.trust;
 		var anim = [0,0];
-		var reverse = function() {Game.playingAnimation = false;};
+		var reverse = Flower.noReverseAnimation;
 		var pause = 0.0;
 		for (var i = 0; i < ANIMATIONS.length; ++i) {
 			if (ANIMATIONS[i].TRUST >= trust) {
@@ -256,9 +256,12 @@ var Flower = {
 			Game.playingAnimation = true;
 			Flower.wantToAnimate = false;
 			Desire.resetAnimateCounter();
-			this.lastAnimation = anim;
-			this.animationPause = pause * 1000;
-			this.animateFlower(anim[0], anim[1], false, reverse);
+			Flower.lastAnimation = anim;
+			Flower.animationPause = pause * 1000;
+			Camera.zoomOut();
+			setTimeout(function() {
+				Flower.animateFlower(anim[0], anim[1], false, reverse);
+			}, 750);
 		}
 	},
 	
@@ -274,6 +277,11 @@ var Flower = {
 				Desire.resetAnimateCounter();
 			});
 		}, Flower.animationPause);
+	},
+	
+	noReverseAnimation: function() {
+		Camera.panToLastMesh();
+		Game.playingAnimation = false;
 	},
 	
 	addReversedAnimationKeys: function(skeleton) {
