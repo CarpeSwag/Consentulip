@@ -18,6 +18,8 @@ var Camera = {
 		y: 0,
 		z: 0
 	},
+	lastMesh: null,
+	counterStart: 0,
 	counter: 0,
 	animate: false,
 	
@@ -60,6 +62,7 @@ var Camera = {
 		// Determine the frames (60 fps)
 		var frameCount = Math.floor(seconds * 60);
 		this.counter = frameCount;
+		this.counterStart = frameCount;
 		
 		this.modCameraAlpha();
 		
@@ -151,6 +154,8 @@ var Camera = {
 	},
 	
 	panToMesh: function(mesh, seconds, rotateClockwise) {
+		this.lastMesh = mesh;
+		
 		rotateClockwise = rotateClockwise || false;
 		var info = mesh.cameraInfo;
 		var target = new BABYLON.Vector3(
@@ -173,6 +178,14 @@ var Camera = {
 		this.rotateCameraTo(target, alpha, beta, radius, seconds, true);
 		
 		Draw.clearCanvases();
+	},
+	
+	panToLastMesh: function(seconds) {
+		this.panToMesh(this.lastMesh, seconds, false);
+		setTimeout(function() {
+			Game.enableGestures = true;
+			UI.toggleRevokeConsent(true);
+		}, seconds);
 	},
 	
 	zoomOut: function() {
