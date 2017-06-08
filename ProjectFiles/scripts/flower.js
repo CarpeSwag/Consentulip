@@ -275,12 +275,12 @@ var Flower = {
 				Flower.animating = false;
 				Game.playingAnimation = false;
 				Desire.resetAnimateCounter();
+				Camera.panToLastMesh(0.75);
 			});
 		}, Flower.animationPause);
 	},
 	
 	noReverseAnimation: function() {
-		Camera.panToLastMesh();
 		Game.playingAnimation = false;
 	},
 	
