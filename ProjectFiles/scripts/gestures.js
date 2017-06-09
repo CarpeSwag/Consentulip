@@ -23,9 +23,15 @@ var Gestures = {
 			} else {
 				respText = '';
 				var change = -2.5;
-				if(this.gesture.Score > 0.33 && Game.wasDesired) {
-					change = 2.5;
+				if(Game.wasDesired) {
+					if (this.gesture.Score > 0.33) {
+						change = 2.5;
+						Talk.textTrusting();
+					}
+				} else {
+					Talk.textRevoke(Game.lastPlayedWith);
 				}
+				
 				UI.adjustTrustBar(change);
 			}
 		}
