@@ -4,7 +4,7 @@ var UI = {
 
 	// Visual elements
 	menuOpen: false,
-	sandwichOpen: false,
+	sandwichOpen: true,
 	
 	filterButtonHue: function(degrees) {
 		var filter = 'hue-rotate(' + degrees + 'deg)';
