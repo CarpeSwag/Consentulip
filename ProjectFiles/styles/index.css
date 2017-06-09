@@ -69,10 +69,10 @@ html, body {
 	display: none;
 	user-select: none;
 	cursor: pointer;
-	width: 40px;
-	height: 40px;	
+	width: 80px;
+	height: 80px;	
 	background-image: url('../art/images/no.png');
-    background-size: 50px 50px;
+    background-size: 90px 90px;
 }
 
 #revoke-btn.active {
@@ -132,8 +132,8 @@ html, body {
 }
 
 #sandwich-btn {
-	width: 40px;
-	height: 40px;
+	width: 80px;
+	height: 80px;
 	position: absolute;
 	right: 0;
 	margin-left: 15px;
@@ -144,31 +144,31 @@ html, body {
 	pointer-events: auto;
 	user-select: none;
 	cursor: pointer;
-	background-size: 50px 50px;
+	background-size: 90px 90px;
 }
 
 #sandwich-btn div.sandwich-button{
-	width: 40px;
-	padding-bottom: 40px;
+	width: 80px;
+	padding-bottom: 80px;
 }
 
 #sandwich-container {
 	position: absolute;
 	right: 0;
 	margin-left: 15px;
-	margin-top: 10px;
+	margin-top: 50px;
 	padding: 5px;
 	padding-top: 25px;
 	border-radius: 10px;
 	pointer-events: auto;
-	width: 40px;
+	width: 80px;
 	height: 0px;
 	transition: height 0.5s ease-in-out;
 	overflow: hidden;
 }
 
 #sandwich-container.active {
-	height: 180px;
+	height: 300px;
 }
 
 #water-btn, #tender-btn,
@@ -178,11 +178,11 @@ html, body {
 	margin-left: -5px;
 	margin-top: 17.5px;
 	margin-bottom: -10px;
-	width: 40px;
-	height: 40px;
+	width: 80px;
+	height: 80px;
 	user-select: none;
 	cursor: pointer;
-	background-size: 50px 50px;
+	background-size: 90px 90px;
 }
 
 #water-btn {
