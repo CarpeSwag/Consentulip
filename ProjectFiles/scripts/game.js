@@ -19,6 +19,7 @@ var Game = {
 	trust: 50,
 	zoomedInMesh: null,
 	wasDesired: false,
+	lastPlayedWith: '',
 	
 	// Flags
 	playingAnimation: false,
@@ -295,6 +296,7 @@ var Game = {
 						Camera.panToMesh(mesh, 0.75);
 						Camera.cameraLockedToMesh = true;
 						Game.wasDesired = Desire.destroyDesire(mesh);
+						Game.lastPlayedWith = mesh.flowerPart;
 						setTimeout(function() {
 							Game.enableGestures = true;
 							UI.toggleRevokeConsent(true);
