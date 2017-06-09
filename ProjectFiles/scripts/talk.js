@@ -129,7 +129,7 @@ var Talk = {
 	textAsk: function(flowerPart) {
 		var messages = [
 			'Could you rub my ' + flowerPart + ' please?',
-			'I\'d like it if you touched me' + flowerPart + '.',
+			'I\'d like it if you touched me.',
 			'I feel like being touched on my ' + flowerPart + '.',
 			'I enjoy it when you touch my ' + flowerPart + '.',
 			'I want you to touch my ' + flowerPart + '. Is that okay with you?',
@@ -142,7 +142,7 @@ var Talk = {
 	
 	textRevoke: function(flowerPart) {
 		var messages = [
-			'I\'m tired. Would you mind watering me instead?',
+			//'I\'m tired. Would you mind watering me instead?',
 			'My ' + flowerPart + ' is sore.',
 			'Stop, please.',
 			'That feels weird. Could you stop?',
