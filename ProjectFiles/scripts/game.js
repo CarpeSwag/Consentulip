@@ -132,6 +132,7 @@ var Game = {
 		godrays.mesh.scaling = new BABYLON.Vector3(SCALE, SCALE, SCALE);*/
 		
 		
+		// Set up music function
 		var soundsReady = 0;
 		var soundReady = function() {
 			++soundsReady;
@@ -142,6 +143,7 @@ var Game = {
 			}
 		}
 		
+		// Initialize music variables
 		this.musicNeutral = new BABYLON.Sound("Neutral music", "audio/music/neutral.mp3",
 			this.scene, soundReady, { loop: true });
 		this.musicHappy = new BABYLON.Sound("Happy music", "audio/music/happy.mp3",
@@ -152,9 +154,11 @@ var Game = {
 		this.musicHappy.setVolume(0);
 		this.musicSad.setVolume(0);
 		
+		// Create sfx chord sound
 		this.soundChord = new BABYLON.Sound('chord', 'audio/sfx/chord_1.mp3', this.scene);
 		this.soundChord.setVolume(.1);
 		
+		// Generate sfx bad sounds
 		for (var i = 0; i < 11; ++i) {
 			var url = 'audio/sfx/bad_' + (i + 1) + '.mp3';
 			var snd = new BABYLON.Sound('bad_' + i, url, this.scene);
@@ -162,6 +166,7 @@ var Game = {
 			this.soundBad.push(snd);
 		}
 		
+		// Generate sfx good and btn sounds
 		for (var i = 0; i < 12; ++i) {
 			var url = 'audio/sfx/good_' + (i + 1) + '.mp3';
 			var snd = new BABYLON.Sound('good_' + i, url, this.scene);
