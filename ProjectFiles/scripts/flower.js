@@ -1,3 +1,8 @@
+/**
+	Flower
+	Creates the flower model scaling and randomizes its color.
+	Also handles all of its animations.
+ */
 var Flower = {
 	petalColor: {r:0, g:0, b:0, btn: 0},
 	
@@ -25,6 +30,7 @@ var Flower = {
 			var SCALE = Constants.FLOWER_SCALE;
 			Flower.flower = mesh;
 			
+			// Scale the flower mesh and add info for the camera
 			for (var i = 0; i < mesh.length; ++i) {
 				mesh[i].scaling.x *= SCALE;
 				mesh[i].scaling.y *= SCALE;
@@ -39,6 +45,7 @@ var Flower = {
 				var interactable = false;
 				
 				if (name === 'stem') {
+					// Stem
 					Flower.stem = mesh[i];
 					Desire.notDesired.push(mesh[i]);
 					type = 'stem';
@@ -66,6 +73,7 @@ var Flower = {
 					));
 					interactable = true;
 				} else if (name.substring(0,4) === 'leaf') {
+					// Leaves
 					var dir = -1;
 					if (Flower.leaves.length == 1) {
 						mesh[i].position.y += 0.4 * SCALE;
@@ -97,6 +105,7 @@ var Flower = {
 					mesh[i].position.y += 0.4 * Constants.FLOWER_SCALE;;
 					interactable = true;
 				} else if (name.substring(0,5) === 'petal') {
+					// Petals
 					Flower.petals.push(mesh[i]);
 					type = 'petal';
 					var alpha = 0;
@@ -146,6 +155,7 @@ var Flower = {
 					mesh[i].overlayAlpha = 0.25;
 					mesh[i].overlayColor = Flower.petalColor;
 				}
+				// Add info into the mesh
 				mesh[i].flowerPart = type;
 				mesh[i].cameraInfo = info;
 				mesh[i].blinkOffset = offset;
@@ -165,12 +175,13 @@ var Flower = {
 			Flower.addReversedAnimationKeys(mesh[0].skeleton);
 		});
 		
-		// Load in the pot
+		// Load in the pot/soil base
 		BABYLON.SceneLoader.ImportMesh('', 'art/models/',
 			'pot.babylon', Game.scene, function (mesh) {
 			for (var i = 0; i < mesh.length; ++i) {
 				mesh[i].isSoil = true;
 				Flower.pot.push(mesh[i]);
+				// Scale the pot meshes
 				mesh[i].scaling.x *= Constants.FLOWER_SCALE;
 				mesh[i].scaling.y *= Constants.FLOWER_SCALE;
 				mesh[i].scaling.z *= Constants.FLOWER_SCALE;
@@ -180,10 +191,12 @@ var Flower = {
 				mesh[i].position.y += -0.80 * Constants.FLOWER_SCALE;
 				
 				if (mesh[i].name === 'TopSoil') {
+					// Cover the fact that there's a small gap at the top
 					mesh[i].scaling.x += 0.015 * Constants.FLOWER_SCALE;
 					mesh[i].scaling.z += 0.015 * Constants.FLOWER_SCALE;
 					mesh[i].position.y -= 0.015 * Constants.FLOWER_SCALE;
 				} else if (mesh[i].name.substring(0,4) === 'Cube'){
+					// Floating rocks at the bottom of the pot
 					Flower.rocks.push(mesh[i]);
 					mesh[i].dir = 1;
 					if (i % 2 == 0) {
@@ -204,6 +217,7 @@ var Flower = {
 	},
 	
 	randomizeColor: function() {
+		// Randomizes the flower color and changes the UI hues
 		var random = Constants.FLOWER_COLORS[Math.floor(
 			Math.random() * Constants.FLOWER_COLORS.length)];
 		this.petalColor.r = random.r;
@@ -216,6 +230,7 @@ var Flower = {
 	
 	// Animation and Poses
 	animateFlower: function(start, end, loop, onEnd) {
+		// Animate the flower
 		loop = loop === true;
 		onEnd = onEnd || function(){};
 		for (var i = 0; i < Flower.flower.length; ++i) {
@@ -225,6 +240,7 @@ var Flower = {
 	},
 	
 	idleAnimation: function() {
+		// Should play an animation randomly
 		var anim = this.lastAnimation;
 		var reverse = (this.reverseAnim)? this.reverseAnimation:
 			this.noReverseAnimation;
@@ -232,11 +248,14 @@ var Flower = {
 	},
 	
 	adjustAnimation: function() {
+		// Check trust level and animate accordingly
 		var ANIMATIONS = Constants.ANIMATION;
 		var trust = Game.trust;
 		var anim = [0,0];
 		var reverse = Flower.noReverseAnimation;
 		var pause = 0.0;
+		
+		// Check the animation values (in constants).
 		for (var i = 0; i < ANIMATIONS.length; ++i) {
 			if (ANIMATIONS[i].TRUST >= trust) {
 				anim[0] = ANIMATIONS[i].ANIM[0];
@@ -266,6 +285,7 @@ var Flower = {
 	},
 	
 	reverseAnimation: function() {
+		// Reverses the last played animation
 		if (Flower.animating) return;
 		Flower.animating = true;
 		setTimeout(function() {
@@ -281,10 +301,14 @@ var Flower = {
 	},
 	
 	noReverseAnimation: function() {
+		// For animations without a reversed section
 		Game.playingAnimation = false;
 	},
 	
 	addReversedAnimationKeys: function(skeleton) {
+		// Takes all of the animations keys of the skeleton's animations
+		// and reverses all of them with voodoo magic. Appends these
+		// new reversed animation keys to the end of the animation keys.
 		for (var i = 0; i < skeleton.bones.length; ++i) {
 			var bone = skeleton.bones[i];
 			var animation = bone.animations[0];

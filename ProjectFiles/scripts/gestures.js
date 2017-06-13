@@ -1,3 +1,7 @@
+/**
+	Gestures
+	Connects the PDollar library to the gesture drawings on the flower
+ */
 var Gestures = {
 	// Instance data
 	points: new Array(),
@@ -8,6 +12,7 @@ var Gestures = {
 	counter: -1,
 	
 	recognizeGesture: function() {
+		// Attempts to recognize a gesture from drawn lines
 		var respText = '';
 		if (this.points.length >= 10) {
 			if (Tutorial.active) {
@@ -17,14 +22,17 @@ var Gestures = {
 			}
 		}
 		
+		// If it found a gesture
 		if (this.gesture) {
 			if (Tutorial.active) {
+				// Tutorial is active (trying to draw a star).
 				respText = Tutorial.gestureInput(this.gesture);
 			} else {
 				respText = '';
 				var change = -2.5;
 				if(Game.wasDesired) {
 					if (this.gesture.Score > 0.33) {
+						// Good if flower desired touching and gesture is decent
 						change = 2.5;
 						Talk.textTrusting();
 						
@@ -33,6 +41,7 @@ var Gestures = {
 						Game.soundGood[rand].play();
 					}
 				} else {
+					// Otherwise the flower does not like the gesture
 					Talk.textRevoke(Game.lastPlayedWith);
 					
 					// Play a bad sound
@@ -40,6 +49,7 @@ var Gestures = {
 					Game.soundBad[rand].play();
 				}
 				
+				// Adjust the trust bar
 				UI.adjustTrustBar(change);
 			}
 		}
@@ -67,6 +77,7 @@ var Gestures = {
 	},
 	
 	convertGestureToDrawing: function() {
+		// For generating new gestures (also debugging)
 		var out = [];
 		var temp = [];
 		var last = 1;
@@ -89,6 +100,7 @@ var Gestures = {
 	},
 	
 	onPointerDown: function(x, y) {
+		// Start a new line
 		this.gesturesEnabled = true;
 		this.counter = Constants.REFRESH_GESTURE_COUNTER;
 		this.points.length = (this.strokeID == 0)? 0: this.points.length;
@@ -96,6 +108,7 @@ var Gestures = {
 	},
 	
 	onPointerMove: function(x, y) {
+		// Add points to last started line
 		if (this.gesturesEnabled) {
 			// Track the point
 			var point = new Point(x, y, this.strokeID);
@@ -108,6 +121,7 @@ var Gestures = {
 	},
 	
 	onPointerUp: function(x, y) {
+		// End last line
 		if (this.gesturesEnabled) {
 			var point = new Point(x, y, this.strokeID);
 			this.points[this.points.length] = point;
@@ -118,6 +132,7 @@ var Gestures = {
 	},
 	
 	onFrame: function() {
+		// Attempt to recognize gestures if counter is done
 		if (Game.enableGestures && !Tutorial.gesture) {
 			if (this.counter >= 0) {
 				if (this.counter == 0) {
