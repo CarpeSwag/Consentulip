@@ -59,8 +59,8 @@ var Constants = {
 	
 	
 	// Desire urge constants
-	DESIRE_TIMER_RESET: Math.ceil(120.00 * FPS),
-	DESIRE_TIMER_RAND: Math.ceil(60.00 * FPS),
+	DESIRE_TIMER_RESET: Math.ceil(60.00 * FPS),
+	DESIRE_TIMER_RAND: Math.ceil(30.00 * FPS),
 	DESIRE_TIMER_REMOVE: Math.ceil(60.00 * MS_TO_SEC),
 	DESIRE_TIMER_REMOVE_RAND: Math.ceil(30.00 * MS_TO_SEC),
 	WATER_FLOWER_FLAG: 1,

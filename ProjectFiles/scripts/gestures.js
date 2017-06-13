@@ -27,9 +27,17 @@ var Gestures = {
 					if (this.gesture.Score > 0.33) {
 						change = 2.5;
 						Talk.textTrusting();
+						
+						// Play a good sound
+						var rand = Math.floor(Math.random() * Game.soundGood.length);
+						Game.soundGood[rand].play();
 					}
 				} else {
 					Talk.textRevoke(Game.lastPlayedWith);
+					
+					// Play a bad sound
+					var rand = Math.floor(Math.random() * Game.soundBad.length);
+					Game.soundBad[rand].play();
 				}
 				
 				UI.adjustTrustBar(change);

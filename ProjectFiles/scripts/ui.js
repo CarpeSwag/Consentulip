@@ -23,43 +23,43 @@ var UI = {
 	
 	toggleSandwich: function() {
 		// Toggle the flag
-		this.sandwichOpen = !this.sandwichOpen;
+		UI.sandwichOpen = !UI.sandwichOpen;
 		
 		// Toggle the elements
 		document.getElementById('sandwich-btn').className = 'button' +
-			((this.sandwichOpen)? ' down': '');
+			((UI.sandwichOpen)? ' down': '');
 		document.getElementById('sandwich-container').className = 
-			((this.sandwichOpen)? 'active': '');
+			((UI.sandwichOpen)? 'active': '');
 	},
 	
 	toggleWater: function() {
-		if(this.menuOpen || Game.enableGestures) {
-			this.disableWaterTend();
+		if(UI.menuOpen || Game.enableGestures) {
+			UI.disableWaterTend();
 			return;
 		}
 		
 		if (Game.waterCan) {
-			this.disableWater();
+			UI.disableWater();
 		} else {
-			this.enableWater();
+			UI.enableWater();
 		}
 		
-		this.disableTend();
+		UI.disableTend();
 	},
 	
 	toggleTend: function() {
-		if(this.menuOpen || Game.enableGestures) {
-			this.disableWaterTend();
+		if(UI.menuOpen || Game.enableGestures) {
+			UI.disableWaterTend();
 			return;
 		}
 		
 		if (Game.tendSoil) {
-			this.disableTend();
+			UI.disableTend();
 		} else {
-			this.enableTend();
+			UI.enableTend();
 		}
 		
-		this.disableWater();
+		UI.disableWater();
 	},
 	
 	enableWater: function() {
@@ -114,43 +114,43 @@ var UI = {
 	},
 	
 	disableWaterTend: function() {
-		this.disableWater();
-		this.disableTend();
+		UI.disableWater();
+		UI.disableTend();
 	},
 	
 	toggleMenu: function() {
 		// Toggle the flag
-		this.menuOpen = !this.menuOpen;
+		UI.menuOpen = !UI.menuOpen;
 		
 		// Disable watering can and soil tending
-		this.disableWaterTend();
+		UI.disableWaterTend();
 		
 		// Toggle the elements
 		document.getElementById('settings-btn').className = 'button' +
-			((this.menuOpen)? ' down': '');
+			((UI.menuOpen)? ' down': '');
 		document.getElementById('ingame-menu-container').className =
-			((this.menuOpen)? 'active': '');
+			((UI.menuOpen)? 'active': '');
 		document.getElementById('overlay').className =
-			((this.menuOpen)? 'menuActive': '');
+			((UI.menuOpen)? 'menuActive': '');
 		
-		if (this.menuOpen) {
-			this.switchMenu('ingame-menu');
+		if (UI.menuOpen) {
+			UI.switchMenu('ingame-menu');
 		} else {
-			this.hideMenus();
+			UI.hideMenus();
 		}
 	},
 	
 	closeMenu: function() {
-		this.menuOpen = false;
-		this.hideMenus();
+		UI.menuOpen = false;
+		UI.hideMenus();
 		
 		// Toggle the elements
 		document.getElementById('settings-btn').className = 'button' +
-			((this.menuOpen)? ' down': '');
+			((UI.menuOpen)? ' down': '');
 		document.getElementById('ingame-menu-container').className =
-			((this.menuOpen)? 'active': '');
+			((UI.menuOpen)? 'active': '');
 		document.getElementById('overlay').className =
-			((this.menuOpen)? 'menuActive': '');
+			((UI.menuOpen)? 'menuActive': '');
 	},
 	
 	hideMenus: function() {
@@ -162,24 +162,24 @@ var UI = {
 	},
 	
 	switchMenu: function(id) {
-		this.hideMenus();
+		UI.hideMenus();
 		document.getElementById(id).className = 'menu-ctnr curr-menu';
 	},
 	
 	returnToMenu: function() {
-		this.switchMenu('ingame-menu');
+		UI.switchMenu('ingame-menu');
 	},
 	
 	aboutMenu: function() {
-		this.switchMenu('about-menu');
+		UI.switchMenu('about-menu');
 	},
 	
 	settingsMenu: function() {
-		this.switchMenu('settings-menu');
+		UI.switchMenu('settings-menu');
 	},
 	
 	creditsMenu: function() {
-		this.switchMenu('credits-menu');
+		UI.switchMenu('credits-menu');
 	},
 	
 	// Trust bar
@@ -190,9 +190,9 @@ var UI = {
 		document.getElementById('trust-bar-inner').style.width =
 			Game.trust + '%';
 		
-		this.adjustTrustBarColor();
+		UI.adjustTrustBarColor();
 		
-		this.adjustMusic();
+		UI.adjustMusic();
 		
 		Flower.adjustAnimation();
 	},
@@ -230,5 +230,11 @@ var UI = {
 			hap = 1;
 		}
 		Game.volumeTargets = [sad, neu, hap];
+	},
+	
+	menuBtn: function(func) {
+		var rand = Math.floor(Math.random() * Game.soundBtn.length);
+		Game.soundBtn[rand].play();
+		func();
 	}
 };
