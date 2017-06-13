@@ -1,3 +1,7 @@
+/**
+	Talk
+	Allows the flower to talk and send messages.
+ */
 var Talk = {
 	// HTML and Canvas elements
 	text: null,
@@ -19,6 +23,7 @@ var Talk = {
 	},
 	
 	setText: function(txt) {
+		// Actually sets the text box to something
 		this.text.innerHTML = txt;
 		this.textBox.className = (txt === '')?
 			'': 'active';
@@ -68,12 +73,14 @@ var Talk = {
 	},
 	
 	startMessageQueue: function(msg, timer, keep) {
+		// Starts the message queue
 		Talk.setText(msg);
 		Talk.keep = keep;
 		setTimeout(Talk.rotateMessage, timer);
 	},
 	
 	rotateMessage: function() {
+		// Rotate out a message
 		if (Talk.extraTime != 0) {
 			// This message gets another cycle
 			setTimeout(Talk.rotateMessage, Talk.extraTime);
@@ -105,11 +112,13 @@ var Talk = {
 	},
 	
 	clearMessage: function() {
+		// Clears the text box
 		Talk.message = '';
 		Talk.textBox.className = '';
 	},
 	
 	clearMessageSafe: function() {
+		// Clears the text box only if it's not active
 		if (!Talk.active)
 			Talk.clearMessage();
 	},
@@ -123,10 +132,12 @@ var Talk = {
 		// Grad random array
 		var msg = arr[Math.floor(Math.random() * arr.length)];
 		
+		// Queue the random message
 		this.queueMessage(msg, timer, delay, keepMsg);
 	},
 	
 	textAsk: function(flowerPart) {
+		// Text for when the flower desires to be touched
 		var messages = [
 			'Could you rub my ' + flowerPart + ' please?',
 			'I\'d like it if you touched me.',
@@ -141,6 +152,7 @@ var Talk = {
 	},
 	
 	textRevoke: function(flowerPart) {
+		// Text revoking consent
 		var messages = [
 			//'I\'m tired. Would you mind watering me instead?',
 			'My ' + flowerPart + ' is sore.',
@@ -156,6 +168,7 @@ var Talk = {
 	},
 	
 	textTrusting: function() {
+		// Text for good feedback
 		var messages = [
 			'I feel comfortable.',
 			'I feel safe.',
@@ -173,6 +186,7 @@ var Talk = {
 	},
 	
 	textLessTrusting: function() {
+		// I don't think we actually use these anywhere... yet?
 		var messages = [
 			'I feel hurt because you didn’t listen to me.',
 			'Why did you touch me like that?',
@@ -187,6 +201,7 @@ var Talk = {
 	},
 	
 	textRandom: function() {
+		// We Mountain now.
 		var messages = [
 			'Why am I floating in space?',
 			'What do you get when you plant kisses?',
