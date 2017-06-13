@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div id='sandwich-container' class='active'>
-					<div id='settings-btn' class='button' onclick='UI.toggleMenu();'>
+					<div id='settings-btn' class='button' onclick='UI.menuBtn(UI.toggleMenu);'>
 					</div>
 					<div id='water-btn' class='button' onclick='UI.toggleWater();'>
 					</div>
@@ -41,16 +41,16 @@
 		<div id='ingame-menu-container'>
 			<div id='ingame-menu' class='menu-ctnr'>
 				<h1> Consentulip </h1>
-				<div id='menu-about-btn' class='menu-btn' onclick='UI.aboutMenu();'>
+				<div id='menu-about-btn' class='menu-btn' onclick='UI.menuBtn(UI.aboutMenu);'>
 					<h3> About </h3>
 				</div>
-				<div id='menu-settings-btn' class='menu-btn' onclick='UI.settingsMenu();'>
+				<div id='menu-settings-btn' class='menu-btn' onclick='UI.menuBtn(UI.settingsMenu);'>
 					<h3> Settings </h3>
 				</div>
-				<div id='menu-credits-btn' class='menu-btn' onclick='UI.creditsMenu();'>
+				<div id='menu-credits-btn' class='menu-btn' onclick='UI.menuBtn(UI.creditsMenu);'>
 					<h3> Credits </h3>
 				</div>
-				<div id='menu-back-btn' class='menu-btn' onclick='UI.closeMenu();'>
+				<div id='menu-back-btn' class='menu-btn' onclick='UI.menuBtn(UI.closeMenu);'>
 					<h3> Back to Game </h3>
 				</div>
 			</div>
@@ -63,22 +63,22 @@
 					Flower Power consists of three game design majors at UC Santa Cruz.  We believe that games carry cultural values and that by creating games that talk about topics such as consent, we can normalize conversations that are currently difficult to have.
 				</p>
 				
-				<div id='about-tutorial-btn' class='menu-btn' onclick='Tutorial.replayTutorial();'>
+				<div id='about-tutorial-btn' class='menu-btn' onclick='UI.menuBtn(Tutorial.replayTutorial);'>
 					<h3> Replay Tutorial </h3>
 				</div>
 				
-				<div id='about-back-btn' class='menu-btn' onclick='UI.returnToMenu();'>
+				<div id='about-back-btn' class='menu-btn' onclick='UI.menuBtn(UI.returnToMenu);'>
 					<h3> Back to Menu </h3>
 				</div>
 			</div>
 			<div id='settings-menu' class='menu-ctnr'>
 				<h1> Settings </h1>
 				
-				<div id='settings-restart-btn' class='menu-btn' onclick='Game.restartGame();'>
+				<div id='settings-restart-btn' class='menu-btn' onclick='UI.menuBtn(Game.restartGame);'>
 					<h3> Restart Game </h3>
 				</div>
 				
-				<div id='settings-back-btn' class='menu-btn' onclick='UI.returnToMenu();'>
+				<div id='settings-back-btn' class='menu-btn' onclick='UI.menuBtn(UI.returnToMenu);'>
 					<h3> Back to Menu </h3>
 				</div>
 			</div>
@@ -106,7 +106,7 @@
 
 				</p>
 				
-				<div id='credits-back-btn' class='menu-btn' onclick='UI.returnToMenu();'>
+				<div id='credits-back-btn' class='menu-btn' onclick='UI.menuBtn(UI.returnToMenu);'>
 					<h3> Back to Menu </h3>
 				</div>
 			</div>
@@ -118,10 +118,10 @@
 					Would you want to try the tutorial?
 				</p>
 				
-				<div id='play-tutorial-btn' class='menu-btn' onclick='Tutorial.replayTutorial();'>
+				<div id='play-tutorial-btn' class='menu-btn' onclick='UI.menuBtn(Tutorial.replayTutorial);'>
 					<h3> Yes please! </h3>
 				</div>
-				<div id='skip-tutorial-btn' class='menu-btn' onclick='UI.closeMenu();'>
+				<div id='skip-tutorial-btn' class='menu-btn' onclick='UI.menuBtn(UI.closeMenu);'>
 					<h3> No, skip it! </h3>
 				</div>
 			</div>

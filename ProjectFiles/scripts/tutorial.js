@@ -108,6 +108,6 @@ var Tutorial = {
 			0.0, Math.PI / 3, 40, 0.000, true);
 		
 		// Start the tutorial.
-		this.start();
+		Tutorial.start();
 	}
 };

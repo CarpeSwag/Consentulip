@@ -163,7 +163,7 @@ var Game = {
 			var snd = new BABYLON.Sound('good_' + i, url, this.scene);
 			var btn = new BABYLON.Sound('btn_' + i, url, this.scene);
 			btn.setPlaybackRate(3);
-			btn.setVolume(.5);
+			btn.setVolume(.25);
 			
 			this.soundGood.push(snd);
 			this.soundBtn.push(btn);
