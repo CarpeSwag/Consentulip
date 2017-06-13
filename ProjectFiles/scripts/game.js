@@ -437,4 +437,34 @@ var Game = {
 			}
 		}
 	},
+	
+	restartGame: function() {
+		Flower.randomizeColor();
+		this.trust = 50;
+		document.getElementById('trust-bar-inner').style.width =
+			this.trust + '%';
+		
+		UI.adjustTrustBarColor();
+		
+		UI.adjustMusic();
+		
+		this.zoomedInMesh = null;
+		this.wasDesired = false;
+		this.lastPlayedWith = '';
+		this.playingAnimation = false;
+		this.enableGestures = false;
+		this.waterCan = false;
+		this.tendSoil = false;
+		this.soilClick = false;
+		
+		Desire.counter = Constants.DESIRE_TIMER_RESET;
+		Desire.animateCounter = Constants.DANCE_TIME_RANGE
+			+ Constants.DANCE_TIME_LOWER;
+		
+		Camera.setCameraToDefault();
+		Camera.camera.radius = 40;
+		Camera.camera.target = Constants.CAMERA_DEFAULT_TARGET;
+		
+		UI.closeMenu();
+	}
 };
