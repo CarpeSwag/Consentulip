@@ -43,6 +43,11 @@ var Game = {
 	musicSad: null,
 	volumeTargets: [0,1,0],
 	
+	// Sounds
+	soundGood: [],
+	soundBad: [],
+	soundBtn: [],
+	
 	onLoad: function() {
 		this.canvas = document.getElementById('renderCanvas');
 		this.engine = new BABYLON.Engine(this.canvas, true);
@@ -145,6 +150,24 @@ var Game = {
 			
 		this.musicHappy.setVolume(0);
 		this.musicSad.setVolume(0);
+		
+		for (var i = 0; i < 11; ++i) {
+			var url = 'audio/sfx/bad_' + (i + 1) + '.mp3';
+			var snd = new BABYLON.Sound('bad_' + i, url, this.scene);
+			
+			this.soundBad.push(snd);
+		}
+		
+		for (var i = 0; i < 12; ++i) {
+			var url = 'audio/sfx/good_' + (i + 1) + '.mp3';
+			var snd = new BABYLON.Sound('good_' + i, url, this.scene);
+			var btn = new BABYLON.Sound('btn_' + i, url, this.scene);
+			btn.setPlaybackRate(3);
+			btn.setVolume(.5);
+			
+			this.soundGood.push(snd);
+			this.soundBtn.push(btn);
+		}
 		
 		// Ensure screen is sized correctly.
 		this.engine.resize();
