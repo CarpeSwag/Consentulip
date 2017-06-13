@@ -15,6 +15,9 @@ window.addEventListener('DOMContentLoaded', function() {
 	Tutorial.onLoad();
 	WaterCan.onLoad();
 	
+	// Open game menu
+	UI.toggleMenu();
+	
 	window.addEventListener('resize', function() {
 		Game.engine.resize();
 		Draw.resizeCanvases();
