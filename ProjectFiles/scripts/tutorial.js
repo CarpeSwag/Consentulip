@@ -93,6 +93,11 @@ var Tutorial = {
 			if (gesture.Score > 0.33) {
 				this.active = false;
 				UI.toggleRevokeConsent(true);
+						
+				// Play a good sound
+				var rand = Math.floor(Math.random() * Game.soundGood.length);
+				Game.soundGood[rand].play();
+				
 				return 'Good job!';
 			}
 			return 'Oops! Try again.';
