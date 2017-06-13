@@ -102,6 +102,7 @@ var Tutorial = {
 	replayTutorial: function() {
 		// Close the menu
 		UI.closeMenu();
+		Game.soundChord.play();
 		
 		// Reset the camera angle (menu should be hiding it).
 		Camera.rotateCameraTo(Constants.CAMERA_DEFAULT_TARGET,

@@ -47,6 +47,7 @@ var Game = {
 	soundGood: [],
 	soundBad: [],
 	soundBtn: [],
+	soundChord: null,
 	
 	onLoad: function() {
 		this.canvas = document.getElementById('renderCanvas');
@@ -151,6 +152,9 @@ var Game = {
 		this.musicHappy.setVolume(0);
 		this.musicSad.setVolume(0);
 		
+		this.soundChord = new BABYLON.Sound('chord', 'audio/sfx/chord_1.mp3', this.scene);
+		this.soundChord.setVolume(.1);
+		
 		for (var i = 0; i < 11; ++i) {
 			var url = 'audio/sfx/bad_' + (i + 1) + '.mp3';
 			var snd = new BABYLON.Sound('bad_' + i, url, this.scene);
@@ -163,7 +167,7 @@ var Game = {
 			var snd = new BABYLON.Sound('good_' + i, url, this.scene);
 			var btn = new BABYLON.Sound('btn_' + i, url, this.scene);
 			btn.setPlaybackRate(3);
-			btn.setVolume(.25);
+			btn.setVolume(.1);
 			
 			this.soundGood.push(snd);
 			this.soundBtn.push(btn);
@@ -463,22 +467,22 @@ var Game = {
 	
 	restartGame: function() {
 		Flower.randomizeColor();
-		this.trust = 50;
+		Game.trust = 50;
 		document.getElementById('trust-bar-inner').style.width =
-			this.trust + '%';
+			Game.trust + '%';
 		
 		UI.adjustTrustBarColor();
 		
 		UI.adjustMusic();
 		
-		this.zoomedInMesh = null;
-		this.wasDesired = false;
-		this.lastPlayedWith = '';
-		this.playingAnimation = false;
-		this.enableGestures = false;
-		this.waterCan = false;
-		this.tendSoil = false;
-		this.soilClick = false;
+		Game.zoomedInMesh = null;
+		Game.wasDesired = false;
+		Game.lastPlayedWith = '';
+		Game.playingAnimation = false;
+		Game.enableGestures = false;
+		Game.waterCan = false;
+		Game.tendSoil = false;
+		Game.soilClick = false;
 		
 		Desire.counter = Constants.DESIRE_TIMER_RESET;
 		Desire.animateCounter = Constants.DANCE_TIME_RANGE
@@ -489,5 +493,6 @@ var Game = {
 		Camera.camera.target = Constants.CAMERA_DEFAULT_TARGET;
 		
 		UI.closeMenu();
+		Game.soundChord.play();
 	}
 };
