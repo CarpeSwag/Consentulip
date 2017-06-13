@@ -291,6 +291,10 @@ html, body {
 	top: 360px;
 }
 
+#settings-restart-btn {
+	top: 360px;
+}
+
 #play-tutorial-btn {
 	top: 400px;
 }
