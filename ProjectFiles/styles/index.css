@@ -246,7 +246,7 @@ html, body {
 
 .menu-ctnr p {
 	text-align: center;
-	font-size: 30px;
+	font-size: 16px;
 }
 
 .menu-btn {
@@ -287,9 +287,17 @@ html, body {
 	top: 360px;
 }
 
-#about-tutorial-btn {
-	top: 360px;
+#about-txt {
+	top: 115px;
 }
+
+#about-tutorial-btn {
+	top: 420px;
+}
+
+ #about-back-btn {
+	top: 550px;
+ }
 
 #settings-restart-btn {
 	top: 360px;
@@ -299,7 +307,7 @@ html, body {
 	top: 400px;
 }
 
-#menu-back-btn, #about-back-btn,
+#menu-back-btn,
 #settings-back-btn, #credits-back-btn,
 #skip-tutorial-btn {
 	top: 500px;
