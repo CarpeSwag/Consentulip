@@ -1,3 +1,7 @@
+/**
+	Draw
+	Handles all of the Canvas draw calls
+ */
 var Draw = {
 	// HTML and Canvas elements
 	mainCanv: null,
@@ -37,6 +41,7 @@ var Draw = {
 	},
 	
 	resizeCanvases: function() {
+		// Resizes all of the canvases to the screen size.
 		var width = window.innerWidth;
 		var height = window.innerHeight;
 		var contexts = [this.ctx, this.sctx, this.gctx, this.bctx];
@@ -65,6 +70,7 @@ var Draw = {
 	
 	// Shape drawing methods
 	addRandomParticle: function(x, y) {
+		// Adds a random golden particle for mouse feedback
 		var r = 155 + Math.round(Math.random() * 100);
 		var g = 150 + Math.round(Math.random() * 155);
 		var b = Math.round(Math.random() * 255);
@@ -84,6 +90,7 @@ var Draw = {
 	},
 	
 	addWaterParticle: function(x, y, dir) {
+		// Adds a blue particle for the water animation
 		var rand = Math.round(Math.random() * 200);
 		var r = rand;
 		var g = rand;
@@ -104,6 +111,7 @@ var Draw = {
 	},
 	
 	addDirtParticle: function(x, y) {
+		// Adds a dirt particle for the tend soil animation
 		var rand = Math.round(Math.random() * 100) + 50;
 		var r = Math.round(Math.random() * 155) + 100;
 		var g = rand;
@@ -157,6 +165,7 @@ var Draw = {
 	},
 	
 	drawLine: function(a, b) {
+		// Draws a line from obj a to obj b (both points)
 		this.bctx.lineTo(b.X, b.Y);
 		var width = Math.sqrt(Math.pow(a.X - b.X, 2) + Math.pow(a.Y - b.Y, 2));
 		this.bctx.lineWidth = 4 - (3 * (width/200));
@@ -164,6 +173,7 @@ var Draw = {
 	},
 	
 	createCircle: function(x, y, rad, col) {
+		// Create a circle at x,y of radius rad and color col.
 		this.sctx.fillStyle = col;
 		this.sctx.beginPath();
 		this.sctx.arc(x, y, rad, 0, 2 * Math.PI, false);
@@ -172,6 +182,7 @@ var Draw = {
 	},
 	
 	createParticle: function(x, y, radius, innerRadius, col, radians) {
+		// Creates a ninja star shaped particle
 		var inner = radius * innerRadius;
 		this.sctx.fillStyle = col;
 		this.sctx.beginPath();
@@ -189,6 +200,7 @@ var Draw = {
 	},
 	
 	createLine: function(a, b, width, blurWidth, col, blurCol) {
+		// Another line function (I honestly don't remember when I made two).
 		this.sctx.strokeStyle = col;
 		this.sctx.lineWidth = width;
 		this.sctx.shadowBlur = blurWidth;
@@ -202,16 +214,19 @@ var Draw = {
 	
 	// Shape helper methods
 	moveToRotated: function(ctx, x1, y1, x2, y2, rad) {
+		// Moves a point x1,y1 arouond x2,y2 rad radians
 		var point = this.rotateAroundPoint(x1, y1, x2, y2, rad);
 		ctx.moveTo(point[0], point[1]);
 	},
 
 	lineToRotated: function(ctx, x1, y1, x2, y2, rad) {
+		// Draws a line to a point x1,y1 rotated around x2,y2 rad radians
 		var point = this.rotateAroundPoint(x1, y1, x2, y2, rad);
 		ctx.lineTo(point[0], point[1]);
 	},
 
 	rotateAroundPoint: function(x1, y1, x2, y2, rad) {
+		// Rotates a point x1,y1 around x2,y2 rad radians
 		var dx = x2 - x1;
 		var dy = y2 - y1;
 		var sin = Math.sin(rad);

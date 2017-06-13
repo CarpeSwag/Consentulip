@@ -1,3 +1,7 @@
+/**
+	UI
+	Handles most of the UI elements and their onclick functions
+ */
 var UI = {
 	// Pointer related
 	isPointerDown: false,
@@ -7,6 +11,7 @@ var UI = {
 	sandwichOpen: true,
 	
 	filterButtonHue: function(degrees) {
+		// Adjust the hue of all of the UI elements to match the flower
 		var filter = 'hue-rotate(' + degrees + 'deg)';
 		document.getElementById('sandwich-btn').style.filter
 			= filter;
@@ -17,6 +22,7 @@ var UI = {
 	},
 	
 	toggleRevokeConsent: function(toggle) {
+		// Toggles the visibility of the NO button in the top left
 		document.getElementById('revoke-btn').className = 
 			'button' + ((toggle)? ' active': '');
 	},
@@ -33,6 +39,7 @@ var UI = {
 	},
 	
 	toggleWater: function() {
+		// Toggles the watering of the flower
 		if(UI.menuOpen || Game.enableGestures) {
 			UI.disableWaterTend();
 			return;
@@ -48,6 +55,7 @@ var UI = {
 	},
 	
 	toggleTend: function() {
+		// Toggles the tending of the soil
 		if(UI.menuOpen || Game.enableGestures) {
 			UI.disableWaterTend();
 			return;
@@ -61,6 +69,8 @@ var UI = {
 		
 		UI.disableWater();
 	},
+	
+	// Utility for the water and soil tending
 	
 	enableWater: function() {
 		if (Game.enableGestures) return;
@@ -117,6 +127,8 @@ var UI = {
 		UI.disableWater();
 		UI.disableTend();
 	},
+	
+	// General menu on click functions
 	
 	toggleMenu: function() {
 		// Toggle the flag
@@ -183,7 +195,9 @@ var UI = {
 	},
 	
 	// Trust bar
+	
 	adjustTrustBar: function(change) {
+		// Adjusts the trust bar's inner bar
 		Game.trust += change;
 		Game.trust = (Game.trust < 0)? 0: ((Game.trust > 100)?
 			100: Game.trust);
@@ -198,6 +212,7 @@ var UI = {
 	},
 	
 	adjustTrustBarColor: function() {
+		// Changes the color of the trust bar according to current trust
 		var percent = Game.trust;
 		var a = [200,0,0];
 		var b = [200,200,0];
@@ -219,6 +234,7 @@ var UI = {
 	},
 	
 	adjustMusic: function(old) {
+		// Adjusts the music (why is this here, oops).
 		var sad = 0;
 		var neu = 0;
 		var hap = 0;
@@ -233,6 +249,7 @@ var UI = {
 	},
 	
 	menuBtn: function(func) {
+		// Wrapper for menu buttons to give it an onclick sound.
 		var rand = Math.floor(Math.random() * Game.soundBtn.length);
 		Game.soundBtn[rand].play();
 		func();

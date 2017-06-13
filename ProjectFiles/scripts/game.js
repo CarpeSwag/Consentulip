@@ -1,3 +1,7 @@
+/**
+	Game
+	Handles most of the game initialization, mouse events, and outlines
+ */
 var Game = {
 	// BabylonJS stuff
 	canvas: null,
@@ -80,7 +84,7 @@ var Game = {
 		this.canvas.addEventListener("pointerup", this.onPointerUp, false);
 		this.canvas.addEventListener("pointermove", this.onPointerMove, false);
 		
-		// Skybox
+		// Load in the Skybox
 		BABYLON.SceneLoader.ImportMesh('', 'art/models/',
 			'skybox.babylon', Game.scene, function (mesh) {
 			var SCALE = 75.0;
@@ -286,8 +290,11 @@ var Game = {
 			return;
 		}
 		
+		// Get the mouse pointer location
 		var x = Game.scene.pointerX;
 		var y = Game.scene.pointerY;
+		
+		// Create cute circles that expand out at mouse location
 		Draw.circles.push({x: x, y: y, radius: 10,
 			dr: 3, color: '255,255,0'});
 		Draw.circles.push({x: x, y: y, radius: 20,
@@ -300,6 +307,7 @@ var Game = {
 			UI.isPointerDown = true;
 		}
 		
+		// Start a new line if we're in gesture mode
 		if (Game.enableGestures && !Tutorial.gesture) {
 			if (evt.button <= 1) {
 				Gestures.onPointerDown(x, y);
@@ -312,18 +320,24 @@ var Game = {
 			}
 		}
 		
-		// check if we are under a mesh
+		// Check if we are under a mesh
 		var pickInfo = Game.scene.pick(x, y);
 		if (pickInfo.hit && !Camera.cameraLockedToMesh && !Game.playingAnimation) {
 			var mesh = pickInfo.pickedMesh;
+			// Check if we hit a part of the flower to touch
 			if (mesh.flowerPart && mesh.flowerPart !== 'ignore') {
+				// Touched the flower
 				if (Tutorial.tutorialPause(mesh)) {
+					// Tutorial is paused and waiting for a specific mesh
 				} else {		
 					if (Game.waterCan) {
+						// Water the flower
 						WaterCan.onPointerDown(x, y);
 						UI.disableWater();
 					} else if (Game.tendSoil) {
+						// Tend to the flower's soil
 					} else {
+						// Zoom into a flower mesh and start the gestures
 						Game.zoomedInMesh = mesh;
 						Camera.panToMesh(mesh, 0.75);
 						Camera.cameraLockedToMesh = true;
@@ -336,7 +350,9 @@ var Game = {
 					}
 				}
 			} else if (mesh.isSoil) {
+				// Touched the soil
 				if (Game.tendSoil) {
+					// Tend the soil
 					Desire.reduceDesireTimer(Constants.TEND_SOIL_FLAG);
 					Game.soilClick = true;
 					UI.disableTend();
@@ -348,15 +364,18 @@ var Game = {
 		}
 		
 		if (!Game.soilClick) {
+			// Draw cute particle effects if this isn't soil tending
 			for (var i = Math.random() * 5 + 3; i >= 0; --i) {
 				Draw.addRandomParticle(x, y);
 			}
 		}
 		
+		// Close the menu if it's open
 		UI.closeMenu();
 	},
 
 	onPointerMove: function (evt) {
+		// Draw more particles and track the points!
 		var x = Game.scene.pointerX;
 		var y = Game.scene.pointerY;
 		if (UI.isPointerDown && !Game.soilClick) {
@@ -374,6 +393,7 @@ var Game = {
 		var y = Game.scene.pointerY;
 		if (evt.button <= 1) {
 			if (UI.isPointerDown) {
+				// End a gesture line
 				UI.isPointerDown = false;
 				Gestures.onPointerUp(x, y);
 				Draw.gctx.drawImage(Draw.bufferCanv, 0, 0);
@@ -383,6 +403,7 @@ var Game = {
 	},
 	
 	addOutlineMesh: function(mesh) {
+		// Outlines a specific mesh
 		mesh.renderOutline = true;
 		if (mesh.outlineCounter == 0)
 			this.outlineMeshes.push(mesh);
@@ -397,6 +418,7 @@ var Game = {
 	},
 	
 	removeOutlineMesh: function(mesh) {
+		// Removes the outline from a mesh
 		var index = this.findOutlineMesh(mesh);
 		if (index === -1) return;
 		mesh.outlineCounter--;
@@ -407,6 +429,7 @@ var Game = {
 	},
 	
 	onFrame: function() {
+		// Rotate clouds and floating rocks and adjust volume
 		++this.rotateCounter;
 		if (this.rotateCounter == 2) {
 			this.rotateCounter = 0;
@@ -435,7 +458,6 @@ var Game = {
 				this.rockVel *= -1;
 			
 			// Volume
-			
 			if (this.musicSad._volume != this.volumeTargets[0]) {
 				var dv = (this.musicSad._volume > this.volumeTargets[0])?
 					-0.01: 0.01;
@@ -458,6 +480,8 @@ var Game = {
 					this.musicHappy.setVolume(this.volumeTargets[2]);
 			}
 		}
+		
+		// Handle mesh outline changes
 		if (this.outlineMeshes.length > 0) {
 			this.outlineWidth += this.outlineDelta;
 			if (this.outlineWidth < Constants.OUTLINE_LOWER
@@ -471,15 +495,19 @@ var Game = {
 	},
 	
 	restartGame: function() {
-		Flower.randomizeColor();
+		// Restarts the game (not perfect)
 		Game.trust = 50;
 		document.getElementById('trust-bar-inner').style.width =
 			Game.trust + '%';
-		
 		UI.adjustTrustBarColor();
 		
+		// Randomize the flower color
+		Flower.randomizeColor();
+		
+		// Reset the music
 		UI.adjustMusic();
 		
+		// Reset a few game variables
 		Game.zoomedInMesh = null;
 		Game.wasDesired = false;
 		Game.lastPlayedWith = '';
@@ -489,14 +517,17 @@ var Game = {
 		Game.tendSoil = false;
 		Game.soilClick = false;
 		
+		// Reset the desire counter
 		Desire.counter = Constants.DESIRE_TIMER_RESET;
 		Desire.animateCounter = Constants.DANCE_TIME_RANGE
 			+ Constants.DANCE_TIME_LOWER;
 		
+		// Reset the camera
 		Camera.setCameraToDefault();
 		Camera.camera.radius = 40;
 		Camera.camera.target = Constants.CAMERA_DEFAULT_TARGET;
 		
+		// Close the game menu and play a nice chord
 		UI.closeMenu();
 		Game.soundChord.play();
 	}

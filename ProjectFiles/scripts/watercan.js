@@ -1,3 +1,7 @@
+/**
+	WaterCan
+	Handles the water can animation.
+ */
 var WaterCan = {
 	x: 0,
 	y: 0,
@@ -23,6 +27,7 @@ var WaterCan = {
 		this.y = y - (Constants.WATER_CAN_LENGTH / 8 * 7);
 		this.dir = 1;
 		
+		// Flip the water can according to which way the flower is
 		this.ele.className = 'water'
 		if (x > (window.innerWidth / 2)) {
 			this.ele.className += ' flip';
@@ -32,6 +37,7 @@ var WaterCan = {
 			this.x -= Constants.WATER_CAN_LENGTH + 10;
 		}
 		
+		// Set the water can location
 		this.ele.style.left = this.x + 'px';
 		this.ele.style.top = this.y + 'px';
 		this.counter = -10;
@@ -45,6 +51,7 @@ var WaterCan = {
 		if (this.active) {
 			++this.counter;
 			if (this.counter > 0 && this.counter < 60) {
+				// Create water particles!
 				if ((this.counter % 3) === 0) {
 					var dx = 0;
 					var dy = (Constants.WATER_CAN_LENGTH / 2);

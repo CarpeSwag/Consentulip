@@ -1,3 +1,7 @@
+/**
+	Tutorial
+	Handles the small tutorial.
+ */
 var Tutorial = {
 	waitingForInput: false,
 	active: false,
@@ -5,11 +9,8 @@ var Tutorial = {
 	counter: 25,
 	particleId: 0,
 	
-	onLoad: function() {
-		
-	},
-	
 	tutorialPause: function(mesh) {
+		// The tutorial is paused waiting for user input
 		if (this.waitingForInput) {
 			if (mesh == Flower.outerPetals[3]) {
 				this.waitingForInput = false;
@@ -69,6 +70,8 @@ var Tutorial = {
 		var centerY = window.innerHeight / 2;
 		var radius = (window.innerWidth < window.innerHeight)?
 			window.innerWidth * 0.25: window.innerHeight * 0.5;
+			
+		// Draw a pretty star
 		var starPoints = [
 			{x: centerX + radius * -0.75, y: centerY + radius * -0.33},
 			{x: centerX + radius *  0.75, y: centerY + radius * -0.33},
@@ -89,6 +92,7 @@ var Tutorial = {
 	},
 	
 	gestureInput: function(gesture) {
+		// Looking for a star input during the tutorial, nothing else
 		if (this.active) {
 			if (gesture.Score > 0.33) {
 				this.active = false;

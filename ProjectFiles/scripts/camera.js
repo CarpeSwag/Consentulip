@@ -1,6 +1,13 @@
+/**
+	Camera
+	Controls all of the BabylonJS camera related calls and camera panning.
+ */
 var Camera = {
 	camera: null,
 	lockedToMesh: false,
+	
+	// Camera animation information
+	animate: false,
 	animationDelta: {
 		alpha: 0,
 		beta: 0,
@@ -19,9 +26,10 @@ var Camera = {
 		z: 0
 	},
 	lastMesh: null,
+	
+	// Counters for animation length
 	counterStart: 0,
 	counter: 0,
-	animate: false,
 	
 	onLoad: function() {
 		// Initialize the camera
@@ -46,6 +54,7 @@ var Camera = {
 	},
 	
 	isInFront: function(alpha) {
+		// Check which side of the flower you're on
 		return (alpha >= 0)? (alpha % (Math.PI * 2)) < Math.PI:
 			(Math.abs(alpha) % (Math.PI * 2)) >= Math.PI;
 	},
@@ -154,8 +163,10 @@ var Camera = {
 	},
 	
 	panToMesh: function(mesh, seconds, rotateClockwise) {
+		// Set the last mesh
 		this.lastMesh = mesh;
 		
+		// Set the camera pan target
 		rotateClockwise = rotateClockwise || false;
 		var info = mesh.cameraInfo;
 		var target = new BABYLON.Vector3(
@@ -164,23 +175,25 @@ var Camera = {
 			mesh.position.z + info.zOffset
 		);
 		
-		// Grab camera info for mesh
+		// Grab camera info for the mesh
 		var alpha = info.alpha;
 		if (info.alpha == 0)
 			alpha = (this.isInFront(this.camera.alpha))? Math.PI / 2: 3 * Math.PI / 2;
 		var beta = Math.PI / 2;
 		var radius = info.radius;
 		
+		// Ensure we're rotating clockwise (if flag set).
 		if (rotateClockwise && this.camera.alpha > alpha) {
 			alpha += Math.PI * 2;
 		}
 		
+		// Start the camera pan animation
 		this.rotateCameraTo(target, alpha, beta, radius, seconds, true);
-		
 		Draw.clearCanvases();
 	},
 	
 	panToLastMesh: function(seconds) {
+		// Calls the pan function on the last panned mesh
 		this.panToMesh(this.lastMesh, seconds, false);
 		setTimeout(function() {
 			Game.enableGestures = true;
@@ -202,6 +215,7 @@ var Camera = {
 	},
 	
 	onFrame: function() {
+		// Animate the camera
 		if (this.animate) {
 			this.adjustCamera();
 		}
